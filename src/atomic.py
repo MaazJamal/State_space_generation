@@ -1,3 +1,6 @@
+
+
+
 class atomic:
     
     def __init__(self, name, X, Y, S, trans_ext, trans_int):
