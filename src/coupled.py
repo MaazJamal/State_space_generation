@@ -49,15 +49,15 @@ class coupled:
 
     def add_EOC(self,EOC):
         for module in EOC:
-            self._model_instance.append(module)
+            self._EOC.append(module)
 
     def add_IC(self,IC):
         for module in IC:
-            self._model_instance.append(module)
+            self._IC.append(module)
 
     def add_select(self,select):
         for module in select:
-            self._model_instance.append(module)
+            self._select.append(module)
     
     #sorts the component names according to select function and verifies if the coupled model is correct
 
