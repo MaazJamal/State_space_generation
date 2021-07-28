@@ -32,7 +32,7 @@ class graph:
 
 
     @property
-    def name(self):
+    def name(self) -> str:
         return self._name
     @name.setter
     def name(self,value):

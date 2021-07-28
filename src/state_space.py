@@ -25,6 +25,7 @@ from src.coupled import coupled
 from src.atomic import atomic
 import numpy as np
 import itertools
+import os
 
 def combinator(model):
     
@@ -84,7 +85,7 @@ def state_space(model):
                     #state_1 is the index of first state in the transition
                     state_1 = []
                     state_2 = []
-                    for state_index,state in enumerate(all_states[:,idx].tolist().split('.')):
+                    for state_index,state in enumerate(all_states[:,idx].tolist()):
                         if state[1] == trans[2][0]:
                             state_1.append[state_index]
                         elif state[1] == trans[3][1]:
@@ -106,6 +107,7 @@ def state_space(model):
                             edge = (state1_name,state2_name)
                             state_graph.add_edge(edge,trans_type,W)
         
+
         # Internal coupling space
         
         index = [i for i,item in enumerate(internal_coupled) if component == item]
@@ -122,7 +124,7 @@ def state_space(model):
                 int_trans = atomic_model.trans_int
                 int_trans_port = [port for port in int_trans if port[0] == ic_output_port.tolist()[1]]
 
-                second_atomic_name = ".".join(ic_input_port.tolist())
+                second_atomic_name = ic_input_port.tolist()[0]
                 second_atomic = model.component_dict[second_atomic_name]
 
                 # two optimizations one the ext transition should check for input type if it does not match skip the transition
@@ -174,7 +176,7 @@ def state_space(model):
                 # The external transitions that match the IC port
                 # with added check if the output type matches the transition
 
-                ext_trans_port = [port for port in ext_trans if port[0] == ic_input_port.tolist()[1] & port[1] in output_type]
+                ext_trans_port = [port for port in ext_trans if port[0] == ic_input_port.tolist()[1] and port[1] in output_type]
 
                 for trans in ext_trans_port:
 
@@ -207,7 +209,42 @@ def state_space(model):
                             edge = (state1_name,state2_name)
                             state_graph.add_edge(edge,trans_type,W)
 
+
         # external coupling 
+        index = [i for i,item in enumerate(output_coupled) if component == item]
+        if index != []:
+            for idx in index:
+                component_name_port = EOC[idx][2:]
+                int_trans = atomic_model.trans_int
+                int_trans_port = [port for port in int_trans if port[0] == component_name_port.tolist()[1]]
+                for trans in int_trans_port:
+                    port = trans[0]
+                    #if port == component_name_port.split('.')[1]:
+                    #state_1 is the index of first state in the transition
+                    state_1 = []
+                    state_2 = []
+                    for state_index,state in enumerate(all_states[:,idx].tolist().split('.')):
+                        if state[1] == trans[2][0]:
+                            state_1.append[state_index]
+                        elif state[1] == trans[3][1]:
+                            state_2.append[state_index]
+                    
+                    for state1_id in state_1:
+                        #convert to string
+                        state1_name = ",".join(all_states[state1_id].tolist())
+                        if state_graph.get(state1_name) is None:
+                            state_graph.add_vertex(state1_name)
+
+                        for state2_id in state_2:
+                            state2_name = ",".join(all_states[state2_id].tolist())
+                            if state_graph.get(state2_name) is None:
+                                state_graph.add_vertex(state2_name)
+                            
+                            W = [port,trans[1],trans[-1]]
+                            trans_type = "int"
+                            edge = (state1_name,state2_name)
+                            state_graph.add_edge(edge,trans_type,W)
+ 
         
 
 
@@ -219,7 +256,37 @@ def state_space(model):
     return state_graph
 
 
+def state_graph_to_file(state_graph,dir):
+        
+        if not os.path.isdir(dir):
+            raise NotADirectoryError()
+        filename = state_graph.name
+        file = dir + filename + ".txt"
 
+        with open(file,"w") as f:
+
+            vertices = state_graph.graph_dict.keys()
+            for V in vertices:
+                data = []
+                if type(V) == str:
+                    state = V
+                if type(V) == list:
+                    state = ",".join(V)
+                data.append("".join(["V,",state,"\n"]))
+                for edge_idx in state_graph.graph_dict[state]:
+                    edge = state_graph.E[edge_idx]
+                    edge_str = ["E"]
+                    if type(edge[0][0]) == str:
+                        edge_str.append(",".join(edge[0]))
+                    elif type(edge[0][0]) == list:
+                        combine_edge = ["/".join(edge[0][0]) , "/".join(edge[0][1])]
+                        edge_str.append(",".join(combine_edge))
+                    edge_str.append(edge[1])
+                    edge_str.append(",".join(edge[2]))
+                    data.append("".join([",".join(edge_str),"\n"]))
+                    
+                f.writelines(data)
+        f.close()
 
 #TODO future State space of multiple models.
 #def state_space_multiple():  
