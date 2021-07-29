@@ -38,7 +38,7 @@ def combinator(model):
         #add name of the component to the state so that we can distinguish it from others
         component_state = [".".join([component,state]) for state in component_state ]
         states.append(component_state)
-    combinations = np.array(list(itertools.product(states)))
+    combinations = np.array(list(itertools.product(*states)))
     return combinations
 
 
@@ -54,8 +54,8 @@ def state_space(model):
     EOC = np.array(model._EOC)
     IC = np.array(model._IC)
     external_coupled = EIC[:,2].tolist() #complete today
-    internal_coupled = IC[:,2].tolist() #complete today
-    output_coupled = EOC[:,2].tolist() #complete tomorrow
+    internal_coupled = IC[:,0].tolist() #complete today
+    output_coupled = EOC[:,0].tolist() #complete tomorrow
         
 
     component_order = model._select
@@ -85,11 +85,11 @@ def state_space(model):
                     #state_1 is the index of first state in the transition
                     state_1 = []
                     state_2 = []
-                    for state_index,state in enumerate(all_states[:,idx].tolist()):
-                        if state[1] == trans[2][0]:
-                            state_1.append[state_index]
-                        elif state[1] == trans[3][1]:
-                            state_2.append[state_index]
+                    for state_index,state in enumerate(all_states[:,component_idx].tolist()):
+                        if state.split(".")[1] == trans[2][0]:
+                            state_1.append(state_index)
+                        elif state.split(".")[1] == trans[2][1]:
+                            state_2.append(state_index)
                     
                     for state1_id in state_1:
                         #convert to string
@@ -127,6 +127,7 @@ def state_space(model):
                 second_atomic_name = ic_input_port.tolist()[0]
                 second_atomic = model.component_dict[second_atomic_name]
 
+
                 # two optimizations one the ext transition should check for input type if it does not match skip the transition
                 # second the external transition should only cater for those states in which the state of the output atomic is the 
                 # transitioned state..
@@ -134,24 +135,26 @@ def state_space(model):
 
 
                 output_type = []
+                global_state_2 = []
                 for trans in int_trans_port:
                     port = trans[0]
 
 
                     # create output list so that we can chose external transitions that will trigger
                     if output_type == []:
-                        output_type.append[trans[1]]
+                        output_type.append(trans[1])
                     elif output_type[-1] != trans[1]:
-                        output_type.append[trans[1]]
+                        output_type.append(trans[1])
 
 
                     state_1 = []
                     state_2 = []
-                    for state_index,state in enumerate(all_states[:,idx].tolist().split('.')):
-                        if state[1] == trans[2][0]:
-                            state_1.append[state_index]
-                        elif state[1] == trans[2][1]:
-                            state_2.append[state_index]
+                    for state_index,state in enumerate(all_states[:,component_idx].tolist()):
+                        if state.split(".")[1] == trans[2][0]:
+                            state_1.append(state_index)
+                        elif state.split(".")[1] == trans[2][1]:
+                            state_2.append(state_index)
+                            global_state_2.append(state_index)
                     
                     for state1_id in state_1:
                         #convert to string
@@ -184,13 +187,23 @@ def state_space(model):
                     ext_state_1 = []
                     ext_state_2 = []
 
-                    for state_index,state in enumerate(all_states[:,idx].tolist().split('.')):
-                        if state[1] == trans[2][0]:
+                    ### THE IDX needs to correspond to the second state. Find this ID
+
+                    second_idx = model._select.index(second_atomic_name)
+                    out_state = [all_states[:,idx][i].tolist() for i in global_state_2]
+                    
+                    for state_index,state in enumerate(all_states[:,second_idx].tolist()):
+                        if state.split(".")[1] == trans[2][0]:
                             ### THIS IS NOT WORKING 
-                            if all_states[state_index].tolist()[idx].split('.')[1] in state_2 :
-                                ext_state_1.append[state_index]
-                        elif state[1] == trans[3][0]:
-                            ext_state_2.append[state_index]
+                            cur_state = all_states[state_index,component_idx].tolist()
+                            ## contains the output of stuff 
+
+
+                            if cur_state in out_state :
+                                ext_state_1.append(state_index)
+                        #The idx must correspond to the second atomic otherwise this will not work
+                        elif state.split(".")[1] == trans[2][1]:
+                            ext_state_2.append(state_index)
                     
                     for state1_id in ext_state_1:
                         #convert to string
@@ -214,7 +227,7 @@ def state_space(model):
         index = [i for i,item in enumerate(output_coupled) if component == item]
         if index != []:
             for idx in index:
-                component_name_port = EOC[idx][2:]
+                component_name_port = EOC[idx][:2]
                 int_trans = atomic_model.trans_int
                 int_trans_port = [port for port in int_trans if port[0] == component_name_port.tolist()[1]]
                 for trans in int_trans_port:
@@ -223,11 +236,11 @@ def state_space(model):
                     #state_1 is the index of first state in the transition
                     state_1 = []
                     state_2 = []
-                    for state_index,state in enumerate(all_states[:,idx].tolist().split('.')):
-                        if state[1] == trans[2][0]:
-                            state_1.append[state_index]
-                        elif state[1] == trans[3][1]:
-                            state_2.append[state_index]
+                    for state_index,state in enumerate(all_states[:,component_idx].tolist()):
+                        if state.split('.')[1] == trans[2][0]:
+                            state_1.append(state_index)
+                        elif state.split('.')[1]  == trans[2][1]:
+                            state_2.append(state_index)
                     
                     for state1_id in state_1:
                         #convert to string
@@ -245,12 +258,6 @@ def state_space(model):
                             edge = (state1_name,state2_name)
                             state_graph.add_edge(edge,trans_type,W)
  
-        
-
-
-
-
-
         
 
     return state_graph

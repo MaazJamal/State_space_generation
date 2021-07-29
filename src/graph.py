@@ -41,6 +41,8 @@ class graph:
     def name(self):
         return self._name
 
+    def get(self, key):
+        return self.graph_dict.get(key)
 
 
 
