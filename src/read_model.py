@@ -73,6 +73,7 @@ class read_model:
                     elif line == "[coupled]":
                         coupled = True
                         header_flag = True
+                    
                 
                 elif atomic:
 

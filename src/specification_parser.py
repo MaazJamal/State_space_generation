@@ -21,13 +21,15 @@ class specification_parser:
         self.specication_file = specification_file
         self.state_graph = state_graph
         self.out_graph = graph()
+        self.out_graph.name = "spec_"+self.state_graph.name
         self.specication_file
         self.path_spec_list = []
         self.state_spec_list = []
         self.trans_spec_list = []
         self.vertex = []
         self.edge = []
-
+        self.state_count = len(state_graph.V[0].split(","))
+        self.specification()
     
     def specification(self):
         if not path.isfile(self.specication_file):
@@ -41,17 +43,17 @@ class specification_parser:
                 if specs[0] == '':
                     continue
                 elif specs[0] == "path":
-                    ind = [idx for idx,x in enumerate(line[1:]) if x != "?"]
-                    self.path_spec_list.append((line,ind))
+                    ind_1 = [idx for idx,x in enumerate(specs[1:self.state_count+1]) if x != "?"]
+                    ind_2 = [idx for idx,x in enumerate(specs[self.state_count+1:]) if x != "?"]
+                    self.path_spec_list.append((specs[1:self.state_count+1],ind_1,specs[self.state_count+1:],ind_2))
 
                 elif specs[0] == "no_state":
-                    ind = [idx for idx,x in enumerate(line[1:]) if x != "?"]
-                    self.state_spec_list.append(line,ind)
+                    ind = [idx for idx,x in enumerate(specs[1:]) if x != "?"]
+                    self.state_spec_list.append((specs[1:],ind))
                 elif specs[0] == "no_transition":
-                    ind = [idx for idx,x in enumerate(line[1:]) if x != "?"]
-                    self.trans_spec_list.append(line,ind)
-                elif specs[0] == "states":
-                    self.state_count = specs[1]
+                    ind = [idx for idx,x in enumerate(specs[1:]) if x != "?"]
+                    self.trans_spec_list.append((specs[1:],ind))
+
 
         return 
 
@@ -73,14 +75,15 @@ class specification_parser:
     def trans_spec(self):
         trans_list = self.state_graph.E
         for trans in trans_list:
-            states = trans.split(",")
-            match = 0
-            for spec,idx in self.trans_spec_list:
-                for id in idx:
-                    if spec[id] == states[id]:
-                        match +=1
-                if match != len(idx) :
-                    self.edge.append(trans)
+            if trans[0][0] in self.vertex:
+                states = trans[0][0].split(",") + trans[0][1].split(",")
+                match = 0
+                for spec,idx in self.trans_spec_list:
+                    for id in idx:
+                        if spec[id] == states[id]:
+                            match +=1
+                    if match != len(idx) :
+                        self.edge.append(trans)
 
         return
 
@@ -95,22 +98,26 @@ class specification_parser:
         self.out_graph.from_vertice(self.vertex)
         self.out_graph.from_edge(self.edge)
 
+        del self.state_graph
         no_path_found = 0
         #problems how to find a path between two states.
-        for spec,idx in self.path_spec_list:
-          
+        for spec1,idx_1,spec2,idx_2 in self.path_spec_list:
+            
+
+            state1 = []
+            state2 = []
             for vert_id,vert in enumerate(self.vertex):    
                 # find all vertices that match the state in vertex list.
                 # find if any vertex completes the path.
                 # move to the next spec in the list. all spec must meet the stuff.
-                state1 = []
-                state2 = []
+
                 state = vert.split(",")
-                total = [id for id in idx if state[id] == spec[id]]
-                if total == len(idx):
-                    if id[0] < self.state_count:
-                        state1.append((vert,vert_id))
-                    else:
+                total_1 = [id for id in idx_1 if state[id] == spec1[id]]
+                total_2 = [id for id in idx_2 if state[id] == spec2[id]]
+                if len(total_1) == len(idx_1):
+                    state1.append((vert,vert_id))
+
+                if len(total_2) == len(idx_2):
                         state2.append(vert)
             
             for source,id in state1:
@@ -132,12 +139,19 @@ class specification_parser:
 
                         for edge_id in self.out_graph[cur_state]:
                             edge = self.out_graph.E[edge_id]
-                            edge_state = ",".join(edge[0][1])
+                            edge_state = edge[0][1]
                             edge_state_id = self.out_graph.vert_dict[edge_state]
+                            
+                            #if at destination add to path found and break loop
                             if edge_state_id == dest_id:
-                                marked[edge_state_id] = True
+                                marked[dest_id] = True
                                 no_path_found += 1
                                 break
+
+                            #if state no ttraversed then add to traversal list and mark as traversed
+                            if not marked[edge_state_id]:
+                                traversal.append(edge_state)
+                                marked[edge_state_id] = True 
                     
                     if marked[dest_id]:
                         break
@@ -149,6 +163,15 @@ class specification_parser:
         if no_path_found == len(self.path_spec_list):
             return True
         
-        else
+        else:
             return False
  
+    def reduced_graph(self):
+        self.state_spec()
+        self.trans_spec()
+        valid_graph = self.path_spec()
+        if valid_graph:
+            return self.out_graph
+        else:
+            return None
+        

@@ -42,7 +42,10 @@ class graph:
         if type(edges) != list:
             raise ValueError("Expected List of edges")
         
-        for idx,edge,trans,W in enumerate(edges):
+        for idx,data in enumerate(edges):
+            edge = data[0]
+            trans = data[1]
+            W = data[2]
             self.E.append((edge,trans,W))
             
             if trans == "ext":
@@ -50,7 +53,7 @@ class graph:
             elif trans == "int":
                 self.int_tran_idx.append(idx)
 
-            self.graph_dict[",".join(edge[0])].append(idx)
+            self.graph_dict[edge[0]].append(idx)
 
 
 
@@ -68,5 +71,7 @@ class graph:
     def get(self, key):
         return self.graph_dict.get(key)
 
+    def __getitem__(self, key):
+        return self.graph_dict[key]
 
 
