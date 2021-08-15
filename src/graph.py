@@ -6,6 +6,7 @@ class graph:
         self.V = []
         self.E = []
         self.graph_dict = {}
+        self.vert_dict = {}
         self.ext_tran_idx = []
         self.int_tran_idx = []
 
@@ -29,6 +30,29 @@ class graph:
             self.graph_dict[edge[0]].append(idx)
         elif type(edge[0]) == list:
             self.graph_dict[",".join(edge[0])].append(idx)
+
+    def from_vertice(self, vertice):
+        if type(vertice) != list:
+            raise ValueError("Expected List of vertices")
+        self.V = vertice
+        self.graph_dict = {x: [] for x in vertice}
+        self.vert_dict = {x: id for id,x in enumerate(vertice)}
+    
+    def from_edge(self, edges):
+        if type(edges) != list:
+            raise ValueError("Expected List of edges")
+        
+        for idx,edge,trans,W in enumerate(edges):
+            self.E.append((edge,trans,W))
+            
+            if trans == "ext":
+                self.ext_tran_idx.append(idx)
+            elif trans == "int":
+                self.int_tran_idx.append(idx)
+
+            self.graph_dict[",".join(edge[0])].append(idx)
+
+
 
 
     @property

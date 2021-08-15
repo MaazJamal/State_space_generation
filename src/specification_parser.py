@@ -10,9 +10,8 @@
 #   
 
 
-import pathlib
+
 from src.graph import graph
-import re
 from os import path
 
 class specification_parser:
@@ -93,7 +92,63 @@ class specification_parser:
         if self.vertex == []:
             self.vertex = self.state_graph.V
         
+        self.out_graph.from_vertice(self.vertex)
+        self.out_graph.from_edge(self.edge)
+
+        no_path_found = 0
         #problems how to find a path between two states.
+        for spec,idx in self.path_spec_list:
+          
+            for vert_id,vert in enumerate(self.vertex):    
+                # find all vertices that match the state in vertex list.
+                # find if any vertex completes the path.
+                # move to the next spec in the list. all spec must meet the stuff.
+                state1 = []
+                state2 = []
+                state = vert.split(",")
+                total = [id for id in idx if state[id] == spec[id]]
+                if total == len(idx):
+                    if id[0] < self.state_count:
+                        state1.append((vert,vert_id))
+                    else:
+                        state2.append(vert)
+            
+            for source,id in state1:
+                for dest in state2:
+                    
+                    #mark all states as unmarked i.e they havent been traversed,
+                    marked = [False] * (len(self.vertex))
+                    
+                    dest_id = self.out_graph.vert_dict[dest]
+                    traversal = []
+                    traversal.append(source)
+                    marked[self.out_graph.vert_dict[source]] = True
+
+                    # edge = edge,tran,W : edge is tuple of list of string defining the state list()
+                    # iterate until traversal list is empty or dest is reached
+                    while traversal and not marked[dest_id]:
+                        
+                        cur_state = traversal.pop()
+
+                        for edge_id in self.out_graph[cur_state]:
+                            edge = self.out_graph.E[edge_id]
+                            edge_state = ",".join(edge[0][1])
+                            edge_state_id = self.out_graph.vert_dict[edge_state]
+                            if edge_state_id == dest_id:
+                                marked[edge_state_id] = True
+                                no_path_found += 1
+                                break
+                    
+                    if marked[dest_id]:
+                        break
+                
+                if marked[dest_id]:
+                    break
+            
         
-        return
+        if no_path_found == len(self.path_spec_list):
+            return True
+        
+        else
+            return False
  
