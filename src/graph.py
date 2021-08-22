@@ -1,6 +1,29 @@
-
+# Class graph
 
 class graph:
+   
+    """
+    A class used to represent graphs
+
+    The class represents directed graphs the vertices are the states of teh system while the 
+    edges are weighted to tell us 
+
+    Attributes
+    ----------
+    says_str : str
+        a formatted string to print out what the animal says
+    name : str
+        the name of the animal
+    sound : str
+        the sound that the animal makes
+    num_legs : int
+        the number of legs the animal has (default 4)
+
+    Methods
+    -------
+    says(sound=None)
+        Prints the animals name and what sound it makes
+    """
 
     def __init__(self):
         self.V = []
