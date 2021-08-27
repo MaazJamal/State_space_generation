@@ -267,6 +267,8 @@ def state_graph_to_file(state_graph,dir):
         
         if not os.path.isdir(dir):
             raise NotADirectoryError()
+        if state_graph is None:
+            raise TypeError("state graph is empty. None Type recieved")
         filename = state_graph.name
         file = dir + filename + ".txt"
 

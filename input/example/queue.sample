@@ -1,0 +1,9 @@
+[atomic]
+X = in,stop,done
+Y = out
+S = active,passive
+Ext = in,N,passive,active,fin
+Ext = done,N,passive,active,fin
+Ext = stop,N,active,passive,inf
+Ext = stop,N,passive,active,inf
+Int = out,N,active,passive,inf 

@@ -1,0 +1,3 @@
+path,2.active,1.active,2.active,1.passive
+no_state,2.passive,1.passive
+no_transition,2.active,1.active,2.passive,1.passive

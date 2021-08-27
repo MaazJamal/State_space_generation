@@ -1,0 +1,9 @@
+[atomic]
+X = arrived,solved,done
+Y = throughput,cpuUsage
+S = active,passive
+Ext = arrived,N,passive,active,fin
+Ext = solved,N,passive,active,fin
+Ext = done,N,passive,active,inf
+Int = throughput,N,active,passive,inf 
+Int = cpuUsage,N,active,passive,inf

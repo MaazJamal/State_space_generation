@@ -61,29 +61,38 @@ class specification_parser:
         vertice_list = self.state_graph.V
         for vertice in vertice_list:
             states = vertice.split(",")
+            match = False
             for spec,idx in self.state_spec_list:
                 
                 ## if vertice state match the rule then skip. Otherwise add to final vertice
-                states = [x for x in idx if states[x] == spec[x]]
-                if len(states) == len(idx):
-                    continue
-                else:
-                    self.vertex.append(vertice)
+                matched_states = [x for x in idx if states[x] == spec[x]]
+                if len(matched_states) == len(idx):
+                    match = True
+                    break
+
+            # if it does not match with anything then append other skip
+            if match != True:
+                self.vertex.append(vertice)
     
         return 
    
     def trans_spec(self):
         trans_list = self.state_graph.E
         for trans in trans_list:
+
             if trans[0][0] in self.vertex:
                 states = trans[0][0].split(",") + trans[0][1].split(",")
-                match = 0
+                match = False
                 for spec,idx in self.trans_spec_list:
                     for id in idx:
                         if spec[id] == states[id]:
-                            match +=1
-                    if match != len(idx) :
-                        self.edge.append(trans)
+                            match = True
+                            break
+                    if match:
+                        break
+                if match != True:
+                    self.edge.append(trans)
+
 
         return
 
@@ -140,19 +149,23 @@ class specification_parser:
                         for edge_id in self.out_graph[cur_state]:
                             edge = self.out_graph.E[edge_id]
                             edge_state = edge[0][1]
-                            edge_state_id = self.out_graph.vert_dict[edge_state]
+                            try:
                             
-                            #if at destination add to path found and break loop
-                            if edge_state_id == dest_id:
-                                marked[dest_id] = True
-                                no_path_found += 1
-                                break
+                                edge_state_id = self.out_graph.vert_dict[edge_state]
+                                
+                                #if at destination add to path found and break loop
+                                if edge_state_id == dest_id:
+                                    marked[dest_id] = True
+                                    no_path_found += 1
+                                    break
 
-                            #if state no ttraversed then add to traversal list and mark as traversed
-                            if not marked[edge_state_id]:
-                                traversal.append(edge_state)
-                                marked[edge_state_id] = True 
-                    
+                                #if state no ttraversed then add to traversal list and mark as traversed
+                                if not marked[edge_state_id]:
+                                    traversal.append(edge_state)
+                                    marked[edge_state_id] = True 
+                            except KeyError:
+                                print("removed state found.")
+                        
                     if marked[dest_id]:
                         break
                 

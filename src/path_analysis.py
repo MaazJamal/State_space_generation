@@ -19,7 +19,7 @@ class path_analysis:
     def path_exists(self):
         
         vertex = self.graph.V
-        visited = [[False,False]] * len(vertex)
+        visited = [[False,False] for i in range(len(vertex))]  
         traversal = []
         visited[0][0] = True
         traversal.append(vertex[0])
@@ -33,22 +33,29 @@ class path_analysis:
             for edge_id in edge_idx:
                 edge = self.graph.E[edge_id]
                 edge_state = edge[0][1]
-                edge_state_id = self.out_graph.vert_dict[edge_state]
-                
-                if visited[edge_state_id][0] == False:
-                    traversal.append(edge_state)
-                    visited[edge_state_id][0] = True 
+                try:
+                    edge_state_id = self.graph.vert_dict[edge_state]
+                    
+                    if visited[edge_state_id][0] == False:
+                        traversal.append(edge_state)
+                        visited[edge_state_id][0] = True 
+                except KeyError:
+                    continue
 
 
         if count != len(vertex):
             raise ValueError("No path found to all vertices. Last vertice: "+last_visited)
 
         # now find a path back to everything
-        state_id = self.out_graph.vert_dict[last_visited]
+        state_id = self.graph.vert_dict[last_visited]
+
+        visited = [[False,False] for i in range(len(vertex))]  
         visited[state_id][0] = True
         traversal.append(vertex[state_id])
         self.not_allowed_states = []
         self.is_path = False
+
+        count = 0
         while traversal:
 
             vertice = traversal.pop()
@@ -60,7 +67,7 @@ class path_analysis:
                 edge_state = edge[0][1]
                 
                 try:
-                    edge_state_id = self.out_graph.vert_dict[edge_state]
+                    edge_state_id = self.graph.vert_dict[edge_state]
                     
                     if visited[edge_state_id][0] == False:
                         traversal.append(edge_state)
@@ -70,7 +77,7 @@ class path_analysis:
                         traversal = []
                         break
                 except KeyError:
-                    self.not_allowed_states.append()
+                    self.not_allowed_states.append(edge_state)
                     print("Transition to not-allowed state found: "+edge_state)
         
 
@@ -88,7 +95,7 @@ class path_analysis:
             vertex = self.graph.V
             visited = [False] * len(vertex)
             traversal = []
-            visited[0][0] = True
+            visited[0] = True
             traversal.append(vertex[0])
             strong_transition = []
             weak_transition = []
@@ -139,11 +146,11 @@ class path_analysis:
                     
 
                     try:
-                        edge_state_id = self.out_graph.vert_dict[edge_state]
+                        edge_state_id = self.graph.vert_dict[edge_state]
                     
-                        if visited[edge_state_id][0] == False:
+                        if visited[edge_state_id] == False:
                             traversal.append(edge_state)
-                            visited[edge_state_id][0] = True
+                            visited[edge_state_id] = True
                     except KeyError:
                         continue 
 
@@ -156,18 +163,21 @@ class path_analysis:
             if len(weak) > 0:
                 file.write("[weak]\n")
                 for edge in weak:
-                    line = "".join([edge[0][0],edge[0][1],edge[1],edge[2][0],edge[2][1],edge[2][2],"\n"])
+                    transition = "".join(edge[0])
+                    line = ",".join([transition,edge[1],edge[2][0],edge[2][1],edge[2][2],"\n"])
                     file.write(line)
             
             if len(strong) > 0:
                 file.write("[strong]\n")
                 for edge in strong:
-                    line = "".join([edge[0][0],edge[0][1],edge[1],edge[2][0],edge[2][1],edge[2][2],"\n"])
+                    transition = "".join(edge[0])
+                    line = ",".join([transition,edge[1],edge[2][0],edge[2][1],edge[2][2],"\n"])
                     file.write(line)
       
             if len(very_strong) > 0:
                 file.write("[very_strong]\n")
                 for edge in very_strong:
-                    line = "".join([edge[0][0],edge[0][1],edge[1],edge[2][0],edge[2][1],edge[2][2],"\n"])
+                    transition = "".join(edge[0])
+                    line = ",".join([transition,edge[1],edge[2][0],edge[2][1],edge[2][2],"\n"])
                     file.write(line)
    

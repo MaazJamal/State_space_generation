@@ -1,0 +1,16 @@
+[atomic]
+X = h
+Y = s
+S = cold,cool,warm,hot
+Ext = h,N,cold,cool,inf 
+Ext = h,N,cold,warm,inf 
+Ext = h,N,cold,hot,inf 
+Ext = h,N,cool,warm,inf
+Ext = h,N,cool,hot,inf
+Ext = h,N,hot,warm,inf 
+Ext = h,N,hot,warm,inf
+Ext = h,N,hot,cool,inf
+Ext = h,N,hot,cold,inf
+Ext = h,N,warm,cool,inf
+Ext = h,N,warm,cold,inf
+Ext = h,N,cool,cold,inf
