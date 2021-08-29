@@ -1,0 +1,14 @@
+[coupled]
+X = heater.pw,thermostat.h,coupled.in
+Y = heater.h,thermostat.s,coupled.out
+D = 1,2
+M = heater,thermostat
+EIC = coupled.in,1.pw
+EOC = 2.s,coupled.out
+IC = 1.h,2.h
+select = 1,2
+
+
+
+
+

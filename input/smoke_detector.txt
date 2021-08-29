@@ -1,0 +1,5 @@
+[atomic]
+Y = smoke_out
+S = no_smoke,smoke
+Int = smoke_out,sch,no_smoke,smoke,fin
+Int = smoke_out,sch,smoke,no_smoke,fin

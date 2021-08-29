@@ -9,7 +9,6 @@ class path_analysis:
         very_strong_transition,strong_transition,weak_transition = self.controllability()
         self.print_controllability(very_strong_transition,strong_transition,weak_transition)
 
-
     # def parse_objectives(self):
         
     #     with open(self.objective,"r") as f:
@@ -180,4 +179,56 @@ class path_analysis:
                     transition = "".join(edge[0])
                     line = ",".join([transition,edge[1],edge[2][0],edge[2][1],edge[2][2],"\n"])
                     file.write(line)
-   
+    
+
+    def inverse_devs(self, source_coupled):
+        # Use the coupled representation just for the coupled outputs adn inputs
+        # The controller is an atomic model. Remember coupled models can be converted to 
+        # atomic models using the closure under coupling property. 
+        # the states are the states of the graph. The transitions are what we have.
+
+        # How do we reduce the states and transitions? 
+
+        Y = [port.split(".")[1] for port in source_coupled._input]
+        X = [port.split(".")[1] for port in source_coupled._output]
+        states = ["({})".format(state) for state in self.graph.V]
+        ext = []
+        int = [] 
+
+        # Edge is structured as 3 tuple. 
+        #   list of states. 0 is first state 1 is second state
+        #   string int or ext
+        #   list of transition. 0 is the port, 1 is the output, 2 is time advance
+
+
+        for edge in self.graph.E:
+            
+            trans = "({}),({}),{}".format(edge[0][0],edge[0][1],edge[2][2])
+            port_io = "{},{},".format(edge[2][0],edge[2][1])
+               
+            # invert ext to int and vice versa
+            if edge[1] == "ext":
+                int.append("Int = "+port_io+trans+"\n")
+            elif edge[2] == "int":
+                ext.append("Ext = "+port_io+trans+"\n")
+
+        with open("output/inverse.txt","w+") as file:
+            file.write("[inverse_atomic]\n")
+            file.write("X = ")
+            file.write(",".join(X))
+            file.write("\n")
+            file.write("Y = ")
+            file.write(",".join(Y))
+            file.write("\n")
+            file.write("S = ")
+            file.write(",".join(states))
+            file.write("\n")
+            file.writelines(ext)
+            file.writelines(int)
+
+            file.close()
+        
+
+            
+
+            

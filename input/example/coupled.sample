@@ -7,8 +7,3 @@ EIC = coupled.in,1.in
 EOC = 2.cpuUsage,coupled.out
 IC = 2.throughput,1.stop
 select = 2,1
-
-
-
-
-

@@ -1,0 +1,8 @@
+[atomic]
+X = pw
+Y = h
+S = passive,on,active,off
+Ext = pw,on,passive,on,fin
+Ext = pw,off,active,off,fin
+Int = h,act,off,passive,inf
+Int = h,pas,on,active,inf

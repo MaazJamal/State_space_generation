@@ -1,0 +1,8 @@
+[atomic]
+X = occupency_in
+Y = occupency_out
+S = entry,exit,not_occupied,occupied
+Ext = occupency_in,ocs,occupied,exit,fin
+Ext = occupency_in,ocs,not_occupied,entry,fin
+Int = occupency_out,och,entry,occupied,inf
+Int = occupency_out,och,exit,not_occupied,inf
