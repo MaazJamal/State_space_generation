@@ -1,8 +1,0 @@
-[atomic]
-Y = co2_out
-S = low,medium,high
-Int = co2_out,co2h,low,medium,fin
-Int = co2_out,co2h,low,high,fin
-Int = co2_out,co2h,medium,high,fin
-Int = co2_out,co2h,high,medium,fin
-Int = co2_out,co2h,high,low,fin

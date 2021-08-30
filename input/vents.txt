@@ -1,11 +1,9 @@
 [atomic]
-X = co2_in
+X = co2_out
 Y = vent_out
-S = shut,half_open,full_open
-Ext = co2_in,low,half_open,shut,inf
-Ext = co2_in,low,full_open,shut,inf
-Ext = co2_in,medium,shut,half_open,inf
-Ext = co2_in,medium,full_open,half_open,inf
-Ext = co2_in,high,half_open,full_open,inf
-Ext = co2_in,high,shut,full_open,inf
-Int = 
+S = shut,closing,opening,full_open
+Ext = co2_in,high,shut,opening,fin
+Ext = co2_in,low,full_open,closing,fin
+Int = vent_out,open,opening,full_open,inf
+Int = vent_out,close,closing,shut,inf
+
