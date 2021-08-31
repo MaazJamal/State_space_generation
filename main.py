@@ -10,6 +10,7 @@ state_graph_to_file(graphs,"output/")
 spec_obj = sp(graphs, "input/spec/specification.txt")
 
 out = spec_obj.reduced_graph()
+del(spec_obj)
 state_graph_to_file(out,"output/")
 analysis = pa(out,"no")
 analysis.path_exists()

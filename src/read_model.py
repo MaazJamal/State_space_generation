@@ -1,5 +1,6 @@
 import os
 import glob
+import posixpath
 from src.atomic import atomic as at
 from src.coupled import coupled as coup
 
@@ -11,8 +12,10 @@ class read_model:
             raise NotADirectoryError()
         
     def file_names(self):
-        searchstring = self.dir + "/*.txt"
-        return glob.glob(searchstring)
+        searchstring = os.path.join(self.dir+"/","*.txt")
+        files = glob.glob(searchstring)
+        files = [f.replace(os.sep, posixpath.sep) for f in files]
+        return files
     
     """ This method reads the transition of an atomic model to tell the result."""
 
@@ -78,7 +81,8 @@ class read_model:
                 elif atomic:
 
                     data = line.split("=")
-
+                    X = None
+                    Y = None
                     if data[0]== "X":
                         X = data[1].split(',')
                     if data[0] == "Y":
@@ -129,6 +133,8 @@ class read_model:
 
                     data = line.split("=")
 
+                    X = None
+                    Y = None
                     if data[0]== "X":
                         X = data[1].split(',')
                     if data[0] == "Y":
