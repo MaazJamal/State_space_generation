@@ -1,4 +1,11 @@
-path,1.on,2.cold,1.off,2.hot
-no_state,1.off,2.cold
-no_state,1.on,2.hot
+path,smoke.no_smoke,alarm.alarm_off,CO2.low,vents.shut,occup.not_occupied,light.off,smoke.smoke,alarm.alarm_on,CO2.high,vents.full_open,occup.occupied,light.on
+no_state,smoke.no_smoke,alarm.alarm_on,?,?,?,?
+no_state,smoke.smoke,alarm.alarm_off,?,?,?,?
+no_state,?,?,CO2.low,vents.full_open,?,?
+no_state,?,?,CO2.high,vents.shut,?,?
+no_state,?,?,?,?,occup.not_occupied,light.on
+no_state,?,?,?,?,occup.occupied,light.off
+
+
+
 

@@ -271,17 +271,21 @@ def state_graph_to_file(state_graph,dir):
             raise TypeError("state graph is empty. None Type recieved")
         filename = state_graph.name
         file = dir + filename + ".txt"
+        file_vertice = dir + filename + "_vertice.txt"
 
-        with open(file,"w") as f:
+        with open(file,"w") as f, open(file_vertice,"w") as fv:
 
             vertices = state_graph.graph_dict.keys()
+            data_vertice = []
             for V in vertices:
                 data = []
                 if type(V) == str:
                     state = V
                 if type(V) == list:
                     state = ",".join(V)
-                data.append("".join(["V,",state,"\n"]))
+                vert = "".join(["V,",state,"\n"])
+                data.append(vert)
+                data_vertice.append(vert)
                 for edge_idx in state_graph.graph_dict[state]:
                     edge = state_graph.E[edge_idx]
                     edge_str = ["E"]
@@ -295,7 +299,9 @@ def state_graph_to_file(state_graph,dir):
                     data.append("".join([",".join(edge_str),"\n"]))
                     
                 f.writelines(data)
+            fv.writelines(data_vertice)
         f.close()
+        fv.close()
 
 #TODO future State space of multiple models.
 #def state_space_multiple():  
