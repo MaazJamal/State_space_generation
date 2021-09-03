@@ -11,8 +11,3 @@ IC = CO2.co2_out,vents.co2_out
 IC = occup.occupency_out,light.occupency_out
 IC = smoke.smoke_out,alarm.smoke_out
 select = smoke,alarm,CO2,vents,occup,light
-
-
-
-
-

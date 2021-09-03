@@ -1,0 +1,9 @@
+[atomic]
+X = co2_out
+Y = vent_out
+S = shut,closing,opening,full_open
+Ext = co2_in,high,shut,opening,fin
+Ext = co2_in,low,full_open,closing,fin
+Int = vent_out,open,opening,full_open,inf
+Int = vent_out,close,closing,shut,inf
+

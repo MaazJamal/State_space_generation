@@ -1,0 +1,7 @@
+original state space = 9216
+coupled state space representation = 1560
+spec state space representation = 840
+coupled state space representatoin = 30000000
+specifications ~= 10000000
+
+
