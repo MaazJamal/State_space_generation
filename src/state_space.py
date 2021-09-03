@@ -53,7 +53,13 @@ def state_space(model):
     EIC = np.array(model._EIC)
     EOC = np.array(model._EOC)
     IC = np.array(model._IC)
-    external_coupled = EIC[:,2].tolist() #complete today
+    eic_exist = False
+
+    if EIC.size == 0:
+        eic_exist = False
+    else:
+        eic_exist = True
+        external_coupled = EIC[:,2].tolist() #complete today
     internal_coupled = IC[:,0].tolist() #complete today
     output_coupled = EOC[:,0].tolist() #complete tomorrow
         
@@ -73,40 +79,41 @@ def state_space(model):
         #find if component is in the external coupled list
         
         #index = external_coupled.index(component) if component in external_coupled else None
-        index = [i for i,item in enumerate(external_coupled) if component == item]
-        if index != []:
-            for idx in index:
-                component_name_port = EIC[idx][2:]
-                ext_trans = atomic_model.trans_ext
-                ext_trans_port = [port for port in ext_trans if port[0] == component_name_port.tolist()[1]]
-                for trans in ext_trans_port:
-                    port = trans[0]
-                    #if port == component_name_port.split('.')[1]:
-                    #state_1 is the index of first state in the transition
-                    state_1 = []
-                    state_2 = []
-                    for state_index,state in enumerate(all_states[:,component_idx].tolist()):
-                        if state.split(".")[1] == trans[2][0]:
-                            state_1.append(state_index)
-                        elif state.split(".")[1] == trans[2][1]:
-                            state_2.append(state_index)
-                    
-                    for state1_id in state_1:
-                        #convert to string
-                        state1_name = ",".join(all_states[state1_id].tolist())
-                        if state_graph.get(state1_name) is None:
-                            state_graph.add_vertex(state1_name)
+        if eic_exist:
+            index = [i for i,item in enumerate(external_coupled) if component == item]
+            if index != []:
+                for idx in index:
+                    component_name_port = EIC[idx][2:]
+                    ext_trans = atomic_model.trans_ext
+                    ext_trans_port = [port for port in ext_trans if port[0] == component_name_port.tolist()[1]]
+                    for trans in ext_trans_port:
+                        port = trans[0]
+                        #if port == component_name_port.split('.')[1]:
+                        #state_1 is the index of first state in the transition
+                        state_1 = []
+                        state_2 = []
+                        for state_index,state in enumerate(all_states[:,component_idx].tolist()):
+                            if state.split(".")[1] == trans[2][0]:
+                                state_1.append(state_index)
+                            elif state.split(".")[1] == trans[2][1]:
+                                state_2.append(state_index)
+                        
+                        for state1_id in state_1:
+                            #convert to string
+                            state1_name = ",".join(all_states[state1_id].tolist())
+                            if state_graph.get(state1_name) is None:
+                                state_graph.add_vertex(state1_name)
 
-                        for state2_id in state_2:
-                            state2_name = ",".join(all_states[state2_id].tolist())
-                            if state_graph.get(state2_name) is None:
-                                state_graph.add_vertex(state2_name)
-                            
-                            W = [port,trans[1],trans[-1]]
-                            trans_type = "ext"
-                            edge = (state1_name,state2_name)
-                            state_graph.add_edge(edge,trans_type,W)
-        
+                            for state2_id in state_2:
+                                state2_name = ",".join(all_states[state2_id].tolist())
+                                if state_graph.get(state2_name) is None:
+                                    state_graph.add_vertex(state2_name)
+                                
+                                W = [port,trans[1],trans[-1]]
+                                trans_type = "ext"
+                                edge = (state1_name,state2_name)
+                                state_graph.add_edge(edge,trans_type,W)
+            
 
         # Internal coupling space
         

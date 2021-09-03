@@ -181,7 +181,7 @@ class path_analysis:
                     file.write(line)
     
 
-    def inverse_devs(self, source_coupled):
+    def inverse_devs(self, source_coupled,dir="output/"):
         # Use the coupled representation just for the coupled outputs adn inputs
         # The controller is an atomic model. Remember coupled models can be converted to 
         # atomic models using the closure under coupling property. 
@@ -212,7 +212,7 @@ class path_analysis:
             elif edge[2] == "int":
                 ext.append("Ext = "+port_io+trans+"\n")
 
-        with open("output/inverse.txt","w+") as file:
+        with open(dir+"inverse.txt","w+") as file:
             file.write("[inverse_atomic]\n")
             file.write("X = ")
             file.write(",".join(X))
