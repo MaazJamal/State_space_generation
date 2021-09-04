@@ -1,5 +1,12 @@
 [atomic]
+X = alarm_out
 Y = smoke_out
-S = no_smoke,smoke
-Int = smoke_out,sch,no_smoke,smoke,fin
-Int = smoke_out,scl,smoke,no_smoke,fin
+S = no_smoke-off,smoke-off,no_smoke-on,smoke-on
+Ext = smoke_out,on,no_smoke-off,no_smoke-on,fin
+Ext = smoke_out,off,no_smoke-on,smoke-off,fin
+Ext = smoke_out,off,smoke-on,no_smoke-off,fin
+Ext = smoke_out,on,smoke-off,no_smoke-on,fin
+Int = smoke_out,sch,no_smoke-off,smoke-off,fin
+Int = smoke_out,scl,smoke-off,no_smoke-off,fin
+Int = smoke_out,sch,no_smoke-on,smoke-on,fin
+Int = smoke_out,scl,smoke-on,no_smoke-on,fin

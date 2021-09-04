@@ -1,8 +1,18 @@
 [atomic]
+X = vents_out
 Y = co2_out
-S = low,medium,high
-Int = co2_out,co2h,low,medium,fin
-Int = co2_out,co2h,low,high,fin
-Int = co2_out,co2h,medium,high,fin
-Int = co2_out,co2h,high,medium,fin
-Int = co2_out,co2h,high,low,fin
+S = low-open,medium-opem,high-open,low-closed,medium-closed,high-closed
+Ext = vents_out,ventl,low-open,low-closed,inf
+Ext = vents_out,ventl,medium-open,medium-closed,inf
+Ext = vents_out,ventl,high-open,high-closed,inf
+Ext = vents_out,venth,low-closed,low-open,inf
+Ext = vents_out,venth,medium-closed,medium-open,inf
+Ext = vents_out,venth,high-closed,high-open,inf
+Int = co2_out,co2h,low-open,medium-open,fin
+Int = co2_out,co2h,medium-open,high-open,fin
+Int = co2_out,co2h,high-open,medium-open,fin
+Int = co2_out,co2h,medium-open,low-open,fin
+Int = co2_out,co2h,low-closed,medium-closed,fin
+Int = co2_out,co2h,medium-closed,high-closed,fin
+Int = co2_out,co2h,high-closed,medium-closed,fin
+Int = co2_out,co2h,medium-closed,low-closed,fin

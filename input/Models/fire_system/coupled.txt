@@ -1,8 +1,9 @@
 [coupled]
-X = fire_alarm.smoke_out
+X = fire_alarm.smoke_out,smoke_detector.alarm_out
 Y = fire_alarm.alarm_out,smoke_detector.smoke_out,coupled.fire
 D = alarm,smoke
 M = fire_alarm,smoke_detector
+EIC = smoke_detector.alarm_out,coupled.alarm_in
 EOC = fire_alarm.alarm_out,coupled.fire
 IC = smoke.smoke_out,alarm.smoke_out
 select = smoke,alarm

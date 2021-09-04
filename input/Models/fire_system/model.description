@@ -1,0 +1,13 @@
+This coupled model consists of two atomic models
+
+1 - smoke_detector:
+    the smoke detector has states smoke, no-smoke and sub states where fir alarms is on or off 
+    The smoke detector would detect an increase in smoke when the fire alarms are off. When the fire-alarms 
+    are on then the smoke detector may detect lower levels.
+
+2 - alarm:
+    simple alarms with  4 states. 2 states are changed due to external transition from smoke detector and two states act on vents
+    to open or close them by using internal or external transitions.
+
+The control objective here is to trigger the alarm when the smoke level reaches high and keep it there until reset. Ah i think we need 
+a third atomic.

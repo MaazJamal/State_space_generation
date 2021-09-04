@@ -1,0 +1,15 @@
+This coupled model consists of two atomic models
+
+1 - Smoke Detector:
+    The CO2 detector has states low,medium,high that can fluctuate between vents being open
+    vs shut.
+    The CO2 detector should be thought of as a higher models of a sensor and smart controller on top.
+    The detector know whether the vents are open or closed. this allows us to accrately model its behaviour.
+    when vents are open the co2 levels should decrease, when the vents are closed the co2 level should increase.
+
+2 - alarm:
+    simple vents with  4 states. 2 states are changed due to external transition from co2 and two states act on vents
+    to open or close them by using internal or external transitions.
+
+the control objective here are to keep the CO2 level at low to medium and avoid the state where the levels are high and the vents
+are closed. 
