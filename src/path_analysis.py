@@ -156,9 +156,9 @@ class path_analysis:
         return (very_strong_transition,strong_transition,weak_transition)
         
     
-    def print_controllability(self,very_strong,strong,weak):
-
-        with open("output/controllabilty.txt","w+") as file:
+    def print_controllability(self,very_strong,strong,weak,dir="output/"):
+        file_dir = dir+"controllabilty.txt"
+        with open(file_dir,"w+") as file:
             if len(weak) > 0:
                 file.write("[weak]\n")
                 for edge in weak:

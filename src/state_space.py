@@ -271,7 +271,7 @@ def state_space(model):
 
 
 def state_graph_to_file(state_graph,dir):
-        
+        dir = dir+"/"
         if not os.path.isdir(dir):
             raise NotADirectoryError()
         if state_graph is None:
