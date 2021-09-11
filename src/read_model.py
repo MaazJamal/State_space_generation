@@ -64,7 +64,8 @@ class read_model:
             coupled = False
             ext_trans = []
             int_trans = []
-
+            X = None
+            Y = None
             for line in f:
                 line = line.replace(" ",'')
                 line = line.strip()
@@ -81,8 +82,7 @@ class read_model:
                 elif atomic:
 
                     data = line.split("=")
-                    X = None
-                    Y = None
+
                     if data[0]== "X":
                         X = data[1].split(',')
                     if data[0] == "Y":
@@ -112,6 +112,8 @@ class read_model:
             header_flag = False
             atomic = False
             coupled = False
+            X = None
+            Y = None
             M = []
             EIC = []
             IC = []
@@ -133,8 +135,7 @@ class read_model:
 
                     data = line.split("=")
 
-                    X = None
-                    Y = None
+
                     if data[0]== "X":
                         X = data[1].split(',')
                     if data[0] == "Y":

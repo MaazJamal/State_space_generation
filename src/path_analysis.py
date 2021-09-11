@@ -43,7 +43,12 @@ class path_analysis:
 
 
         if count != len(vertex):
-            raise ValueError("No path found to all vertices. Last vertice: "+last_visited)
+            error_str = [last_visited,"Not Visited:"]
+            for  vidx,visit in enumerate(visited):
+                if visit[0] == False:
+                    error_str.append(vertex[vidx])
+            error_str = "\n".join(error_str)
+            raise ValueError("No path found to all vertices. Last vertice: "+error_str)
 
         # now find a path back to everything
         state_id = self.graph.vert_dict[last_visited]

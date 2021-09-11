@@ -1,7 +1,7 @@
 [atomic]
 X = vents_out
 Y = co2_out
-S = low-open,medium-opem,high-open,low-closed,medium-closed,high-closed
+S = low-open,medium-open,high-open,low-closed,medium-closed,high-closed
 Ext = vents_out,ventl,low-open,low-closed,inf
 Ext = vents_out,ventl,medium-open,medium-closed,inf
 Ext = vents_out,ventl,high-open,high-closed,inf
