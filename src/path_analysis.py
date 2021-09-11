@@ -6,8 +6,6 @@ class path_analysis:
         self.graph = graph
         self.objective = objectives_file
         self.path_exists()
-        very_strong_transition,strong_transition,weak_transition = self.controllability()
-        self.print_controllability(very_strong_transition,strong_transition,weak_transition)
 
     # def parse_objectives(self):
         
@@ -162,7 +160,7 @@ class path_analysis:
         
     
     def print_controllability(self,very_strong,strong,weak,dir="output/"):
-        file_dir = dir+"controllabilty.txt"
+        file_dir = dir+"/controllabilty.txt"
         with open(file_dir,"w+") as file:
             if len(weak) > 0:
                 file.write("[weak]\n")
@@ -217,7 +215,7 @@ class path_analysis:
             elif edge[2] == "int":
                 ext.append("Ext = "+port_io+trans+"\n")
 
-        with open(dir+"inverse.txt","w+") as file:
+        with open(dir+"/"+"inverse.txt","w+") as file:
             file.write("[inverse_atomic]\n")
             file.write("X = ")
             file.write(",".join(X))

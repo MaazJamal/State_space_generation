@@ -48,6 +48,8 @@ def multiple_loop():
         state_graph_to_file(out,out_path)
         analysis = pa(out,"no")
         analysis.path_exists()
+        very_strong_transition,strong_transition,weak_transition = analysis.controllability()
+        analysis.print_controllability(very_strong_transition,strong_transition,weak_transition,model_dir)
         analysis.inverse_devs(coupleds[0],out_path)
 
 
