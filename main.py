@@ -5,7 +5,7 @@ from src.path_analysis import path_analysis as pa
 import argparse
 import os
 import posixpath
-
+from src.make_cadmium_hpp import read_inverse_files
 def single_loop():
     
     reader_obj = read_model("input")
@@ -52,6 +52,9 @@ def multiple_loop():
         
         analysis.print_controllability(very_strong_transition,strong_transition,weak_transition,out_path+"/")
         analysis.inverse_devs(coupleds[0],out_path)
+    
+
+    read_inverse_files("output/Models/")
 
 
 
