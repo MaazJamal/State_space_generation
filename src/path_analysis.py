@@ -194,7 +194,7 @@ class path_analysis:
 
         Y = [port.split(".")[1] for port in source_coupled._input]
         X = [port.split(".")[1] for port in source_coupled._output]
-        states = ["({})".format(state) for state in self.graph.V]
+        states = ["{}".format(state) for state in self.graph.V]
         ext = []
         int = [] 
 
@@ -206,8 +206,8 @@ class path_analysis:
 
         for edge in self.graph.E:
             
-            trans = "({}),({}),{}".format(edge[0][0],edge[0][1],edge[2][2])
-            port_io = "{},{},".format(edge[2][0],edge[2][1])
+            trans = "{}:{}|{}".format(edge[0][0],edge[0][1],edge[2][2])
+            port_io = "{}|{}|".format(edge[2][0],edge[2][1])
                
             # invert ext to int and vice versa
             if edge[1] == "ext":
@@ -224,7 +224,7 @@ class path_analysis:
             file.write(",".join(Y))
             file.write("\n")
             file.write("S = ")
-            file.write(",".join(states))
+            file.write("|".join(states))
             file.write("\n")
             file.writelines(ext)
             file.writelines(int)

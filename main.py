@@ -49,7 +49,8 @@ def multiple_loop():
         analysis = pa(out,"no")
         analysis.path_exists()
         very_strong_transition,strong_transition,weak_transition = analysis.controllability()
-        analysis.print_controllability(very_strong_transition,strong_transition,weak_transition,model_dir)
+        
+        analysis.print_controllability(very_strong_transition,strong_transition,weak_transition,out_path+"/")
         analysis.inverse_devs(coupleds[0],out_path)
 
 
@@ -67,4 +68,3 @@ if __name__ == "__main__":
     
     elif args.mode == 1:
         multiple_loop()
-    

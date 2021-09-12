@@ -1,9 +1,20 @@
 import os 
 
 
+def write_inverse(dir,in_ports,out_ports,states,int,ext):
+    
+    out = []
+    with open(dir,"w+") as file:
+        for idx,state in enumerate(states):
+            state = state.replace(".","_")
+            state = state.replace(",","_")
+            state = state.upper()
+            out.append("#define {} {}".format(state,idx))
 
 
-def write_cadmium(file_dir):
+
+
+def read_inverse(file_dir):
 
     with open(file_dir,"r+") as file:
         lines = file.readlines
@@ -21,14 +32,16 @@ def write_cadmium(file_dir):
             elif what == "Y":
                 out_ports = data.split(",")
             elif what == "S":
-                states = data.split(",")
+                states = data.split("|")
             elif what == "Int":
-                int.append(data.split(","))
+                int.append(data.split("|"))
             elif what == "Ext":
-                ext.append(data.split(","))
-                
+                ext.append(data.split("|"))
+    file.close()     
+    return  in_ports,out_ports,states,int,ext
+ 
 
-    return 
-
-def write_files(top_dir):
+def read_inverse_files(top_dir):
+    
+    dir = os.listdir(top_dir)
     return
