@@ -35,3 +35,9 @@ struct CO2_defs {
     struct vent : public in_port<string> { };
     struct co2_out : public in_port<string> { };
 }
+
+
+//INTERNAL TRANSITIONS
+
+switch (this->state.state) {
+    case {}:

@@ -10,6 +10,7 @@ def write_inverse(dir,in_ports,out_ports,states,int,ext):
             state = state.replace(".","_")
             state = state.replace(",","_")
             state = state.upper()
+            
             out.append("#define {} {}\n".format(state,idx))
         
         out.append("\n\n\n //PORTS \n\n")

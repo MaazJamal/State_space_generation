@@ -176,7 +176,7 @@ def state_space(model):
                                 state_graph.add_vertex(state2_name)
                             
                             W = [port,trans[1],trans[-1]]
-                            trans_type = "ext"
+                            trans_type = "int"
                             edge = (state1_name,state2_name)
                             state_graph.add_edge(edge,trans_type,W)
 

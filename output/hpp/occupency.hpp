@@ -26,3 +26,9 @@ struct occupency_defs {
     struct light_out : public in_port<string> { };
     struct light : public in_port<string> { };
 }
+
+
+//INTERNAL TRANSITIONS
+
+switch (this->state.state) {
+    case {}:

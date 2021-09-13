@@ -25,3 +25,9 @@ struct fire_system_defs {
     struct smoke_out : public in_port<string> { };
     struct fire : public in_port<string> { };
 }
+
+
+//INTERNAL TRANSITIONS
+
+switch (this->state.state) {
+    case {}:
