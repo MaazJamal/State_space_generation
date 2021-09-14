@@ -212,7 +212,7 @@ class path_analysis:
             # invert ext to int and vice versa
             if edge[1] == "ext":
                 int.append("Int = "+port_io+trans+"\n")
-            elif edge[2] == "int":
+            elif edge[1] == "int":
                 ext.append("Ext = "+port_io+trans+"\n")
 
         with open(dir+"/"+"inverse.txt","w+") as file:
