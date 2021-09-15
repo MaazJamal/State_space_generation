@@ -20,6 +20,12 @@
 # we cater for the scenario where both models have fin internal transition and will trigger 
 # in some time?
 
+
+#### Making the change so that their can only be one transition at a time. To avoid complications
+### This is done by ensuring only one atomic model is allowed to change the state.
+### I justify this by saying that in case multiple events happen at the same time then the system can 
+### carry out multiple transitions in sequence. The state space graph should not be polluted.
+
 from src.graph import graph
 from src.coupled import coupled 
 from src.atomic import atomic
@@ -38,7 +44,9 @@ def combinator(model):
         #add name of the component to the state so that we can distinguish it from others
         component_state = [".".join([component,state]) for state in component_state ]
         states.append(component_state)
+ 
     combinations = np.array(list(itertools.product(*states)))
+  
     return combinations
 
 
@@ -73,8 +81,6 @@ def state_space(model):
     for component_idx,component in enumerate(component_order):
         atomic_model = model.component_dict[component]
 
-        ####### REMOVE THIS LINE BEFORE RUNNING
-    #    atomic_model = atomic()
         
         #find if component is in the external coupled list
         
@@ -92,20 +98,37 @@ def state_space(model):
                         #state_1 is the index of first state in the transition
                         state_1 = []
                         state_2 = []
+
+                        ## These states are the states of the atomics. not the coupled state space
                         for state_index,state in enumerate(all_states[:,component_idx].tolist()):
                             if state.split(".")[1] == trans[2][0]:
-                                state_1.append(state_index)
+                                state_1.append([state_index, state])
                             elif state.split(".")[1] == trans[2][1]:
                                 state_2.append(state_index)
                         
-                        for state1_id in state_1:
+                        # These states are combined states of the coupled model
+                        for state1_id,state_name in state_1:
                             #convert to string
-                            state1_name = ",".join(all_states[state1_id].tolist())
+                            states = all_states[state1_id].tolist()
+
+                            ## We need the position to distinguish between instances eof the same type
+                            position = states.index(state_name)
+                            state1_name = ",".join(states)
                             if state_graph.get(state1_name) is None:
                                 state_graph.add_vertex(state1_name)
 
                             for state2_id in state_2:
-                                state2_name = ",".join(all_states[state2_id].tolist())
+                                
+                                ## new code 
+                                states_2 = all_states[state2_id].tolist()
+                                matches = len([x for idx,x in enumerate(states_2) if x==states[idx] and idx !=position])
+                                # if there are less matches than more than one atomic has changed state so we skip
+                                if matches != (len(states_2)-1):
+                                    continue
+                                state2_name = ",".join(states_2)
+                                
+                                ### End of new code to prevent state transitions from multiple atomics from one input.
+                                
                                 if state_graph.get(state2_name) is None:
                                     state_graph.add_vertex(state2_name)
                                 
@@ -158,19 +181,30 @@ def state_space(model):
                     state_2 = []
                     for state_index,state in enumerate(all_states[:,component_idx].tolist()):
                         if state.split(".")[1] == trans[2][0]:
-                            state_1.append(state_index)
+                            state_1.append([state_index,state])
                         elif state.split(".")[1] == trans[2][1]:
                             state_2.append(state_index)
                             global_state_2.append(state_index)
                     
-                    for state1_id in state_1:
+                    for state1_id,state_name in state_1:
                         #convert to string
-                        state1_name = ",".join(all_states[state1_id].tolist())
+                        states = all_states[state1_id].tolist()
+                        position = states.index(state_name)
+
+                        state1_name = ",".join(states)
                         if state_graph.get(state1_name) is None:
                             state_graph.add_vertex(state1_name)
 
                         for state2_id in state_2:
-                            state2_name = ",".join(all_states[state2_id].tolist())
+
+                            states_2 = all_states[state2_id].tolist()
+
+                            #number of matches needs to be one less than total as the one atomic is always changing state
+                            matches = len([x for idx,x in enumerate(states_2) if x==states[idx]])
+                            ## there need to be an exact number of matches otherwise 
+                            if matches != len(states_2)-1:
+                                continue
+                            state2_name = ",".join(states_2)
  
                             if state_graph.get(state2_name) is None:
                                 state_graph.add_vertex(state2_name)
@@ -201,19 +235,20 @@ def state_space(model):
                     
                     for state_index,state in enumerate(all_states[:,second_idx].tolist()):
                         if state.split(".")[1] == trans[2][0]:
-                            ### THIS IS NOT WORKING 
+                            
                             cur_state = all_states[state_index,component_idx].tolist()
                             ## contains the output of stuff 
 
 
                             if cur_state in out_state :
                                 ext_state_1.append(state_index)
-                        #The idx must correspond to the second atomic otherwise this will not work
+                        #The idx must correspond to the second atomic otherwise this will not work.
                         elif state.split(".")[1] == trans[2][1]:
                             ext_state_2.append(state_index)
                     
                     for state1_id in ext_state_1:
                         #convert to string
+
                         state1_name = ",".join(all_states[state1_id].tolist())
                         if state_graph.get(state1_name) is None:
                             state_graph.add_vertex(state1_name)
