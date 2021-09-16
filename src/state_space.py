@@ -248,14 +248,21 @@ def state_space(model):
                     
                     for state1_id in ext_state_1:
                         #convert to string
-
-                        state1_name = ",".join(all_states[state1_id].tolist())
+                        states = all_states[state1_id].tolist()
+                        state1_name = ",".join(states)
                         if state_graph.get(state1_name) is None:
                             state_graph.add_vertex(state1_name)
 
                         for state2_id in ext_state_2:
-                            state2_name = ",".join(all_states[state2_id].tolist())
- 
+                            states_2 = all_states[state2_id].tolist()
+                            state2_name = ",".join(states_2)
+
+                            #number of matches needs to be one less than total as the one atomic is always changing state
+                            matches = len([x for idx,x in enumerate(states_2) if x==states[idx]])
+                            ## there need to be an exact number of matches otherwise 
+                            if matches != len(states_2)-1:
+                                continue
+                         
                             if state_graph.get(state2_name) is None:
                                 state_graph.add_vertex(state2_name)
                             
@@ -286,12 +293,21 @@ def state_space(model):
                     
                     for state1_id in state_1:
                         #convert to string
-                        state1_name = ",".join(all_states[state1_id].tolist())
+                        states = all_states[state1_id].tolist()
+                        state1_name = ",".join(states)
                         if state_graph.get(state1_name) is None:
                             state_graph.add_vertex(state1_name)
 
                         for state2_id in state_2:
-                            state2_name = ",".join(all_states[state2_id].tolist())
+                            
+                            states_2 = all_states[state2_id].tolist()
+                            #number of matches needs to be one less than total as the one atomic is always changing state
+                            matches = len([x for idx,x in enumerate(states_2) if x==states[idx]])
+                            ## there need to be an exact number of matches otherwise 
+                            if matches != len(states_2)-1:
+                                continue
+                         
+                            state2_name = ",".join(states_2)
                             if state_graph.get(state2_name) is None:
                                 state_graph.add_vertex(state2_name)
                             

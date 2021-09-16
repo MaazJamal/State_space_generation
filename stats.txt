@@ -11,3 +11,5 @@ that one input should only cause one transition.
 If multiple imputs cause multiple transitions then the select function 
 can cater for that and we can use if functions to allow multiple outputs 
 i think
+Using this method the number of transitions for the co2 detector model 
+were reduced from 280 to 70.
