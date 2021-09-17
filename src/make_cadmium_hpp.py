@@ -1,16 +1,18 @@
 import os 
 
+def state_conversion(ind_state):
+        ind_state = ind_state.replace(".","_")
+        ind_state = ind_state.replace(",","_")
+        ind_state = ind_state.upper()
+        return ind_state
 
 def write_inverse(dir,in_ports,out_ports,states,int,ext):
     
     out = []
     with open(dir,"w+") as file:
         out.append("//STATE DEFINITIONS\n\n")
-        for idx,state in enumerate(states):
-            state = state.replace(".","_")
-            state = state.replace(",","_")
-            state = state.upper()
-            
+        for idx,ind_state in enumerate(states):
+            state = state_conversion(ind_state)
             out.append("#define {} {}\n".format(state,idx))
         
         out.append("\n\n\n //PORTS \n\n")
@@ -19,16 +21,49 @@ def write_inverse(dir,in_ports,out_ports,states,int,ext):
             out.append("    struct {} : public out_port<string> {{ }};\n".format(o_port))
         for i_port in in_ports:
             out.append("    struct {} : public in_port<string> {{ }};\n".format(i_port))
-        out.append("}\n\n\n")
+        out.append("};\n\n\n")
         out.append("//INTERNAL TRANSITIONS\n\n")
         
         out.append("switch (this->state.state) {\n")
         for tran in int:
-            state = state.replace(".","_")
-            state = state.replace(",","_")
-            state = state.upper()
-            tran
-        out.append("    case {}:\n")
+            states = tran[2].split(":")
+            state1 = state_conversion(states[0])
+            state2 = state_conversion(states[1])
+            out.append("    case {}:\n        this->state.state = {};\n".format(state1,state2))
+            out.append("        this->out_port = \"{}\";\n        this->out = \"{}\"\n".format(tran[0],tran[1]))
+            out.append("        this->ta = {};\n        break;\n".format(tran[3]))
+        out.append("}\n\n\n// External Inputs\n\n\n")
+
+        # the external transitions are divided by port and then input. 
+        ext_dict = {}
+        for port in in_ports:
+            ext_dict[port] = {}
+        for tran in ext:
+            if tran[1] in ext_dict[tran[0]]:
+                ext_dict[tran[0]][tran[1]].append(tran)
+            else:
+                ext_dict[tran[0]][tran[1]] = []
+                ext_dict[tran[0]][tran[1]].append(tran)
+
+        for key in ext_dict.keys():
+            out.append("    if(this->in_port == \"{}\" {{\n".format(key))
+            value = ext_dict[key]
+            for input,tran_value in value.items():
+                out.append("        if(this->in == \"{}\"{{\n".format(input))
+                out.append("            switch (this->state.state) {\n")
+
+                for tran in tran_value:
+                    states = tran[2].split(":")
+                    state1 = state_conversion(states[0])
+                    state2 = state_conversion(states[1])
+                    out.append("                case {}:\n                this->state.state = {};\n".format(state1,state2))
+                    out.append("                this->ta = {};\n                break;\n".format(tran[3]))                                
+                out.append("            }\n")
+                out.append("        }\n")
+            out.append("    }\n")
+                
+
+        
 
 
         file.writelines(out)
@@ -39,6 +74,9 @@ def write_inverse(dir,in_ports,out_ports,states,int,ext):
 
 
 def read_inverse(file_dir):
+    
+    int = []
+    ext = []
 
     with open(file_dir,"r+") as file:
         lines = file.readlines()
@@ -49,8 +87,7 @@ def read_inverse(file_dir):
             line = line.split("=")
             what = line[0].strip()
             data = line[1].strip()
-            int = []
-            ext = []
+
             if what == "X":
                 in_ports = data.split(",")
             elif what == "Y":

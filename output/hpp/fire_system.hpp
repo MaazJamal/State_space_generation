@@ -24,10 +24,213 @@ struct fire_system_defs {
     struct alarm_out : public in_port<string> { };
     struct smoke_out : public in_port<string> { };
     struct fire : public in_port<string> { };
-}
+};
 
 
 //INTERNAL TRANSITIONS
 
 switch (this->state.state) {
-    case {}:
+    case SMOKE_NO_SMOKE-OFF_ALARM_ALARM_OFF:
+        this->state.state = SMOKE_NO_SMOKE-ON_ALARM_ALARM_OFF;
+        this->out_port = "alarm_out";
+        this->out = "on"
+        this->ta = fin;
+        break;
+    case SMOKE_NO_SMOKE-OFF_ALARM_SWITCH_ON:
+        this->state.state = SMOKE_NO_SMOKE-ON_ALARM_SWITCH_ON;
+        this->out_port = "alarm_out";
+        this->out = "on"
+        this->ta = fin;
+        break;
+    case SMOKE_NO_SMOKE-OFF_ALARM_SWITCH_OFF:
+        this->state.state = SMOKE_NO_SMOKE-ON_ALARM_SWITCH_OFF;
+        this->out_port = "alarm_out";
+        this->out = "on"
+        this->ta = fin;
+        break;
+    case SMOKE_NO_SMOKE-ON_ALARM_ALARM_OFF:
+        this->state.state = SMOKE_SMOKE-OFF_ALARM_ALARM_OFF;
+        this->out_port = "alarm_out";
+        this->out = "off"
+        this->ta = fin;
+        break;
+    case SMOKE_NO_SMOKE-ON_ALARM_SWITCH_ON:
+        this->state.state = SMOKE_SMOKE-OFF_ALARM_SWITCH_ON;
+        this->out_port = "alarm_out";
+        this->out = "off"
+        this->ta = fin;
+        break;
+    case SMOKE_NO_SMOKE-ON_ALARM_SWITCH_OFF:
+        this->state.state = SMOKE_SMOKE-OFF_ALARM_SWITCH_OFF;
+        this->out_port = "alarm_out";
+        this->out = "off"
+        this->ta = fin;
+        break;
+    case SMOKE_SMOKE-ON_ALARM_ALARM_ON:
+        this->state.state = SMOKE_NO_SMOKE-OFF_ALARM_ALARM_ON;
+        this->out_port = "alarm_out";
+        this->out = "off"
+        this->ta = fin;
+        break;
+    case SMOKE_SMOKE-ON_ALARM_ALARM_OFF:
+        this->state.state = SMOKE_NO_SMOKE-OFF_ALARM_ALARM_OFF;
+        this->out_port = "alarm_out";
+        this->out = "off"
+        this->ta = fin;
+        break;
+    case SMOKE_SMOKE-ON_ALARM_SWITCH_ON:
+        this->state.state = SMOKE_NO_SMOKE-OFF_ALARM_SWITCH_ON;
+        this->out_port = "alarm_out";
+        this->out = "off"
+        this->ta = fin;
+        break;
+    case SMOKE_SMOKE-ON_ALARM_SWITCH_OFF:
+        this->state.state = SMOKE_NO_SMOKE-OFF_ALARM_SWITCH_OFF;
+        this->out_port = "alarm_out";
+        this->out = "off"
+        this->ta = fin;
+        break;
+    case SMOKE_SMOKE-OFF_ALARM_SWITCH_ON:
+        this->state.state = SMOKE_NO_SMOKE-ON_ALARM_SWITCH_ON;
+        this->out_port = "alarm_out";
+        this->out = "on"
+        this->ta = fin;
+        break;
+    case SMOKE_SMOKE-OFF_ALARM_SWITCH_OFF:
+        this->state.state = SMOKE_NO_SMOKE-ON_ALARM_SWITCH_OFF;
+        this->out_port = "alarm_out";
+        this->out = "on"
+        this->ta = fin;
+        break;
+    case SMOKE_NO_SMOKE-OFF_ALARM_ALARM_OFF:
+        this->state.state = SMOKE_NO_SMOKE-OFF_ALARM_SWITCH_ON;
+        this->out_port = "smoke_out";
+        this->out = "sch"
+        this->ta = fin;
+        break;
+    case SMOKE_NO_SMOKE-ON_ALARM_ALARM_OFF:
+        this->state.state = SMOKE_NO_SMOKE-ON_ALARM_SWITCH_ON;
+        this->out_port = "smoke_out";
+        this->out = "sch"
+        this->ta = fin;
+        break;
+    case SMOKE_SMOKE-ON_ALARM_ALARM_OFF:
+        this->state.state = SMOKE_SMOKE-ON_ALARM_SWITCH_ON;
+        this->out_port = "smoke_out";
+        this->out = "sch"
+        this->ta = fin;
+        break;
+    case SMOKE_SMOKE-ON_ALARM_ALARM_ON:
+        this->state.state = SMOKE_SMOKE-ON_ALARM_SWITCH_OFF;
+        this->out_port = "smoke_out";
+        this->out = "scl"
+        this->ta = fin;
+        break;
+}
+
+
+// External Inputs
+
+
+    if(this->in_port == "alarm_out" {
+        if(this->in == "on"{
+            switch (this->state.state) {
+                case SMOKE_NO_SMOKE-OFF_ALARM_SWITCH_ON:
+                this->state.state = SMOKE_NO_SMOKE-OFF_ALARM_ALARM_ON;
+                this->ta = inf;
+                break;
+                case SMOKE_SMOKE-OFF_ALARM_SWITCH_ON:
+                this->state.state = SMOKE_SMOKE-OFF_ALARM_ALARM_ON;
+                this->ta = inf;
+                break;
+                case SMOKE_NO_SMOKE-ON_ALARM_SWITCH_ON:
+                this->state.state = SMOKE_NO_SMOKE-ON_ALARM_ALARM_ON;
+                this->ta = inf;
+                break;
+                case SMOKE_SMOKE-ON_ALARM_SWITCH_ON:
+                this->state.state = SMOKE_SMOKE-ON_ALARM_ALARM_ON;
+                this->ta = inf;
+                break;
+            }
+        }
+        if(this->in == "off"{
+            switch (this->state.state) {
+                case SMOKE_NO_SMOKE-OFF_ALARM_SWITCH_OFF:
+                this->state.state = SMOKE_NO_SMOKE-OFF_ALARM_ALARM_OFF;
+                this->ta = inf;
+                break;
+                case SMOKE_SMOKE-OFF_ALARM_SWITCH_OFF:
+                this->state.state = SMOKE_SMOKE-OFF_ALARM_ALARM_OFF;
+                this->ta = inf;
+                break;
+                case SMOKE_NO_SMOKE-ON_ALARM_SWITCH_OFF:
+                this->state.state = SMOKE_NO_SMOKE-ON_ALARM_ALARM_OFF;
+                this->ta = inf;
+                break;
+                case SMOKE_SMOKE-ON_ALARM_SWITCH_OFF:
+                this->state.state = SMOKE_SMOKE-ON_ALARM_ALARM_OFF;
+                this->ta = inf;
+                break;
+            }
+        }
+    }
+    if(this->in_port == "smoke_out" {
+        if(this->in == "sch"{
+            switch (this->state.state) {
+                case SMOKE_NO_SMOKE-OFF_ALARM_ALARM_OFF:
+                this->state.state = SMOKE_SMOKE-OFF_ALARM_ALARM_OFF;
+                this->ta = fin;
+                break;
+                case SMOKE_NO_SMOKE-OFF_ALARM_SWITCH_ON:
+                this->state.state = SMOKE_SMOKE-OFF_ALARM_SWITCH_ON;
+                this->ta = fin;
+                break;
+                case SMOKE_NO_SMOKE-OFF_ALARM_SWITCH_OFF:
+                this->state.state = SMOKE_SMOKE-OFF_ALARM_SWITCH_OFF;
+                this->ta = fin;
+                break;
+                case SMOKE_NO_SMOKE-ON_ALARM_ALARM_OFF:
+                this->state.state = SMOKE_SMOKE-ON_ALARM_ALARM_OFF;
+                this->ta = fin;
+                break;
+                case SMOKE_NO_SMOKE-ON_ALARM_SWITCH_ON:
+                this->state.state = SMOKE_SMOKE-ON_ALARM_SWITCH_ON;
+                this->ta = fin;
+                break;
+                case SMOKE_NO_SMOKE-ON_ALARM_SWITCH_OFF:
+                this->state.state = SMOKE_SMOKE-ON_ALARM_SWITCH_OFF;
+                this->ta = fin;
+                break;
+            }
+        }
+        if(this->in == "scl"{
+            switch (this->state.state) {
+                case SMOKE_SMOKE-OFF_ALARM_SWITCH_ON:
+                this->state.state = SMOKE_NO_SMOKE-OFF_ALARM_SWITCH_ON;
+                this->ta = fin;
+                break;
+                case SMOKE_SMOKE-OFF_ALARM_SWITCH_OFF:
+                this->state.state = SMOKE_NO_SMOKE-OFF_ALARM_SWITCH_OFF;
+                this->ta = fin;
+                break;
+                case SMOKE_SMOKE-ON_ALARM_ALARM_ON:
+                this->state.state = SMOKE_NO_SMOKE-ON_ALARM_ALARM_ON;
+                this->ta = fin;
+                break;
+                case SMOKE_SMOKE-ON_ALARM_ALARM_OFF:
+                this->state.state = SMOKE_NO_SMOKE-ON_ALARM_ALARM_OFF;
+                this->ta = fin;
+                break;
+                case SMOKE_SMOKE-ON_ALARM_SWITCH_ON:
+                this->state.state = SMOKE_NO_SMOKE-ON_ALARM_SWITCH_ON;
+                this->ta = fin;
+                break;
+                case SMOKE_SMOKE-ON_ALARM_SWITCH_OFF:
+                this->state.state = SMOKE_NO_SMOKE-ON_ALARM_SWITCH_OFF;
+                this->ta = fin;
+                break;
+            }
+        }
+    }
+    if(this->in_port == "fire" {
+    }
