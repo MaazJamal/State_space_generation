@@ -1,6 +1,6 @@
 [coupled]
 X = light_actuator.occupency_out,occupency.occupency_in,coupled.ocp
-Y = light_actuator.light_out,coupled.light
+Y = light_actuator.light_out,occupency.occupency_out,coupled.light
 D = light,occup
 M = light_actuator,occupency
 EIC = coupled.ocp,occup.occupency_in
