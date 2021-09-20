@@ -5,7 +5,8 @@ from src.path_analysis import path_analysis as pa
 import argparse
 import os
 import posixpath
-from src.make_cadmium_hpp import read_inverse_files
+from src.make_cadmium_hpp import read_inverse_files,read_atomic_files
+
 def single_loop():
     
     reader_obj = read_model("input")
@@ -33,6 +34,7 @@ def multiple_loop():
     dir = [f.replace(os.sep, posixpath.sep) for f in dir]
 
     for idx,model_dir in enumerate(dir):
+        read_atomic_files(model_dir)
         reader_obj = read_model(model_dir)
         _,coupleds = reader_obj.read_models()
         out_path = "output/Models/"+sub_dir_name[idx] 

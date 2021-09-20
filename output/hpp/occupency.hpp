@@ -31,79 +31,84 @@ struct occupency_defs {
 };
 
 
+//port deifinitions
+
+    using input_ports = std::tuple<typename defs::light_out,typename defs::occupency_out,typename defs::light>;
+    using output_ports = std::tuple<typename defs::occupency_out,typename defs::occupency_in,typename defs::ocp>;
+
 //INTERNAL TRANSITIONS
 
 switch (this->state.state) {
     case OCCUP_OCCUPIED_LIGHT_ON:
         this->state.state = OCCUP_EXIT_LIGHT_ON;
         this->out_port = "occupency_in";
-        this->out = "ocs"
+        this->out = "ocs";
         this->ta = fin;
         break;
     case OCCUP_OCCUPIED_LIGHT_OFF:
         this->state.state = OCCUP_EXIT_LIGHT_OFF;
         this->out_port = "occupency_in";
-        this->out = "ocs"
+        this->out = "ocs";
         this->ta = fin;
         break;
     case OCCUP_OCCUPIED_LIGHT_SWITCH_ON:
         this->state.state = OCCUP_EXIT_LIGHT_SWITCH_ON;
         this->out_port = "occupency_in";
-        this->out = "ocs"
+        this->out = "ocs";
         this->ta = fin;
         break;
     case OCCUP_OCCUPIED_LIGHT_SWITCH_OFF:
         this->state.state = OCCUP_EXIT_LIGHT_SWITCH_OFF;
         this->out_port = "occupency_in";
-        this->out = "ocs"
+        this->out = "ocs";
         this->ta = fin;
         break;
     case OCCUP_NOT_OCCUPIED_LIGHT_ON:
         this->state.state = OCCUP_ENTRY_LIGHT_ON;
         this->out_port = "occupency_in";
-        this->out = "ocs"
+        this->out = "ocs";
         this->ta = fin;
         break;
     case OCCUP_NOT_OCCUPIED_LIGHT_OFF:
         this->state.state = OCCUP_ENTRY_LIGHT_OFF;
         this->out_port = "occupency_in";
-        this->out = "ocs"
+        this->out = "ocs";
         this->ta = fin;
         break;
     case OCCUP_NOT_OCCUPIED_LIGHT_SWITCH_ON:
         this->state.state = OCCUP_ENTRY_LIGHT_SWITCH_ON;
         this->out_port = "occupency_in";
-        this->out = "ocs"
+        this->out = "ocs";
         this->ta = fin;
         break;
     case OCCUP_NOT_OCCUPIED_LIGHT_SWITCH_OFF:
         this->state.state = OCCUP_ENTRY_LIGHT_SWITCH_OFF;
         this->out_port = "occupency_in";
-        this->out = "ocs"
+        this->out = "ocs";
         this->ta = fin;
         break;
     case OCCUP_NOT_OCCUPIED_LIGHT_ON:
         this->state.state = OCCUP_NOT_OCCUPIED_LIGHT_SWITCH_OFF;
         this->out_port = "occupency_out";
-        this->out = "ocl"
+        this->out = "ocl";
         this->ta = fin;
         break;
     case OCCUP_OCCUPIED_LIGHT_ON:
         this->state.state = OCCUP_OCCUPIED_LIGHT_SWITCH_OFF;
         this->out_port = "occupency_out";
-        this->out = "ocl"
+        this->out = "ocl";
         this->ta = fin;
         break;
     case OCCUP_NOT_OCCUPIED_LIGHT_OFF:
         this->state.state = OCCUP_NOT_OCCUPIED_LIGHT_SWITCH_ON;
         this->out_port = "occupency_out";
-        this->out = "och"
+        this->out = "och";
         this->ta = fin;
         break;
     case OCCUP_OCCUPIED_LIGHT_OFF:
         this->state.state = OCCUP_OCCUPIED_LIGHT_SWITCH_ON;
         this->out_port = "occupency_out";
-        this->out = "och"
+        this->out = "och";
         this->ta = fin;
         break;
 }
@@ -112,8 +117,8 @@ switch (this->state.state) {
 // External Inputs
 
 
-    if(this->in_port == "light_out" {
-        if(this->in == "off"{
+    if(this->in_port == "light_out") {
+        if(this->in == "off"){
             switch (this->state.state) {
                 case OCCUP_ENTRY_LIGHT_SWITCH_OFF:
                 this->state.state = OCCUP_ENTRY_LIGHT_OFF;
@@ -133,7 +138,7 @@ switch (this->state.state) {
                 break;
             }
         }
-        if(this->in == "on"{
+        if(this->in == "on"){
             switch (this->state.state) {
                 case OCCUP_ENTRY_LIGHT_SWITCH_ON:
                 this->state.state = OCCUP_ENTRY_LIGHT_ON;
@@ -154,8 +159,8 @@ switch (this->state.state) {
             }
         }
     }
-    if(this->in_port == "occupency_out" {
-        if(this->in == "ocl"{
+    if(this->in_port == "occupency_out") {
+        if(this->in == "ocl"){
             switch (this->state.state) {
                 case OCCUP_ENTRY_LIGHT_ON:
                 this->state.state = OCCUP_OCCUPIED_LIGHT_ON;
@@ -175,7 +180,7 @@ switch (this->state.state) {
                 break;
             }
         }
-        if(this->in == "och"{
+        if(this->in == "och"){
             switch (this->state.state) {
                 case OCCUP_EXIT_LIGHT_ON:
                 this->state.state = OCCUP_NOT_OCCUPIED_LIGHT_ON;
@@ -196,5 +201,5 @@ switch (this->state.state) {
             }
         }
     }
-    if(this->in_port == "light" {
+    if(this->in_port == "light") {
     }
