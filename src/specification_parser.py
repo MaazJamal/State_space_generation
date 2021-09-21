@@ -164,7 +164,7 @@ class specification_parser:
                                     traversal.append(edge_state)
                                     marked[edge_state_id] = True 
                             except KeyError:
-                                print("removed state found.")
+                                print("removed state found.: {}".format(cur_state))
                         
                     if marked[dest_id]:
                         break
