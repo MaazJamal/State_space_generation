@@ -10,7 +10,7 @@
  //PORTS 
 
 struct vents_defs {
-    struct vent_out : public out_port<string> { };
+    struct vents_out : public out_port<string> { };
     struct co2_out : public in_port<string> { };
 };
 
@@ -18,20 +18,20 @@ struct vents_defs {
 //port deifinitions
 
     using input_ports = std::tuple<typename defs::co2_out>;
-    using output_ports = std::tuple<typename defs::vent_out>;
+    using output_ports = std::tuple<typename defs::vents_out>;
 
 //INTERNAL TRANSITIONS
 
 switch (this->state.state) {
     case OPENING:
         this->state.state = FULL_OPEN;
-        this->out_port = "vent_out";
+        this->out_port = "vents_out";
         this->out = "venth";
         this->ta = inf;
         break;
     case CLOSING:
         this->state.state = SHUT;
-        this->out_port = "vent_out";
+        this->out_port = "vents_out";
         this->out = "ventl";
         this->ta = inf;
         break;

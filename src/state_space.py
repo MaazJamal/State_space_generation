@@ -140,7 +140,12 @@ def state_space(model):
 
         # Internal coupling space
         
-        index = [i for i,item in enumerate(internal_coupled) if component == item]
+        #index = [i for i,item in enumerate(internal_coupled) if component == item]
+        #For Debugging
+        index = []
+        for i,item in enumerate(internal_coupled):
+            if component == item:
+                index.append(i)
         if index != []:
             for idx in index:
 
@@ -229,9 +234,15 @@ def state_space(model):
                     ext_state_2 = []
 
                     ### THE IDX needs to correspond to the second state. Find this ID
-
+                    ### WE ARE USING THE IDX to find the The state the internal transition
+                    # in the IC has transitioned to. This state needs to be the same in the 
+                    # transition of the external state. i.e if x is the state transitioned to in ic 
+                    #  then state space transition must be a,x -> b,x . x must stay the same while a - > is the 
+                    # external transition of the second atomic. 
+                    # BUG the IDX is not correct so the out_state does not take proper state values.
                     second_idx = model._select.index(second_atomic_name)
-                    out_state = [all_states[:,idx][i].tolist() for i in global_state_2]
+                    first_idx = model._select.index(component)
+                    out_state = [all_states[:,first_idx][i].tolist() for i in global_state_2]
                     
                     for state_index,state in enumerate(all_states[:,second_idx].tolist()):
                         if state.split(".")[1] == trans[2][0]:

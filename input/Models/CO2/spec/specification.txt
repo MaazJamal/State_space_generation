@@ -1,3 +1,4 @@
+path,CO2.low-open,vents.shut,CO2.high-closed,vents.full_open
 no_state,CO2.low-open,vents.full_open
 no_state,CO2.high-closed,vents.shut
 
