@@ -1,9 +1,9 @@
 //STATE DEFINITIONS
 
-#define ENTRY 0
-#define EXIT 1
-#define NOT_OCCUPIED 2
-#define OCCUPIED 3
+#define NOT_OCCUPIED_ON 0
+#define OCCUPIED_ON 1
+#define NOT_OCCUPIED_OFF 2
+#define OCCUPIED_OFF 3
 
 
 
@@ -11,29 +11,41 @@
 
 struct occupency_defs {
     struct occupency_out : public out_port<string> { };
-    struct occupency_in : public in_port<string> { };
+    struct light_out : public in_port<string> { };
 };
 
 
 //port deifinitions
 
-    using input_ports = std::tuple<typename defs::occupency_in>;
+    using input_ports = std::tuple<typename defs::light_out>;
     using output_ports = std::tuple<typename defs::occupency_out>;
 
 //INTERNAL TRANSITIONS
 
 switch (this->state.state) {
-    case ENTRY:
-        this->state.state = OCCUPIED;
-        this->out_port = "occupency_out";
-        this->out = "ocl";
-        this->ta = inf;
-        break;
-    case EXIT:
-        this->state.state = NOT_OCCUPIED;
+    case NOT_OCCUPIED_OFF:
+        this->state.state = OCCUPIED_OFF;
         this->out_port = "occupency_out";
         this->out = "och";
-        this->ta = inf;
+        this->ta = fin;
+        break;
+    case OCCUPIED_OFF:
+        this->state.state = NOT_OCCUPIED_OFF;
+        this->out_port = "occupency_out";
+        this->out = "ocl";
+        this->ta = fin;
+        break;
+    case NOT_OCCUPIED_ON:
+        this->state.state = OCCUPIED_ON;
+        this->out_port = "occupency_out";
+        this->out = "och";
+        this->ta = fin;
+        break;
+    case OCCUPIED_ON:
+        this->state.state = NOT_OCCUPIED_ON;
+        this->out_port = "occupency_out";
+        this->out = "ocl";
+        this->ta = fin;
         break;
 }
 
@@ -41,15 +53,27 @@ switch (this->state.state) {
 // External Inputs
 
 
-    if(this->in_port == "occupency_in") {
-        if(this->in == "ocs"){
+    if(this->in_port == "light_out") {
+        if(this->in == "off"){
             switch (this->state.state) {
-                case OCCUPIED:
-                this->state.state = EXIT;
+                case OCCUPIED_ON:
+                this->state.state = OCCUPIED_OFF;
                 this->ta = fin;
                 break;
-                case NOT_OCCUPIED:
-                this->state.state = ENTRY;
+                case NOT_OCCUPIED_ON:
+                this->state.state = NOT_OCCUPIED_OFF;
+                this->ta = fin;
+                break;
+            }
+        }
+        if(this->in == "on"){
+            switch (this->state.state) {
+                case OCCUPIED_OFF:
+                this->state.state = OCCUPIED_ON;
+                this->ta = fin;
+                break;
+                case NOT_OCCUPIED_OFF:
+                this->state.state = NOT_OCCUPIED_ON;
                 this->ta = fin;
                 break;
             }

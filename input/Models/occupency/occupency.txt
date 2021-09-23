@@ -1,8 +1,12 @@
 [atomic]
-X = occupency_in
+X = light_out
 Y = occupency_out
-S = entry,exit,not_occupied,occupied
-Ext = occupency_in,ocs,occupied,exit,fin
-Ext = occupency_in,ocs,not_occupied,entry,fin
-Int = occupency_out,ocl,entry,occupied,inf
-Int = occupency_out,och,exit,not_occupied,inf
+S = not_occupied-on,occupied-on,not_occupied-off,occupied-off
+Ext = light_out,off,occupied-on,occupied-off,fin
+Ext = light_out,on,occupied-off,occupied-on,fin
+Ext = light_out,off,not_occupied-on,not_occupied-off,fin
+Ext = light_out,on,not_occupied-off,not_occupied-on,fin
+Int = occupency_out,och,not_occupied-off,occupied-off,fin
+Int = occupency_out,ocl,occupied-off,not-occupied-off,fin
+Int = occupency_out,och,not_occupied-on,occupied-on,fin
+Int = occupency_out,ocl,occupied-on,not-occupied-on,fin

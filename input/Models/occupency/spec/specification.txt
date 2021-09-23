@@ -1,4 +1,5 @@
-path,occup.not_occupied,light.off,occup.occupied,light.on
-
+path,occup.not_occupied-off,light.off,occup.occupied-on,light.on
+no_state,occup.occupied-on,light.off
+no_state,occup.occupied-off,light.on
 
 
