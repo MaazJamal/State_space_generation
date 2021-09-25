@@ -12,6 +12,7 @@ def state_conversion(ind_state):
 def write_inverse(dir,in_ports,out_ports,states,int,ext):
     
     out = []
+    
     with open(dir,"w+") as file:
         out.append("//STATE DEFINITIONS\n\n")
         for idx,ind_state in enumerate(states):
@@ -174,7 +175,7 @@ def read_atomic_files(top_dir):
             if header == "[atomic]":
                 f.close()
                 in_ports,out_ports,states,int,ext = read_atomic(file)
-                write_inverse(output+"/{}.hpp".format(file.split('/')[-1]),in_ports,out_ports,states,int,ext)
+                write_inverse(output+"/{}.hpp".format(file.split('/')[-1].split(".")[0]),in_ports,out_ports,states,int,ext)
             else:
                 f.close()
                 continue

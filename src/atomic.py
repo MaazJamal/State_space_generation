@@ -3,6 +3,53 @@
 
 class atomic:
     
+    """
+    A class used to represent an Atomic model.
+
+    The atomic models are represented as inputs, outputs and transitions between states.
+    The format for the transition is port,output/input,transitions,time advance
+
+    ...
+
+    Attributes
+    ----------
+    _name : str
+        a string that stores the name of the atomic. The atomic name is the name of the file.
+    input : list[str]
+        the input ports. It is a list of strings with port names.
+    output : list[str]
+        the output ports. It is a list of the strings of port names.
+    state : list[str]
+        A list of strings of the states of the atomic.
+    trans_ext : list[tuple(str,str,str,str)]
+        A list of tuple of strings. That mention the port name, input , transition, time advance
+    trans_int : list[tuple(str,str,str,str)]
+        A list of tuple of strings. That mention the port name, output , transition, time advance
+
+    Methods
+    -------
+    add_transition(port : str ,message : str,transition : str,ta : str,tran : str)
+        Generic function that adds a transition to either external or internal list.
+        Depending upon the input at tran. "ext" specifies external and "int"
+        specifies internal.
+    
+    add_input(X)
+        adds a port to the model. If X can be  str or list[str] 
+   
+    add_output(Y)
+        adds a port to the model. If X can be  str or list[str]     
+   
+    add_state()
+        adds a state to the model. If X can be  str or list[str] 
+
+    ext_trans()
+        returns external transitions 
+    int_trans()
+        returns internal transitions
+
+    """
+
+
     def __init__(self, name, X, Y, S, trans_ext, trans_int):
             self._name = name
             self.input = X
@@ -12,7 +59,7 @@ class atomic:
             self.trans_int = trans_int 
             
 
-    def add_transition(self, port,message,transition,ta,tran):
+    def add_transition(self, port : str ,message : str,transition : str,ta : str,tran : str):
         if isinstance(tran) != str:
             raise TypeError("Unknown transition object type expected str got " + type(tran).__name__)
         transition = (port,message,transition,ta)

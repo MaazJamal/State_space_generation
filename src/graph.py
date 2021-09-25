@@ -5,11 +5,20 @@ class graph:
     """
     A class used to represent graphs
 
-    The class represents directed graphs the vertices are the states of teh system while the 
+    The class represents directed graphs the vertices are the states of the system while the 
     edges are weighted to tell us 
 
     Attributes
     ----------
+    self.V : list[str]
+        a list of vertice names. the states from different atomics are seperated by commas.
+    self.E : list[tuple()]
+
+    self.graph_dict : {}
+    self.vert_dict : {}
+    self.ext_tran_idx : []
+    self.int_tran_idx : []
+
     says_str : str
         a formatted string to print out what the animal says
     name : str

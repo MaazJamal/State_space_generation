@@ -10,7 +10,40 @@
 #  
 
 class coupled:
-    
+    """
+    A class used to represent coupled models
+
+    ...
+
+    Attributes
+    ----------
+    _name : str
+        name of the coupled model
+    _output: list[str]
+        the output ports 
+    _input : list[str]
+        the input ports
+    _component_names : list[str]
+        list of the Names of the components 
+    _model_instance : list[atomic]
+        list of the atomic object instances
+    _EIC : list[tuple(str,str,str,str)]
+        list of external internal coupling as 4-tuple of strings
+    _EOC : list[tuple(str,str,str,str)]
+        list of external output coupling as 4-tuple of strings
+    _IC : list[tuple(str,str,str,str)]
+        list of internal coupling as a 4-tuple of strings
+    _select : list[str]
+        list of names of the atomics. Describing the order of the select function
+    component_dict : dict{str: atomic}
+        dictionary of the components. The key is name of the component and the returned value
+        is an instance of atomic class.
+    Methods
+    -------
+    sort_verify()
+        verifies if the coupled model has been configured properly.
+    """
+
     def __init__(self, name="default", X=[], Y=[], D=[], M=[], EIC=[], EOC=[], IC=[], select=[]):
             self._name = name
             self._input = X
@@ -73,20 +106,6 @@ class coupled:
         self.component_dict = dict(zip(self._component_names,self._model_instance))
         self.model_names = list([model.name for model in self._model_instance])
 
-        # for idx,value in enumerate(list(self.component_dict.values())):
-        #     if self.model_names != []:
-        #         if value.name not in self.model_names:
-        #             self.model_names.append(value.name)
-        #         else:
-        #             continue
-        #     else:
-        #         self.model_names.append(value.name)
-
-        
-
-        # for key,value in self.component_dict:
-        #     if key != value.name:
-        #         raise IndexError("length of component names and modules do not match.")
         if self._input is not None:
             len_x = len(self._input)
 

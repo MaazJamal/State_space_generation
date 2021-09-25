@@ -66,7 +66,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Single or multiple models')
     parser.add_argument('--mode',"-m", dest="mode" ,type=int,
                     help='mode 0 for one model. 1 for multiple models')
- 
+    
     args = parser.parse_args()
     if args.mode == 0:
         single_loop()
