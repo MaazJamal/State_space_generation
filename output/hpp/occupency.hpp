@@ -23,26 +23,14 @@ struct occupency_defs {
 //INTERNAL TRANSITIONS
 
 switch (this->state.state) {
-    case NOT_OCCUPIED_OFF:
+    case NOT_OCCUPIED:
         this->state.state = OCCUPIED_OFF;
         this->out_port = "occupency_out";
         this->out = "och";
         this->ta = fin;
         break;
-    case OCCUPIED_OFF:
-        this->state.state = NOT_OCCUPIED_OFF;
-        this->out_port = "occupency_out";
-        this->out = "ocl";
-        this->ta = fin;
-        break;
-    case NOT_OCCUPIED_ON:
-        this->state.state = OCCUPIED_ON;
-        this->out_port = "occupency_out";
-        this->out = "och";
-        this->ta = fin;
-        break;
-    case OCCUPIED_ON:
-        this->state.state = NOT_OCCUPIED_ON;
+    case OCCUPIED:
+        this->state.state = NOT_OCCUPIED;
         this->out_port = "occupency_out";
         this->out = "ocl";
         this->ta = fin;
@@ -54,28 +42,4 @@ switch (this->state.state) {
 
 
     if(this->in_port == "light_out") {
-        if(this->in == "off"){
-            switch (this->state.state) {
-                case OCCUPIED_ON:
-                this->state.state = OCCUPIED_OFF;
-                this->ta = fin;
-                break;
-                case NOT_OCCUPIED_ON:
-                this->state.state = NOT_OCCUPIED_OFF;
-                this->ta = fin;
-                break;
-            }
-        }
-        if(this->in == "on"){
-            switch (this->state.state) {
-                case OCCUPIED_OFF:
-                this->state.state = OCCUPIED_ON;
-                this->ta = fin;
-                break;
-                case NOT_OCCUPIED_OFF:
-                this->state.state = NOT_OCCUPIED_ON;
-                this->ta = fin;
-                break;
-            }
-        }
     }

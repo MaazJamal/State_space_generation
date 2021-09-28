@@ -68,7 +68,11 @@ def state_space(model):
     else:
         eic_exist = True
         external_coupled = EIC[:,2].tolist() #complete today
-    internal_coupled = IC[:,0].tolist() #complete today
+    ic_exist = True
+    try:
+        internal_coupled = IC[:,0].tolist() #complete today
+    except IndexError: 
+        ic_exist = False
     output_coupled = EOC[:,0].tolist() #complete tomorrow
         
 
@@ -142,145 +146,146 @@ def state_space(model):
         
         #index = [i for i,item in enumerate(internal_coupled) if component == item]
         #For Debugging
-        index = []
-        for i,item in enumerate(internal_coupled):
-            if component == item:
-                index.append(i)
-        if index != []:
-            for idx in index:
+        if ic_exist:
+            index = []
+            for i,item in enumerate(internal_coupled):
+                if component == item:
+                    index.append(i)
+            if index != []:
+                for idx in index:
 
 
-                #internal transition giving output
-                ic_output_port = IC[idx][0:2]
+                    #internal transition giving output
+                    ic_output_port = IC[idx][0:2]
 
-                #external transition recieving input at second location
-                ic_input_port = IC[idx][2:]
-                
-                int_trans = atomic_model.trans_int
-                int_trans_port = [port for port in int_trans if port[0] == ic_output_port.tolist()[1]]
-
-                second_atomic_name = ic_input_port.tolist()[0]
-                second_atomic = model.component_dict[second_atomic_name]
-
-
-                # two optimizations one the ext transition should check for input type if it does not match skip the transition
-                # second the external transition should only cater for those states in which the state of the output atomic is the 
-                # transitioned state..
-
-
-
-                output_type = []
-                global_state_2 = []
-                for trans in int_trans_port:
-                    port = trans[0]
-
-
-                    # create output list so that we can chose external transitions that will trigger
-                    if output_type == []:
-                        output_type.append(trans[1])
-                    elif output_type[-1] != trans[1]:
-                        output_type.append(trans[1])
-
-
-                    state_1 = []
-                    state_2 = []
-                    for state_index,state in enumerate(all_states[:,component_idx].tolist()):
-                        if state.split(".")[1] == trans[2][0]:
-                            state_1.append([state_index,state])
-                        elif state.split(".")[1] == trans[2][1]:
-                            state_2.append(state_index)
-                            global_state_2.append(state_index)
+                    #external transition recieving input at second location
+                    ic_input_port = IC[idx][2:]
                     
-                    for state1_id,state_name in state_1:
-                        #convert to string
-                        states = all_states[state1_id].tolist()
-                        position = states.index(state_name)
+                    int_trans = atomic_model.trans_int
+                    int_trans_port = [port for port in int_trans if port[0] == ic_output_port.tolist()[1]]
 
-                        state1_name = ",".join(states)
-                        if state_graph.get(state1_name) is None:
-                            state_graph.add_vertex(state1_name)
+                    second_atomic_name = ic_input_port.tolist()[0]
+                    second_atomic = model.component_dict[second_atomic_name]
 
-                        for state2_id in state_2:
 
-                            states_2 = all_states[state2_id].tolist()
+                    # two optimizations one the ext transition should check for input type if it does not match skip the transition
+                    # second the external transition should only cater for those states in which the state of the output atomic is the 
+                    # transitioned state..
 
-                            #number of matches needs to be one less than total as the one atomic is always changing state
-                            matches = len([x for idx,x in enumerate(states_2) if x==states[idx]])
-                            ## there need to be an exact number of matches otherwise 
-                            if matches != len(states_2)-1:
-                                continue
-                            state2_name = ",".join(states_2)
- 
-                            if state_graph.get(state2_name) is None:
-                                state_graph.add_vertex(state2_name)
+
+
+                    output_type = []
+                    global_state_2 = []
+                    for trans in int_trans_port:
+                        port = trans[0]
+
+
+                        # create output list so that we can chose external transitions that will trigger
+                        if output_type == []:
+                            output_type.append(trans[1])
+                        elif output_type[-1] != trans[1]:
+                            output_type.append(trans[1])
+
+
+                        state_1 = []
+                        state_2 = []
+                        for state_index,state in enumerate(all_states[:,component_idx].tolist()):
+                            if state.split(".")[1] == trans[2][0]:
+                                state_1.append([state_index,state])
+                            elif state.split(".")[1] == trans[2][1]:
+                                state_2.append(state_index)
+                                global_state_2.append(state_index)
+                        
+                        for state1_id,state_name in state_1:
+                            #convert to string
+                            states = all_states[state1_id].tolist()
+                            position = states.index(state_name)
+
+                            state1_name = ",".join(states)
+                            if state_graph.get(state1_name) is None:
+                                state_graph.add_vertex(state1_name)
+
+                            for state2_id in state_2:
+
+                                states_2 = all_states[state2_id].tolist()
+
+                                #number of matches needs to be one less than total as the one atomic is always changing state
+                                matches = len([x for idx,x in enumerate(states_2) if x==states[idx]])
+                                ## there need to be an exact number of matches otherwise 
+                                if matches != len(states_2)-1:
+                                    continue
+                                state2_name = ",".join(states_2)
+    
+                                if state_graph.get(state2_name) is None:
+                                    state_graph.add_vertex(state2_name)
+                                
+                                W = [port,trans[1],trans[-1]]
+                                trans_type = "int"
+                                edge = (state1_name,state2_name)
+                                state_graph.add_edge(edge,trans_type,W)
+
+                    # All the external transitions
+                    ext_trans = second_atomic.trans_ext
+
+                    # The external transitions that match the IC port
+                    # with added check if the output type matches the transition
+
+                    ext_trans_port = [port for port in ext_trans if port[0] == ic_input_port.tolist()[1] and port[1] in output_type]
+
+                    for trans in ext_trans_port:
+
+
+                        ext_state_1 = []
+                        ext_state_2 = []
+
+                        ### THE IDX needs to correspond to the second state. Find this ID
+                        ### WE ARE USING THE IDX to find the The state the internal transition
+                        # in the IC has transitioned to. This state needs to be the same in the 
+                        # transition of the external state. i.e if x is the state transitioned to in ic 
+                        #  then state space transition must be a,x -> b,x . x must stay the same while a - > is the 
+                        # external transition of the second atomic. 
+                        # BUG the IDX is not correct so the out_state does not take proper state values.
+                        second_idx = model._select.index(second_atomic_name)
+                        first_idx = model._select.index(component)
+                        out_state = [all_states[:,first_idx][i].tolist() for i in global_state_2]
+                        
+                        for state_index,state in enumerate(all_states[:,second_idx].tolist()):
+                            if state.split(".")[1] == trans[2][0]:
+                                
+                                cur_state = all_states[state_index,component_idx].tolist()
+                                ## contains the output of stuff 
+
+
+                                if cur_state in out_state :
+                                    ext_state_1.append(state_index)
+                            #The idx must correspond to the second atomic otherwise this will not work.
+                            elif state.split(".")[1] == trans[2][1]:
+                                ext_state_2.append(state_index)
+                        
+                        for state1_id in ext_state_1:
+                            #convert to string
+                            states = all_states[state1_id].tolist()
+                            state1_name = ",".join(states)
+                            if state_graph.get(state1_name) is None:
+                                state_graph.add_vertex(state1_name)
+
+                            for state2_id in ext_state_2:
+                                states_2 = all_states[state2_id].tolist()
+                                state2_name = ",".join(states_2)
+
+                                #number of matches needs to be one less than total as the one atomic is always changing state
+                                matches = len([x for idx,x in enumerate(states_2) if x==states[idx]])
+                                ## there need to be an exact number of matches otherwise 
+                                if matches != len(states_2)-1:
+                                    continue
                             
-                            W = [port,trans[1],trans[-1]]
-                            trans_type = "int"
-                            edge = (state1_name,state2_name)
-                            state_graph.add_edge(edge,trans_type,W)
-
-                # All the external transitions
-                ext_trans = second_atomic.trans_ext
-
-                # The external transitions that match the IC port
-                # with added check if the output type matches the transition
-
-                ext_trans_port = [port for port in ext_trans if port[0] == ic_input_port.tolist()[1] and port[1] in output_type]
-
-                for trans in ext_trans_port:
-
-
-                    ext_state_1 = []
-                    ext_state_2 = []
-
-                    ### THE IDX needs to correspond to the second state. Find this ID
-                    ### WE ARE USING THE IDX to find the The state the internal transition
-                    # in the IC has transitioned to. This state needs to be the same in the 
-                    # transition of the external state. i.e if x is the state transitioned to in ic 
-                    #  then state space transition must be a,x -> b,x . x must stay the same while a - > is the 
-                    # external transition of the second atomic. 
-                    # BUG the IDX is not correct so the out_state does not take proper state values.
-                    second_idx = model._select.index(second_atomic_name)
-                    first_idx = model._select.index(component)
-                    out_state = [all_states[:,first_idx][i].tolist() for i in global_state_2]
-                    
-                    for state_index,state in enumerate(all_states[:,second_idx].tolist()):
-                        if state.split(".")[1] == trans[2][0]:
-                            
-                            cur_state = all_states[state_index,component_idx].tolist()
-                            ## contains the output of stuff 
-
-
-                            if cur_state in out_state :
-                                ext_state_1.append(state_index)
-                        #The idx must correspond to the second atomic otherwise this will not work.
-                        elif state.split(".")[1] == trans[2][1]:
-                            ext_state_2.append(state_index)
-                    
-                    for state1_id in ext_state_1:
-                        #convert to string
-                        states = all_states[state1_id].tolist()
-                        state1_name = ",".join(states)
-                        if state_graph.get(state1_name) is None:
-                            state_graph.add_vertex(state1_name)
-
-                        for state2_id in ext_state_2:
-                            states_2 = all_states[state2_id].tolist()
-                            state2_name = ",".join(states_2)
-
-                            #number of matches needs to be one less than total as the one atomic is always changing state
-                            matches = len([x for idx,x in enumerate(states_2) if x==states[idx]])
-                            ## there need to be an exact number of matches otherwise 
-                            if matches != len(states_2)-1:
-                                continue
-                         
-                            if state_graph.get(state2_name) is None:
-                                state_graph.add_vertex(state2_name)
-                            
-                            W = [port,trans[1],trans[-1]]
-                            trans_type = "ext"
-                            edge = (state1_name,state2_name)
-                            state_graph.add_edge(edge,trans_type,W)
+                                if state_graph.get(state2_name) is None:
+                                    state_graph.add_vertex(state2_name)
+                                
+                                W = [port,trans[1],trans[-1]]
+                                trans_type = "ext"
+                                edge = (state1_name,state2_name)
+                                state_graph.add_edge(edge,trans_type,W)
 
 
         # external coupling 

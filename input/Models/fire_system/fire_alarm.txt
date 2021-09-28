@@ -1,8 +1,8 @@
 [atomic]
-X = smoke_out
+X = alarm_in
 Y = alarm_out
 S = alarm_on,alarm_off,switch_on,switch_off
-Ext = smoke_out,sch,alarm_off,switch_on,fin
-Ext = smoke_out,scl,alarm_on,switch_off,fin
+Ext = alarm_in,h,alarm_off,switch_on,fin
+Ext = alarm_in,l,alarm_on,switch_off,fin
 Int = alarm_out,on,switch_on,alarm_on,inf
 Int = alarm_out,off,switch_off,alarm_off,inf

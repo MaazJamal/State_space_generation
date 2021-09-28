@@ -11,13 +11,13 @@
 
 struct light_actuator_defs {
     struct light_out : public out_port<string> { };
-    struct occupency_out : public in_port<string> { };
+    struct light_in : public in_port<string> { };
 };
 
 
 //port deifinitions
 
-    using input_ports = std::tuple<typename defs::occupency_out>;
+    using input_ports = std::tuple<typename defs::light_in>;
     using output_ports = std::tuple<typename defs::light_out>;
 
 //INTERNAL TRANSITIONS
@@ -41,7 +41,7 @@ switch (this->state.state) {
 // External Inputs
 
 
-    if(this->in_port == "occupency_out") {
+    if(this->in_port == "light_in") {
         if(this->in == "ocl"){
             switch (this->state.state) {
                 case ON:

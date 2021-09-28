@@ -11,13 +11,13 @@
 
 struct fire_alarm_defs {
     struct alarm_out : public out_port<string> { };
-    struct smoke_out : public in_port<string> { };
+    struct alarm_in : public in_port<string> { };
 };
 
 
 //port deifinitions
 
-    using input_ports = std::tuple<typename defs::smoke_out>;
+    using input_ports = std::tuple<typename defs::alarm_in>;
     using output_ports = std::tuple<typename defs::alarm_out>;
 
 //INTERNAL TRANSITIONS
@@ -41,8 +41,8 @@ switch (this->state.state) {
 // External Inputs
 
 
-    if(this->in_port == "smoke_out") {
-        if(this->in == "sch"){
+    if(this->in_port == "alarm_in") {
+        if(this->in == "h"){
             switch (this->state.state) {
                 case ALARM_OFF:
                 this->state.state = SWITCH_ON;
@@ -50,7 +50,7 @@ switch (this->state.state) {
                 break;
             }
         }
-        if(this->in == "scl"){
+        if(this->in == "l"){
             switch (this->state.state) {
                 case ALARM_ON:
                 this->state.state = SWITCH_OFF;
