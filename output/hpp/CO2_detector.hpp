@@ -84,15 +84,15 @@ switch (this->state.state) {
             switch (this->state.state) {
                 case LOW_OPEN:
                 this->state.state = LOW_CLOSED;
-                this->ta = inf;
+                this->ta = fin;
                 break;
                 case MEDIUM_OPEN:
                 this->state.state = MEDIUM_CLOSED;
-                this->ta = inf;
+                this->ta = fin;
                 break;
                 case HIGH_OPEN:
                 this->state.state = HIGH_CLOSED;
-                this->ta = inf;
+                this->ta = fin;
                 break;
             }
         }
@@ -100,15 +100,15 @@ switch (this->state.state) {
             switch (this->state.state) {
                 case LOW_CLOSED:
                 this->state.state = LOW_OPEN;
-                this->ta = inf;
+                this->ta = fin;
                 break;
                 case MEDIUM_CLOSED:
                 this->state.state = MEDIUM_OPEN;
-                this->ta = inf;
+                this->ta = fin;
                 break;
                 case HIGH_CLOSED:
                 this->state.state = HIGH_OPEN;
-                this->ta = inf;
+                this->ta = fin;
                 break;
             }
         }
