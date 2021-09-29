@@ -20,7 +20,7 @@
  //PORTS 
 
 struct fire_system_defs {
-    struct smoke_out : public out_port<string> { };
+    struct alarm_in : public out_port<string> { };
     struct alarm_out : public out_port<string> { };
     struct alarm : public out_port<string> { };
     struct alarm_out : public in_port<string> { };
@@ -32,45 +32,45 @@ struct fire_system_defs {
 //port deifinitions
 
     using input_ports = std::tuple<typename defs::alarm_out,typename defs::smoke_out,typename defs::smoke>;
-    using output_ports = std::tuple<typename defs::smoke_out,typename defs::alarm_out,typename defs::alarm>;
+    using output_ports = std::tuple<typename defs::alarm_in,typename defs::alarm_out,typename defs::alarm>;
 
 //INTERNAL TRANSITIONS
 
 switch (this->state.state) {
     case SMOKE_NO_SMOKE_OFF_ALARM_ALARM_OFF:
         this->state.state = SMOKE_NO_SMOKE_OFF_ALARM_SWITCH_ON;
-        this->out_port = "smoke_out";
-        this->out = "sch";
+        this->out_port = "alarm_in";
+        this->out = "h";
         this->ta = fin;
         break;
     case SMOKE_NO_SMOKE_ON_ALARM_ALARM_OFF:
         this->state.state = SMOKE_NO_SMOKE_ON_ALARM_SWITCH_ON;
-        this->out_port = "smoke_out";
-        this->out = "sch";
+        this->out_port = "alarm_in";
+        this->out = "h";
         this->ta = fin;
         break;
     case SMOKE_SMOKE_ON_ALARM_ALARM_OFF:
         this->state.state = SMOKE_SMOKE_ON_ALARM_SWITCH_ON;
-        this->out_port = "smoke_out";
-        this->out = "sch";
+        this->out_port = "alarm_in";
+        this->out = "h";
         this->ta = fin;
         break;
     case SMOKE_NO_SMOKE_OFF_ALARM_ALARM_ON:
         this->state.state = SMOKE_NO_SMOKE_OFF_ALARM_SWITCH_OFF;
-        this->out_port = "smoke_out";
-        this->out = "scl";
+        this->out_port = "alarm_in";
+        this->out = "l";
         this->ta = fin;
         break;
     case SMOKE_SMOKE_OFF_ALARM_ALARM_ON:
         this->state.state = SMOKE_SMOKE_OFF_ALARM_SWITCH_OFF;
-        this->out_port = "smoke_out";
-        this->out = "scl";
+        this->out_port = "alarm_in";
+        this->out = "l";
         this->ta = fin;
         break;
     case SMOKE_SMOKE_ON_ALARM_ALARM_ON:
         this->state.state = SMOKE_SMOKE_ON_ALARM_SWITCH_OFF;
-        this->out_port = "smoke_out";
-        this->out = "scl";
+        this->out_port = "alarm_in";
+        this->out = "l";
         this->ta = fin;
         break;
     case SMOKE_NO_SMOKE_OFF_ALARM_ALARM_ON:

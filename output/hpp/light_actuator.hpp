@@ -23,16 +23,16 @@ struct light_actuator_defs {
 //INTERNAL TRANSITIONS
 
 switch (this->state.state) {
-    case SWITCH_OFF:
-        this->state.state = OFF;
-        this->out_port = "light_out";
-        this->out = "off";
-        this->ta = inf;
-        break;
     case SWITCH_ON:
         this->state.state = ON;
         this->out_port = "light_out";
         this->out = "on";
+        this->ta = inf;
+        break;
+    case SWITCH_OFF:
+        this->state.state = OFF;
+        this->out_port = "light_out";
+        this->out = "off";
         this->ta = inf;
         break;
 }
@@ -42,18 +42,18 @@ switch (this->state.state) {
 
 
     if(this->in_port == "light_in") {
-        if(this->in == "ocl"){
+        if(this->in == "on"){
             switch (this->state.state) {
-                case ON:
-                this->state.state = SWITCH_OFF;
+                case OFF:
+                this->state.state = SWITCH_ON;
                 this->ta = fin;
                 break;
             }
         }
-        if(this->in == "och"){
+        if(this->in == "off"){
             switch (this->state.state) {
-                case OFF:
-                this->state.state = SWITCH_ON;
+                case ON:
+                this->state.state = SWITCH_OFF;
                 this->ta = fin;
                 break;
             }
