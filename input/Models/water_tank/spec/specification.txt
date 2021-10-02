@@ -1,0 +1,5 @@
+path,?,low-stop,stop,high-out
+no_state,?,exhausted
+no_state,?,overflow
+no_trans,?,filled-in,?,filled-out
+

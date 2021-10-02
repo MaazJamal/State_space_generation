@@ -1,3 +1,0 @@
-path,occ.noc_off,light.off,occ.oc_on,light.on
-no_state,occ.noc_off,light.on
-no_smoke,occ.oc_on,light.off

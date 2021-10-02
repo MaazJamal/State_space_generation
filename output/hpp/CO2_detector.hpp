@@ -29,49 +29,49 @@ switch (this->state.state) {
         this->state.state = MEDIUM_OPEN;
         this->out_port = "co2_out";
         this->out = "co2m";
-        this->ta = fin;
+        this->ta = inf;
         break;
     case MEDIUM_OPEN:
         this->state.state = HIGH_OPEN;
         this->out_port = "co2_out";
         this->out = "co2h";
-        this->ta = fin;
+        this->ta = inf;
         break;
     case HIGH_OPEN:
         this->state.state = MEDIUM_OPEN;
         this->out_port = "co2_out";
         this->out = "co2m";
-        this->ta = fin;
+        this->ta = inf;
         break;
     case MEDIUM_OPEN:
         this->state.state = LOW_OPEN;
         this->out_port = "co2_out";
         this->out = "co2l";
-        this->ta = fin;
+        this->ta = inf;
         break;
     case LOW_CLOSED:
         this->state.state = MEDIUM_CLOSED;
         this->out_port = "co2_out";
         this->out = "co2m";
-        this->ta = fin;
+        this->ta = inf;
         break;
     case MEDIUM_CLOSED:
         this->state.state = HIGH_CLOSED;
         this->out_port = "co2_out";
         this->out = "co2h";
-        this->ta = fin;
+        this->ta = inf;
         break;
     case HIGH_CLOSED:
         this->state.state = MEDIUM_CLOSED;
         this->out_port = "co2_out";
         this->out = "co2m";
-        this->ta = fin;
+        this->ta = inf;
         break;
     case MEDIUM_CLOSED:
         this->state.state = LOW_CLOSED;
         this->out_port = "co2_out";
         this->out = "co2l";
-        this->ta = fin;
+        this->ta = inf;
         break;
 }
 
