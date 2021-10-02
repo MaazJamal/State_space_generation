@@ -1,0 +1,8 @@
+[atomic]
+X = pw
+Y = w
+S = stop,on,pumping,off
+Ext = pw,on,stop,on,fin
+Ext = pw,off,pumping,off,fin
+Int = w,wstop,off,stop,inf
+Int = w,wstrt,on,pumping,inf
