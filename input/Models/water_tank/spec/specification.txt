@@ -1,5 +1,5 @@
-path,?,low-stop,stop,high-out
-no_state,?,exhausted
-no_state,?,overflow
-no_trans,?,filled-in,?,filled-out
+path,?,t.low-out,p.stop,t.high-out
+no_state,?,t.exhausted
+no_state,?,t.overflow
+no_transition,?,t.filled-in,?,t.filled-out
 

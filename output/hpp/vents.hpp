@@ -42,7 +42,7 @@ switch (this->state.state) {
 
 
     if(this->in_port == "vents_in") {
-        if(this->in == "venth"){
+        if(this->in == "on"){
             switch (this->state.state) {
                 case SHUT:
                 this->state.state = OPENING;
@@ -50,7 +50,7 @@ switch (this->state.state) {
                 break;
             }
         }
-        if(this->in == "ventl"){
+        if(this->in == "off"){
             switch (this->state.state) {
                 case FULL_OPEN:
                 this->state.state = CLOSING;

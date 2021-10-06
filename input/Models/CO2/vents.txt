@@ -2,8 +2,8 @@
 X = vents_in
 Y = vents_out
 S = shut,closing,opening,full_open
-Ext = vents_in,venth,shut,opening,fin
-Ext = vents_in,ventl,full_open,closing,fin
+Ext = vents_in,on,shut,opening,fin
+Ext = vents_in,off,full_open,closing,fin
 Int = vents_out,venth,opening,full_open,inf
 Int = vents_out,ventl,closing,shut,inf
 

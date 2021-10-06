@@ -1,9 +1,9 @@
 [coupled]
-X = CO2_detector.vents_out,coupled.co2,vents.vents_in
-Y = vents.vents_out,coupled.vent,CO2_detector.co2_out
+X = CO2_detector.vents_out,coupled.vents_in,vents.vents_in
+Y = vents.vents_out,coupled.co2_out,CO2_detector.co2_out
 D = CO2,vents
 M = CO2_detector,vents
-EIC = coupled.co2,vents.vents_in
-EOC = CO2.co2_out,coupled.vent
+EIC = coupled.vents_in,vents.vents_in
+EOC = CO2.co2_out,coupled.co2_out
 IC = vents.vents_out,CO2.vents_out
 select = CO2,vents

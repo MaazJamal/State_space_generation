@@ -84,11 +84,12 @@ class specification_parser:
                 states = trans[0][0].split(",") + trans[0][1].split(",")
                 match = False
                 for spec,idx in self.trans_spec_list:
+                    no_matches = 0
                     for id in idx:
                         if spec[id] == states[id]:
-                            match = True
-                            break
-                    if match:
+                            no_matches += 1
+                    if len(idx) == no_matches:
+                        match = True
                         break
                 if match != True:
                     self.edge.append(trans)
