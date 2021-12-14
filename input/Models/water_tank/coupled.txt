@@ -1,9 +1,11 @@
 [coupled]
-X = CO2_detector.vents_out,coupled.co2,vents.vents_in
-Y = vents.vents_out,coupled.vent,CO2_detector.co2_out
-D = CO2,vents
-M = CO2_detector,vents
-EIC = coupled.co2,vents.vents_in
-EOC = CO2.co2_out,coupled.vent
-IC = vents.vents_out,CO2.vents_out
-select = CO2,vents
+X = pump.pw,tank.w,coupled.pw
+Y = pump.w,tank.ls,tank.hs,tank.e,coupled.ls,coupled.hs,coupled.ls,coupled.e
+D = p,t
+M = pump,tank
+EIC = coupled.pw,p.pw
+EOC = t.ls,coupled.ls
+EOC = t.hs,coupled.hs
+EOC = t.e,coupled.e
+IC = p.w,t.w
+select = p,t
