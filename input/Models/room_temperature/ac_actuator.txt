@@ -1,0 +1,9 @@
+[atomic]
+X = ac_in
+Y = ac_out
+S = on,off,switch_on,switch_off
+Ext = ac_in,on,off,switch_on,fin
+Ext = ac_in,off,on,switch_off,fin
+Int = ac_out,on,switch_on,on,inf
+Int = ac_out,off,switch_off,off,inf
+

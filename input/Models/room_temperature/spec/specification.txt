@@ -1,0 +1,11 @@
+path,room.cool,ac.off,room.hot,ac.on
+no_state,room.cold-on,?
+no_state,room.cold-off,?
+no_state,room.cool-off,ac.on
+no_state,room.cool-off,ac.off
+no_state,room.veryhot-on,?
+no_state,room.veryhot-off,?
+no_state,room.hot-on,ac.off
+no_state,room.hot-on,ac.on
+no_transition,room.warm-on,?,room.warm-off
+no_transition,room.warm-off,?,room.warm-on
