@@ -5,5 +5,5 @@ D = room,ac
 M = room_temperature,ac_actuator
 EIC = coupled.room,ac.ac_in
 EOC = room.room_out,coupled.ac
-IC = ac.ac_out,room.room_in
+IC = ac.ac_out,room.ac_out
 select = room,ac
