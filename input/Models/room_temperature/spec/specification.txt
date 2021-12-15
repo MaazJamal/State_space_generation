@@ -1,1 +1,1 @@
-path,cool-off,ac.off,room.hot-on,ac.on
+path,room.cool-off,ac.off,room.hot-on,ac.on

@@ -29,122 +29,242 @@ struct room_temperature_defs {
 //INTERNAL TRANSITIONS
 
 switch (this->state.state) {
-    case COOL:
-        this->state.state = COLD;
+    case COOL_OFF:
+        this->state.state = COLD_OFF;
         this->out_port = "room_out";
         this->out = "vlow";
         this->ta = fin;
         break;
-    case WARM:
-        this->state.state = COLD;
+    case WARM_OFF:
+        this->state.state = COLD_OFF;
         this->out_port = "room_out";
         this->out = "vlow";
         this->ta = fin;
         break;
-    case HOT:
-        this->state.state = COLD;
+    case HOT_OFF:
+        this->state.state = COLD_OFF;
         this->out_port = "room_out";
         this->out = "vlow";
         this->ta = fin;
         break;
-    case VERYHOT:
-        this->state.state = COLD;
+    case VERYHOT_OFF:
+        this->state.state = COLD_OFF;
         this->out_port = "room_out";
         this->out = "vlow";
         this->ta = fin;
         break;
-    case COLD:
-        this->state.state = COOL;
+    case COLD_OFF:
+        this->state.state = COOL_OFF;
         this->out_port = "room_out";
         this->out = "low";
         this->ta = fin;
         break;
-    case WARM:
-        this->state.state = COOL;
+    case WARM_OFF:
+        this->state.state = COOL_OFF;
         this->out_port = "room_out";
         this->out = "low";
         this->ta = fin;
         break;
-    case HOT:
-        this->state.state = COOL;
+    case HOT_OFF:
+        this->state.state = COOL_OFF;
         this->out_port = "room_out";
         this->out = "low";
         this->ta = fin;
         break;
-    case VERYHOT:
-        this->state.state = COOL;
+    case VERYHOT_OFF:
+        this->state.state = COOL_OFF;
         this->out_port = "room_out";
         this->out = "low";
         this->ta = fin;
         break;
-    case COLD:
-        this->state.state = WARM;
+    case COLD_OFF:
+        this->state.state = WARM_OFF;
         this->out_port = "room_out";
         this->out = "med";
         this->ta = fin;
         break;
-    case COOL:
-        this->state.state = WARM;
+    case COOL_OFF:
+        this->state.state = WARM_OFF;
         this->out_port = "room_out";
         this->out = "med";
         this->ta = fin;
         break;
-    case HOT:
-        this->state.state = WARM;
+    case HOT_OFF:
+        this->state.state = WARM_OFF;
         this->out_port = "room_out";
         this->out = "med";
         this->ta = fin;
         break;
-    case VERYHOT:
-        this->state.state = WARM;
+    case VERYHOT_OFF:
+        this->state.state = WARM_OFF;
         this->out_port = "room_out";
         this->out = "med";
         this->ta = fin;
         break;
-    case COLD:
-        this->state.state = HOT;
+    case COLD_OFF:
+        this->state.state = HOT_OFF;
         this->out_port = "room_out";
         this->out = "high";
         this->ta = fin;
         break;
-    case COOL:
-        this->state.state = HOT;
+    case COOL_OFF:
+        this->state.state = HOT_OFF;
         this->out_port = "room_out";
         this->out = "high";
         this->ta = fin;
         break;
-    case WARM:
-        this->state.state = HOT;
+    case WARM_OFF:
+        this->state.state = HOT_OFF;
         this->out_port = "room_out";
         this->out = "high";
         this->ta = fin;
         break;
-    case VERYHOT:
-        this->state.state = HOT;
+    case VERYHOT_OFF:
+        this->state.state = HOT_OFF;
         this->out_port = "room_out";
         this->out = "high";
         this->ta = fin;
         break;
-    case COLD:
-        this->state.state = VERYHOT;
+    case COLD_OFF:
+        this->state.state = VERYHOT_OFF;
         this->out_port = "room_out";
         this->out = "vhigh";
         this->ta = fin;
         break;
-    case COOL:
-        this->state.state = VERYHOT;
+    case COOL_OFF:
+        this->state.state = VERYHOT_OFF;
         this->out_port = "room_out";
         this->out = "vhigh";
         this->ta = fin;
         break;
-    case WARM:
-        this->state.state = VERYHOT;
+    case WARM_OFF:
+        this->state.state = VERYHOT_OFF;
         this->out_port = "room_out";
         this->out = "vhigh";
         this->ta = fin;
         break;
-    case HOT:
-        this->state.state = VERYHOT;
+    case HOT_OFF:
+        this->state.state = VERYHOT_OFF;
+        this->out_port = "room_out";
+        this->out = "vhigh";
+        this->ta = fin;
+        break;
+    case COOL_ON:
+        this->state.state = COLD_ON;
+        this->out_port = "room_out";
+        this->out = "vlow";
+        this->ta = fin;
+        break;
+    case WARM_ON:
+        this->state.state = COLD_ON;
+        this->out_port = "room_out";
+        this->out = "vlow";
+        this->ta = fin;
+        break;
+    case HOT_ON:
+        this->state.state = COLD_ON;
+        this->out_port = "room_out";
+        this->out = "vlow";
+        this->ta = fin;
+        break;
+    case VERYHOT_ON:
+        this->state.state = COLD_ON;
+        this->out_port = "room_out";
+        this->out = "vlow";
+        this->ta = fin;
+        break;
+    case COLD_ON:
+        this->state.state = COOL_ON;
+        this->out_port = "room_out";
+        this->out = "low";
+        this->ta = fin;
+        break;
+    case WARM_ON:
+        this->state.state = COOL_ON;
+        this->out_port = "room_out";
+        this->out = "low";
+        this->ta = fin;
+        break;
+    case HOT_ON:
+        this->state.state = COOL_ON;
+        this->out_port = "room_out";
+        this->out = "low";
+        this->ta = fin;
+        break;
+    case VERYHOT_ON:
+        this->state.state = COOL_ON;
+        this->out_port = "room_out";
+        this->out = "low";
+        this->ta = fin;
+        break;
+    case COLD_ON:
+        this->state.state = WARM_ON;
+        this->out_port = "room_out";
+        this->out = "med";
+        this->ta = fin;
+        break;
+    case COOL_ON:
+        this->state.state = WARM_ON;
+        this->out_port = "room_out";
+        this->out = "med";
+        this->ta = fin;
+        break;
+    case HOT_ON:
+        this->state.state = WARM_ON;
+        this->out_port = "room_out";
+        this->out = "med";
+        this->ta = fin;
+        break;
+    case VERYHOT_ON:
+        this->state.state = WARM_ON;
+        this->out_port = "room_out";
+        this->out = "med";
+        this->ta = fin;
+        break;
+    case COLD_ON:
+        this->state.state = HOT_ON;
+        this->out_port = "room_out";
+        this->out = "high";
+        this->ta = fin;
+        break;
+    case COOL_ON:
+        this->state.state = HOT_ON;
+        this->out_port = "room_out";
+        this->out = "high";
+        this->ta = fin;
+        break;
+    case WARM_ON:
+        this->state.state = HOT_ON;
+        this->out_port = "room_out";
+        this->out = "high";
+        this->ta = fin;
+        break;
+    case VERYHOT_ON:
+        this->state.state = HOT_ON;
+        this->out_port = "room_out";
+        this->out = "high";
+        this->ta = fin;
+        break;
+    case COLD_ON:
+        this->state.state = VERYHOT_ON;
+        this->out_port = "room_out";
+        this->out = "vhigh";
+        this->ta = fin;
+        break;
+    case COOL_ON:
+        this->state.state = VERYHOT_ON;
+        this->out_port = "room_out";
+        this->out = "vhigh";
+        this->ta = fin;
+        break;
+    case WARM_ON:
+        this->state.state = VERYHOT_ON;
+        this->out_port = "room_out";
+        this->out = "vhigh";
+        this->ta = fin;
+        break;
+    case HOT_ON:
+        this->state.state = VERYHOT_ON;
         this->out_port = "room_out";
         this->out = "vhigh";
         this->ta = fin;
