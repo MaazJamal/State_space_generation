@@ -1,272 +1,306 @@
 //STATE DEFINITIONS
 
-#define COLD_OFF 0
-#define COOL_OFF 1
-#define WARM_OFF 2
-#define HOT_OFF 3
-#define VERYHOT_OFF 4
-#define COLD_ON 5
-#define COOL_ON 6
-#define WARM_ON 7
-#define HOT_ON 8
-#define VERYHOT_ON 9
+#define ROOM_COOL_OFF_AC_ON 0
+#define ROOM_COLD_OFF_AC_ON 1
+#define ROOM_COOL_OFF_AC_OFF 2
+#define ROOM_COLD_OFF_AC_OFF 3
+#define ROOM_COOL_OFF_AC_SWITCH_ON 4
+#define ROOM_COLD_OFF_AC_SWITCH_ON 5
+#define ROOM_COOL_OFF_AC_SWITCH_OFF 6
+#define ROOM_COLD_OFF_AC_SWITCH_OFF 7
+#define ROOM_WARM_OFF_AC_ON 8
+#define ROOM_WARM_OFF_AC_OFF 9
+#define ROOM_WARM_OFF_AC_SWITCH_ON 10
+#define ROOM_WARM_OFF_AC_SWITCH_OFF 11
+#define ROOM_HOT_OFF_AC_ON 12
+#define ROOM_HOT_OFF_AC_OFF 13
+#define ROOM_HOT_OFF_AC_SWITCH_ON 14
+#define ROOM_HOT_OFF_AC_SWITCH_OFF 15
+#define ROOM_VERYHOT_OFF_AC_ON 16
+#define ROOM_VERYHOT_OFF_AC_OFF 17
+#define ROOM_VERYHOT_OFF_AC_SWITCH_ON 18
+#define ROOM_VERYHOT_OFF_AC_SWITCH_OFF 19
+#define ROOM_COOL_ON_AC_ON 20
+#define ROOM_COLD_ON_AC_ON 21
+#define ROOM_COOL_ON_AC_OFF 22
+#define ROOM_COLD_ON_AC_OFF 23
+#define ROOM_COOL_ON_AC_SWITCH_ON 24
+#define ROOM_COLD_ON_AC_SWITCH_ON 25
+#define ROOM_COOL_ON_AC_SWITCH_OFF 26
+#define ROOM_COLD_ON_AC_SWITCH_OFF 27
+#define ROOM_WARM_ON_AC_ON 28
+#define ROOM_WARM_ON_AC_OFF 29
+#define ROOM_WARM_ON_AC_SWITCH_ON 30
+#define ROOM_WARM_ON_AC_SWITCH_OFF 31
+#define ROOM_HOT_ON_AC_ON 32
+#define ROOM_HOT_ON_AC_OFF 33
+#define ROOM_HOT_ON_AC_SWITCH_ON 34
+#define ROOM_HOT_ON_AC_SWITCH_OFF 35
+#define ROOM_VERYHOT_ON_AC_ON 36
+#define ROOM_VERYHOT_ON_AC_OFF 37
+#define ROOM_VERYHOT_ON_AC_SWITCH_ON 38
+#define ROOM_VERYHOT_ON_AC_SWITCH_OFF 39
 
 
 
  //PORTS 
 
 struct room_temperature_defs {
-    struct room_out : public out_port<string> { };
+    struct ac_out : public out_port<string> { };
+    struct room : public out_port<string> { };
+    struct ac_in : public out_port<string> { };
     struct ac_out : public in_port<string> { };
+    struct ac : public in_port<string> { };
+    struct room_out : public in_port<string> { };
 };
 
 
 //port deifinitions
 
-    using input_ports = std::tuple<typename defs::ac_out>;
-    using output_ports = std::tuple<typename defs::room_out>;
+    using input_ports = std::tuple<typename defs::ac_out,typename defs::ac,typename defs::room_out>;
+    using output_ports = std::tuple<typename defs::ac_out,typename defs::room,typename defs::ac_in>;
 
 //INTERNAL TRANSITIONS
 
 switch (this->state.state) {
-    case COOL_OFF:
-        this->state.state = COLD_OFF;
-        this->out_port = "room_out";
-        this->out = "vlow";
+    case ROOM_COLD_OFF_AC_OFF:
+        this->state.state = ROOM_COLD_OFF_AC_SWITCH_ON;
+        this->out_port = "ac_in";
+        this->out = "on";
         this->ta = fin;
         break;
-    case WARM_OFF:
-        this->state.state = COLD_OFF;
-        this->out_port = "room_out";
-        this->out = "vlow";
+    case ROOM_COOL_OFF_AC_OFF:
+        this->state.state = ROOM_COOL_OFF_AC_SWITCH_ON;
+        this->out_port = "ac_in";
+        this->out = "on";
         this->ta = fin;
         break;
-    case HOT_OFF:
-        this->state.state = COLD_OFF;
-        this->out_port = "room_out";
-        this->out = "vlow";
+    case ROOM_WARM_OFF_AC_OFF:
+        this->state.state = ROOM_WARM_OFF_AC_SWITCH_ON;
+        this->out_port = "ac_in";
+        this->out = "on";
         this->ta = fin;
         break;
-    case VERYHOT_OFF:
-        this->state.state = COLD_OFF;
-        this->out_port = "room_out";
-        this->out = "vlow";
+    case ROOM_HOT_OFF_AC_OFF:
+        this->state.state = ROOM_HOT_OFF_AC_SWITCH_ON;
+        this->out_port = "ac_in";
+        this->out = "on";
         this->ta = fin;
         break;
-    case COLD_OFF:
-        this->state.state = COOL_OFF;
-        this->out_port = "room_out";
-        this->out = "low";
+    case ROOM_VERYHOT_OFF_AC_OFF:
+        this->state.state = ROOM_VERYHOT_OFF_AC_SWITCH_ON;
+        this->out_port = "ac_in";
+        this->out = "on";
         this->ta = fin;
         break;
-    case WARM_OFF:
-        this->state.state = COOL_OFF;
-        this->out_port = "room_out";
-        this->out = "low";
+    case ROOM_COLD_ON_AC_OFF:
+        this->state.state = ROOM_COLD_ON_AC_SWITCH_ON;
+        this->out_port = "ac_in";
+        this->out = "on";
         this->ta = fin;
         break;
-    case HOT_OFF:
-        this->state.state = COOL_OFF;
-        this->out_port = "room_out";
-        this->out = "low";
+    case ROOM_COOL_ON_AC_OFF:
+        this->state.state = ROOM_COOL_ON_AC_SWITCH_ON;
+        this->out_port = "ac_in";
+        this->out = "on";
         this->ta = fin;
         break;
-    case VERYHOT_OFF:
-        this->state.state = COOL_OFF;
-        this->out_port = "room_out";
-        this->out = "low";
+    case ROOM_WARM_ON_AC_OFF:
+        this->state.state = ROOM_WARM_ON_AC_SWITCH_ON;
+        this->out_port = "ac_in";
+        this->out = "on";
         this->ta = fin;
         break;
-    case COLD_OFF:
-        this->state.state = WARM_OFF;
-        this->out_port = "room_out";
-        this->out = "med";
+    case ROOM_HOT_ON_AC_OFF:
+        this->state.state = ROOM_HOT_ON_AC_SWITCH_ON;
+        this->out_port = "ac_in";
+        this->out = "on";
         this->ta = fin;
         break;
-    case COOL_OFF:
-        this->state.state = WARM_OFF;
-        this->out_port = "room_out";
-        this->out = "med";
+    case ROOM_VERYHOT_ON_AC_OFF:
+        this->state.state = ROOM_VERYHOT_ON_AC_SWITCH_ON;
+        this->out_port = "ac_in";
+        this->out = "on";
         this->ta = fin;
         break;
-    case HOT_OFF:
-        this->state.state = WARM_OFF;
-        this->out_port = "room_out";
-        this->out = "med";
+    case ROOM_COLD_OFF_AC_ON:
+        this->state.state = ROOM_COLD_OFF_AC_SWITCH_OFF;
+        this->out_port = "ac_in";
+        this->out = "off";
         this->ta = fin;
         break;
-    case VERYHOT_OFF:
-        this->state.state = WARM_OFF;
-        this->out_port = "room_out";
-        this->out = "med";
+    case ROOM_COOL_OFF_AC_ON:
+        this->state.state = ROOM_COOL_OFF_AC_SWITCH_OFF;
+        this->out_port = "ac_in";
+        this->out = "off";
         this->ta = fin;
         break;
-    case COLD_OFF:
-        this->state.state = HOT_OFF;
-        this->out_port = "room_out";
-        this->out = "high";
+    case ROOM_WARM_OFF_AC_ON:
+        this->state.state = ROOM_WARM_OFF_AC_SWITCH_OFF;
+        this->out_port = "ac_in";
+        this->out = "off";
         this->ta = fin;
         break;
-    case COOL_OFF:
-        this->state.state = HOT_OFF;
-        this->out_port = "room_out";
-        this->out = "high";
+    case ROOM_HOT_OFF_AC_ON:
+        this->state.state = ROOM_HOT_OFF_AC_SWITCH_OFF;
+        this->out_port = "ac_in";
+        this->out = "off";
         this->ta = fin;
         break;
-    case WARM_OFF:
-        this->state.state = HOT_OFF;
-        this->out_port = "room_out";
-        this->out = "high";
+    case ROOM_VERYHOT_OFF_AC_ON:
+        this->state.state = ROOM_VERYHOT_OFF_AC_SWITCH_OFF;
+        this->out_port = "ac_in";
+        this->out = "off";
         this->ta = fin;
         break;
-    case VERYHOT_OFF:
-        this->state.state = HOT_OFF;
-        this->out_port = "room_out";
-        this->out = "high";
+    case ROOM_COLD_ON_AC_ON:
+        this->state.state = ROOM_COLD_ON_AC_SWITCH_OFF;
+        this->out_port = "ac_in";
+        this->out = "off";
         this->ta = fin;
         break;
-    case COLD_OFF:
-        this->state.state = VERYHOT_OFF;
-        this->out_port = "room_out";
-        this->out = "vhigh";
+    case ROOM_COOL_ON_AC_ON:
+        this->state.state = ROOM_COOL_ON_AC_SWITCH_OFF;
+        this->out_port = "ac_in";
+        this->out = "off";
         this->ta = fin;
         break;
-    case COOL_OFF:
-        this->state.state = VERYHOT_OFF;
-        this->out_port = "room_out";
-        this->out = "vhigh";
+    case ROOM_WARM_ON_AC_ON:
+        this->state.state = ROOM_WARM_ON_AC_SWITCH_OFF;
+        this->out_port = "ac_in";
+        this->out = "off";
         this->ta = fin;
         break;
-    case WARM_OFF:
-        this->state.state = VERYHOT_OFF;
-        this->out_port = "room_out";
-        this->out = "vhigh";
+    case ROOM_HOT_ON_AC_ON:
+        this->state.state = ROOM_HOT_ON_AC_SWITCH_OFF;
+        this->out_port = "ac_in";
+        this->out = "off";
         this->ta = fin;
         break;
-    case HOT_OFF:
-        this->state.state = VERYHOT_OFF;
-        this->out_port = "room_out";
-        this->out = "vhigh";
+    case ROOM_VERYHOT_ON_AC_ON:
+        this->state.state = ROOM_VERYHOT_ON_AC_SWITCH_OFF;
+        this->out_port = "ac_in";
+        this->out = "off";
         this->ta = fin;
         break;
-    case COOL_ON:
-        this->state.state = COLD_ON;
-        this->out_port = "room_out";
-        this->out = "vlow";
+    case ROOM_COLD_ON_AC_ON:
+        this->state.state = ROOM_COLD_OFF_AC_ON;
+        this->out_port = "ac_out";
+        this->out = "off";
         this->ta = fin;
         break;
-    case WARM_ON:
-        this->state.state = COLD_ON;
-        this->out_port = "room_out";
-        this->out = "vlow";
+    case ROOM_COLD_ON_AC_OFF:
+        this->state.state = ROOM_COLD_OFF_AC_OFF;
+        this->out_port = "ac_out";
+        this->out = "off";
         this->ta = fin;
         break;
-    case HOT_ON:
-        this->state.state = COLD_ON;
-        this->out_port = "room_out";
-        this->out = "vlow";
+    case ROOM_COOL_ON_AC_ON:
+        this->state.state = ROOM_COOL_OFF_AC_ON;
+        this->out_port = "ac_out";
+        this->out = "off";
         this->ta = fin;
         break;
-    case VERYHOT_ON:
-        this->state.state = COLD_ON;
-        this->out_port = "room_out";
-        this->out = "vlow";
+    case ROOM_COOL_ON_AC_OFF:
+        this->state.state = ROOM_COOL_OFF_AC_OFF;
+        this->out_port = "ac_out";
+        this->out = "off";
         this->ta = fin;
         break;
-    case COLD_ON:
-        this->state.state = COOL_ON;
-        this->out_port = "room_out";
-        this->out = "low";
+    case ROOM_WARM_ON_AC_ON:
+        this->state.state = ROOM_WARM_OFF_AC_ON;
+        this->out_port = "ac_out";
+        this->out = "off";
         this->ta = fin;
         break;
-    case WARM_ON:
-        this->state.state = COOL_ON;
-        this->out_port = "room_out";
-        this->out = "low";
+    case ROOM_WARM_ON_AC_OFF:
+        this->state.state = ROOM_WARM_OFF_AC_OFF;
+        this->out_port = "ac_out";
+        this->out = "off";
         this->ta = fin;
         break;
-    case HOT_ON:
-        this->state.state = COOL_ON;
-        this->out_port = "room_out";
-        this->out = "low";
+    case ROOM_HOT_ON_AC_ON:
+        this->state.state = ROOM_HOT_OFF_AC_ON;
+        this->out_port = "ac_out";
+        this->out = "off";
         this->ta = fin;
         break;
-    case VERYHOT_ON:
-        this->state.state = COOL_ON;
-        this->out_port = "room_out";
-        this->out = "low";
+    case ROOM_HOT_ON_AC_OFF:
+        this->state.state = ROOM_HOT_OFF_AC_OFF;
+        this->out_port = "ac_out";
+        this->out = "off";
         this->ta = fin;
         break;
-    case COLD_ON:
-        this->state.state = WARM_ON;
-        this->out_port = "room_out";
-        this->out = "med";
+    case ROOM_VERYHOT_ON_AC_ON:
+        this->state.state = ROOM_VERYHOT_OFF_AC_ON;
+        this->out_port = "ac_out";
+        this->out = "off";
         this->ta = fin;
         break;
-    case COOL_ON:
-        this->state.state = WARM_ON;
-        this->out_port = "room_out";
-        this->out = "med";
+    case ROOM_VERYHOT_ON_AC_OFF:
+        this->state.state = ROOM_VERYHOT_OFF_AC_OFF;
+        this->out_port = "ac_out";
+        this->out = "off";
         this->ta = fin;
         break;
-    case HOT_ON:
-        this->state.state = WARM_ON;
-        this->out_port = "room_out";
-        this->out = "med";
+    case ROOM_COLD_OFF_AC_ON:
+        this->state.state = ROOM_COLD_ON_AC_ON;
+        this->out_port = "ac_out";
+        this->out = "on";
         this->ta = fin;
         break;
-    case VERYHOT_ON:
-        this->state.state = WARM_ON;
-        this->out_port = "room_out";
-        this->out = "med";
+    case ROOM_COLD_OFF_AC_OFF:
+        this->state.state = ROOM_COLD_ON_AC_OFF;
+        this->out_port = "ac_out";
+        this->out = "on";
         this->ta = fin;
         break;
-    case COLD_ON:
-        this->state.state = HOT_ON;
-        this->out_port = "room_out";
-        this->out = "high";
+    case ROOM_COOL_OFF_AC_ON:
+        this->state.state = ROOM_COOL_ON_AC_ON;
+        this->out_port = "ac_out";
+        this->out = "on";
         this->ta = fin;
         break;
-    case COOL_ON:
-        this->state.state = HOT_ON;
-        this->out_port = "room_out";
-        this->out = "high";
+    case ROOM_COOL_OFF_AC_OFF:
+        this->state.state = ROOM_COOL_ON_AC_OFF;
+        this->out_port = "ac_out";
+        this->out = "on";
         this->ta = fin;
         break;
-    case WARM_ON:
-        this->state.state = HOT_ON;
-        this->out_port = "room_out";
-        this->out = "high";
+    case ROOM_WARM_OFF_AC_ON:
+        this->state.state = ROOM_WARM_ON_AC_ON;
+        this->out_port = "ac_out";
+        this->out = "on";
         this->ta = fin;
         break;
-    case VERYHOT_ON:
-        this->state.state = HOT_ON;
-        this->out_port = "room_out";
-        this->out = "high";
+    case ROOM_WARM_OFF_AC_OFF:
+        this->state.state = ROOM_WARM_ON_AC_OFF;
+        this->out_port = "ac_out";
+        this->out = "on";
         this->ta = fin;
         break;
-    case COLD_ON:
-        this->state.state = VERYHOT_ON;
-        this->out_port = "room_out";
-        this->out = "vhigh";
+    case ROOM_HOT_OFF_AC_ON:
+        this->state.state = ROOM_HOT_ON_AC_ON;
+        this->out_port = "ac_out";
+        this->out = "on";
         this->ta = fin;
         break;
-    case COOL_ON:
-        this->state.state = VERYHOT_ON;
-        this->out_port = "room_out";
-        this->out = "vhigh";
+    case ROOM_HOT_OFF_AC_OFF:
+        this->state.state = ROOM_HOT_ON_AC_OFF;
+        this->out_port = "ac_out";
+        this->out = "on";
         this->ta = fin;
         break;
-    case WARM_ON:
-        this->state.state = VERYHOT_ON;
-        this->out_port = "room_out";
-        this->out = "vhigh";
+    case ROOM_VERYHOT_OFF_AC_ON:
+        this->state.state = ROOM_VERYHOT_ON_AC_ON;
+        this->out_port = "ac_out";
+        this->out = "on";
         this->ta = fin;
         break;
-    case HOT_ON:
-        this->state.state = VERYHOT_ON;
-        this->out_port = "room_out";
-        this->out = "vhigh";
+    case ROOM_VERYHOT_OFF_AC_OFF:
+        this->state.state = ROOM_VERYHOT_ON_AC_OFF;
+        this->out_port = "ac_out";
+        this->out = "on";
         this->ta = fin;
         break;
 }
@@ -276,50 +310,754 @@ switch (this->state.state) {
 
 
     if(this->in_port == "ac_out") {
+        if(this->in == "on"){
+            switch (this->state.state) {
+                case ROOM_COLD_OFF_AC_SWITCH_ON:
+                this->state.state = ROOM_COLD_OFF_AC_ON;
+                this->ta = inf;
+                break;
+                case ROOM_COOL_OFF_AC_SWITCH_ON:
+                this->state.state = ROOM_COOL_OFF_AC_ON;
+                this->ta = inf;
+                break;
+                case ROOM_WARM_OFF_AC_SWITCH_ON:
+                this->state.state = ROOM_WARM_OFF_AC_ON;
+                this->ta = inf;
+                break;
+                case ROOM_HOT_OFF_AC_SWITCH_ON:
+                this->state.state = ROOM_HOT_OFF_AC_ON;
+                this->ta = inf;
+                break;
+                case ROOM_VERYHOT_OFF_AC_SWITCH_ON:
+                this->state.state = ROOM_VERYHOT_OFF_AC_ON;
+                this->ta = inf;
+                break;
+                case ROOM_COLD_ON_AC_SWITCH_ON:
+                this->state.state = ROOM_COLD_ON_AC_ON;
+                this->ta = inf;
+                break;
+                case ROOM_COOL_ON_AC_SWITCH_ON:
+                this->state.state = ROOM_COOL_ON_AC_ON;
+                this->ta = inf;
+                break;
+                case ROOM_WARM_ON_AC_SWITCH_ON:
+                this->state.state = ROOM_WARM_ON_AC_ON;
+                this->ta = inf;
+                break;
+                case ROOM_HOT_ON_AC_SWITCH_ON:
+                this->state.state = ROOM_HOT_ON_AC_ON;
+                this->ta = inf;
+                break;
+                case ROOM_VERYHOT_ON_AC_SWITCH_ON:
+                this->state.state = ROOM_VERYHOT_ON_AC_ON;
+                this->ta = inf;
+                break;
+            }
+        }
         if(this->in == "off"){
             switch (this->state.state) {
-                case COLD_ON:
-                this->state.state = COLD_OFF;
+                case ROOM_COLD_OFF_AC_SWITCH_OFF:
+                this->state.state = ROOM_COLD_OFF_AC_OFF;
+                this->ta = inf;
+                break;
+                case ROOM_COOL_OFF_AC_SWITCH_OFF:
+                this->state.state = ROOM_COOL_OFF_AC_OFF;
+                this->ta = inf;
+                break;
+                case ROOM_WARM_OFF_AC_SWITCH_OFF:
+                this->state.state = ROOM_WARM_OFF_AC_OFF;
+                this->ta = inf;
+                break;
+                case ROOM_HOT_OFF_AC_SWITCH_OFF:
+                this->state.state = ROOM_HOT_OFF_AC_OFF;
+                this->ta = inf;
+                break;
+                case ROOM_VERYHOT_OFF_AC_SWITCH_OFF:
+                this->state.state = ROOM_VERYHOT_OFF_AC_OFF;
+                this->ta = inf;
+                break;
+                case ROOM_COLD_ON_AC_SWITCH_OFF:
+                this->state.state = ROOM_COLD_ON_AC_OFF;
+                this->ta = inf;
+                break;
+                case ROOM_COOL_ON_AC_SWITCH_OFF:
+                this->state.state = ROOM_COOL_ON_AC_OFF;
+                this->ta = inf;
+                break;
+                case ROOM_WARM_ON_AC_SWITCH_OFF:
+                this->state.state = ROOM_WARM_ON_AC_OFF;
+                this->ta = inf;
+                break;
+                case ROOM_HOT_ON_AC_SWITCH_OFF:
+                this->state.state = ROOM_HOT_ON_AC_OFF;
+                this->ta = inf;
+                break;
+                case ROOM_VERYHOT_ON_AC_SWITCH_OFF:
+                this->state.state = ROOM_VERYHOT_ON_AC_OFF;
+                this->ta = inf;
+                break;
+            }
+        }
+    }
+    if(this->in_port == "ac") {
+    }
+    if(this->in_port == "room_out") {
+        if(this->in == "vlow"){
+            switch (this->state.state) {
+                case ROOM_COOL_OFF_AC_ON:
+                this->state.state = ROOM_COLD_OFF_AC_ON;
                 this->ta = fin;
                 break;
-                case COOL_ON:
-                this->state.state = COOL_OFF;
+                case ROOM_COOL_OFF_AC_OFF:
+                this->state.state = ROOM_COLD_OFF_AC_OFF;
                 this->ta = fin;
                 break;
-                case WARM_ON:
-                this->state.state = WARM_OFF;
+                case ROOM_COOL_OFF_AC_SWITCH_ON:
+                this->state.state = ROOM_COLD_OFF_AC_SWITCH_ON;
                 this->ta = fin;
                 break;
-                case HOT_ON:
-                this->state.state = HOT_OFF;
+                case ROOM_COOL_OFF_AC_SWITCH_OFF:
+                this->state.state = ROOM_COLD_OFF_AC_SWITCH_OFF;
                 this->ta = fin;
                 break;
-                case VERYHOT_ON:
-                this->state.state = VERYHOT_OFF;
+                case ROOM_WARM_OFF_AC_ON:
+                this->state.state = ROOM_COLD_OFF_AC_ON;
+                this->ta = fin;
+                break;
+                case ROOM_WARM_OFF_AC_OFF:
+                this->state.state = ROOM_COLD_OFF_AC_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_WARM_OFF_AC_SWITCH_ON:
+                this->state.state = ROOM_COLD_OFF_AC_SWITCH_ON;
+                this->ta = fin;
+                break;
+                case ROOM_WARM_OFF_AC_SWITCH_OFF:
+                this->state.state = ROOM_COLD_OFF_AC_SWITCH_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_HOT_OFF_AC_ON:
+                this->state.state = ROOM_COLD_OFF_AC_ON;
+                this->ta = fin;
+                break;
+                case ROOM_HOT_OFF_AC_OFF:
+                this->state.state = ROOM_COLD_OFF_AC_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_HOT_OFF_AC_SWITCH_ON:
+                this->state.state = ROOM_COLD_OFF_AC_SWITCH_ON;
+                this->ta = fin;
+                break;
+                case ROOM_HOT_OFF_AC_SWITCH_OFF:
+                this->state.state = ROOM_COLD_OFF_AC_SWITCH_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_VERYHOT_OFF_AC_ON:
+                this->state.state = ROOM_COLD_OFF_AC_ON;
+                this->ta = fin;
+                break;
+                case ROOM_VERYHOT_OFF_AC_OFF:
+                this->state.state = ROOM_COLD_OFF_AC_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_VERYHOT_OFF_AC_SWITCH_ON:
+                this->state.state = ROOM_COLD_OFF_AC_SWITCH_ON;
+                this->ta = fin;
+                break;
+                case ROOM_VERYHOT_OFF_AC_SWITCH_OFF:
+                this->state.state = ROOM_COLD_OFF_AC_SWITCH_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_COOL_ON_AC_ON:
+                this->state.state = ROOM_COLD_ON_AC_ON;
+                this->ta = fin;
+                break;
+                case ROOM_COOL_ON_AC_OFF:
+                this->state.state = ROOM_COLD_ON_AC_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_COOL_ON_AC_SWITCH_ON:
+                this->state.state = ROOM_COLD_ON_AC_SWITCH_ON;
+                this->ta = fin;
+                break;
+                case ROOM_COOL_ON_AC_SWITCH_OFF:
+                this->state.state = ROOM_COLD_ON_AC_SWITCH_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_WARM_ON_AC_ON:
+                this->state.state = ROOM_COLD_ON_AC_ON;
+                this->ta = fin;
+                break;
+                case ROOM_WARM_ON_AC_OFF:
+                this->state.state = ROOM_COLD_ON_AC_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_WARM_ON_AC_SWITCH_ON:
+                this->state.state = ROOM_COLD_ON_AC_SWITCH_ON;
+                this->ta = fin;
+                break;
+                case ROOM_WARM_ON_AC_SWITCH_OFF:
+                this->state.state = ROOM_COLD_ON_AC_SWITCH_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_HOT_ON_AC_ON:
+                this->state.state = ROOM_COLD_ON_AC_ON;
+                this->ta = fin;
+                break;
+                case ROOM_HOT_ON_AC_OFF:
+                this->state.state = ROOM_COLD_ON_AC_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_HOT_ON_AC_SWITCH_ON:
+                this->state.state = ROOM_COLD_ON_AC_SWITCH_ON;
+                this->ta = fin;
+                break;
+                case ROOM_HOT_ON_AC_SWITCH_OFF:
+                this->state.state = ROOM_COLD_ON_AC_SWITCH_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_VERYHOT_ON_AC_ON:
+                this->state.state = ROOM_COLD_ON_AC_ON;
+                this->ta = fin;
+                break;
+                case ROOM_VERYHOT_ON_AC_OFF:
+                this->state.state = ROOM_COLD_ON_AC_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_VERYHOT_ON_AC_SWITCH_ON:
+                this->state.state = ROOM_COLD_ON_AC_SWITCH_ON;
+                this->ta = fin;
+                break;
+                case ROOM_VERYHOT_ON_AC_SWITCH_OFF:
+                this->state.state = ROOM_COLD_ON_AC_SWITCH_OFF;
                 this->ta = fin;
                 break;
             }
         }
-        if(this->in == "on"){
+        if(this->in == "low"){
             switch (this->state.state) {
-                case COLD_OFF:
-                this->state.state = COLD_ON;
+                case ROOM_COLD_OFF_AC_ON:
+                this->state.state = ROOM_COOL_OFF_AC_ON;
                 this->ta = fin;
                 break;
-                case COOL_OFF:
-                this->state.state = COOL_ON;
+                case ROOM_COLD_OFF_AC_OFF:
+                this->state.state = ROOM_COOL_OFF_AC_OFF;
                 this->ta = fin;
                 break;
-                case WARM_OFF:
-                this->state.state = WARM_ON;
+                case ROOM_COLD_OFF_AC_SWITCH_ON:
+                this->state.state = ROOM_COOL_OFF_AC_SWITCH_ON;
                 this->ta = fin;
                 break;
-                case HOT_OFF:
-                this->state.state = HOT_ON;
+                case ROOM_COLD_OFF_AC_SWITCH_OFF:
+                this->state.state = ROOM_COOL_OFF_AC_SWITCH_OFF;
                 this->ta = fin;
                 break;
-                case VERYHOT_OFF:
-                this->state.state = VERYHOT_ON;
+                case ROOM_WARM_OFF_AC_ON:
+                this->state.state = ROOM_COOL_OFF_AC_ON;
+                this->ta = fin;
+                break;
+                case ROOM_WARM_OFF_AC_OFF:
+                this->state.state = ROOM_COOL_OFF_AC_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_WARM_OFF_AC_SWITCH_ON:
+                this->state.state = ROOM_COOL_OFF_AC_SWITCH_ON;
+                this->ta = fin;
+                break;
+                case ROOM_WARM_OFF_AC_SWITCH_OFF:
+                this->state.state = ROOM_COOL_OFF_AC_SWITCH_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_HOT_OFF_AC_ON:
+                this->state.state = ROOM_COOL_OFF_AC_ON;
+                this->ta = fin;
+                break;
+                case ROOM_HOT_OFF_AC_OFF:
+                this->state.state = ROOM_COOL_OFF_AC_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_HOT_OFF_AC_SWITCH_ON:
+                this->state.state = ROOM_COOL_OFF_AC_SWITCH_ON;
+                this->ta = fin;
+                break;
+                case ROOM_HOT_OFF_AC_SWITCH_OFF:
+                this->state.state = ROOM_COOL_OFF_AC_SWITCH_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_VERYHOT_OFF_AC_ON:
+                this->state.state = ROOM_COOL_OFF_AC_ON;
+                this->ta = fin;
+                break;
+                case ROOM_VERYHOT_OFF_AC_OFF:
+                this->state.state = ROOM_COOL_OFF_AC_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_VERYHOT_OFF_AC_SWITCH_ON:
+                this->state.state = ROOM_COOL_OFF_AC_SWITCH_ON;
+                this->ta = fin;
+                break;
+                case ROOM_VERYHOT_OFF_AC_SWITCH_OFF:
+                this->state.state = ROOM_COOL_OFF_AC_SWITCH_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_COLD_ON_AC_ON:
+                this->state.state = ROOM_COOL_ON_AC_ON;
+                this->ta = fin;
+                break;
+                case ROOM_COLD_ON_AC_OFF:
+                this->state.state = ROOM_COOL_ON_AC_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_COLD_ON_AC_SWITCH_ON:
+                this->state.state = ROOM_COOL_ON_AC_SWITCH_ON;
+                this->ta = fin;
+                break;
+                case ROOM_COLD_ON_AC_SWITCH_OFF:
+                this->state.state = ROOM_COOL_ON_AC_SWITCH_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_WARM_ON_AC_ON:
+                this->state.state = ROOM_COOL_ON_AC_ON;
+                this->ta = fin;
+                break;
+                case ROOM_WARM_ON_AC_OFF:
+                this->state.state = ROOM_COOL_ON_AC_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_WARM_ON_AC_SWITCH_ON:
+                this->state.state = ROOM_COOL_ON_AC_SWITCH_ON;
+                this->ta = fin;
+                break;
+                case ROOM_WARM_ON_AC_SWITCH_OFF:
+                this->state.state = ROOM_COOL_ON_AC_SWITCH_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_HOT_ON_AC_ON:
+                this->state.state = ROOM_COOL_ON_AC_ON;
+                this->ta = fin;
+                break;
+                case ROOM_HOT_ON_AC_OFF:
+                this->state.state = ROOM_COOL_ON_AC_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_HOT_ON_AC_SWITCH_ON:
+                this->state.state = ROOM_COOL_ON_AC_SWITCH_ON;
+                this->ta = fin;
+                break;
+                case ROOM_HOT_ON_AC_SWITCH_OFF:
+                this->state.state = ROOM_COOL_ON_AC_SWITCH_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_VERYHOT_ON_AC_ON:
+                this->state.state = ROOM_COOL_ON_AC_ON;
+                this->ta = fin;
+                break;
+                case ROOM_VERYHOT_ON_AC_OFF:
+                this->state.state = ROOM_COOL_ON_AC_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_VERYHOT_ON_AC_SWITCH_ON:
+                this->state.state = ROOM_COOL_ON_AC_SWITCH_ON;
+                this->ta = fin;
+                break;
+                case ROOM_VERYHOT_ON_AC_SWITCH_OFF:
+                this->state.state = ROOM_COOL_ON_AC_SWITCH_OFF;
+                this->ta = fin;
+                break;
+            }
+        }
+        if(this->in == "med"){
+            switch (this->state.state) {
+                case ROOM_COLD_OFF_AC_ON:
+                this->state.state = ROOM_WARM_OFF_AC_ON;
+                this->ta = fin;
+                break;
+                case ROOM_COLD_OFF_AC_OFF:
+                this->state.state = ROOM_WARM_OFF_AC_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_COLD_OFF_AC_SWITCH_ON:
+                this->state.state = ROOM_WARM_OFF_AC_SWITCH_ON;
+                this->ta = fin;
+                break;
+                case ROOM_COLD_OFF_AC_SWITCH_OFF:
+                this->state.state = ROOM_WARM_OFF_AC_SWITCH_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_COOL_OFF_AC_ON:
+                this->state.state = ROOM_WARM_OFF_AC_ON;
+                this->ta = fin;
+                break;
+                case ROOM_COOL_OFF_AC_OFF:
+                this->state.state = ROOM_WARM_OFF_AC_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_COOL_OFF_AC_SWITCH_ON:
+                this->state.state = ROOM_WARM_OFF_AC_SWITCH_ON;
+                this->ta = fin;
+                break;
+                case ROOM_COOL_OFF_AC_SWITCH_OFF:
+                this->state.state = ROOM_WARM_OFF_AC_SWITCH_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_HOT_OFF_AC_ON:
+                this->state.state = ROOM_WARM_OFF_AC_ON;
+                this->ta = fin;
+                break;
+                case ROOM_HOT_OFF_AC_OFF:
+                this->state.state = ROOM_WARM_OFF_AC_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_HOT_OFF_AC_SWITCH_ON:
+                this->state.state = ROOM_WARM_OFF_AC_SWITCH_ON;
+                this->ta = fin;
+                break;
+                case ROOM_HOT_OFF_AC_SWITCH_OFF:
+                this->state.state = ROOM_WARM_OFF_AC_SWITCH_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_VERYHOT_OFF_AC_ON:
+                this->state.state = ROOM_WARM_OFF_AC_ON;
+                this->ta = fin;
+                break;
+                case ROOM_VERYHOT_OFF_AC_OFF:
+                this->state.state = ROOM_WARM_OFF_AC_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_VERYHOT_OFF_AC_SWITCH_ON:
+                this->state.state = ROOM_WARM_OFF_AC_SWITCH_ON;
+                this->ta = fin;
+                break;
+                case ROOM_VERYHOT_OFF_AC_SWITCH_OFF:
+                this->state.state = ROOM_WARM_OFF_AC_SWITCH_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_COLD_ON_AC_ON:
+                this->state.state = ROOM_WARM_ON_AC_ON;
+                this->ta = fin;
+                break;
+                case ROOM_COLD_ON_AC_OFF:
+                this->state.state = ROOM_WARM_ON_AC_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_COLD_ON_AC_SWITCH_ON:
+                this->state.state = ROOM_WARM_ON_AC_SWITCH_ON;
+                this->ta = fin;
+                break;
+                case ROOM_COLD_ON_AC_SWITCH_OFF:
+                this->state.state = ROOM_WARM_ON_AC_SWITCH_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_COOL_ON_AC_ON:
+                this->state.state = ROOM_WARM_ON_AC_ON;
+                this->ta = fin;
+                break;
+                case ROOM_COOL_ON_AC_OFF:
+                this->state.state = ROOM_WARM_ON_AC_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_COOL_ON_AC_SWITCH_ON:
+                this->state.state = ROOM_WARM_ON_AC_SWITCH_ON;
+                this->ta = fin;
+                break;
+                case ROOM_COOL_ON_AC_SWITCH_OFF:
+                this->state.state = ROOM_WARM_ON_AC_SWITCH_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_HOT_ON_AC_ON:
+                this->state.state = ROOM_WARM_ON_AC_ON;
+                this->ta = fin;
+                break;
+                case ROOM_HOT_ON_AC_OFF:
+                this->state.state = ROOM_WARM_ON_AC_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_HOT_ON_AC_SWITCH_ON:
+                this->state.state = ROOM_WARM_ON_AC_SWITCH_ON;
+                this->ta = fin;
+                break;
+                case ROOM_HOT_ON_AC_SWITCH_OFF:
+                this->state.state = ROOM_WARM_ON_AC_SWITCH_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_VERYHOT_ON_AC_ON:
+                this->state.state = ROOM_WARM_ON_AC_ON;
+                this->ta = fin;
+                break;
+                case ROOM_VERYHOT_ON_AC_OFF:
+                this->state.state = ROOM_WARM_ON_AC_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_VERYHOT_ON_AC_SWITCH_ON:
+                this->state.state = ROOM_WARM_ON_AC_SWITCH_ON;
+                this->ta = fin;
+                break;
+                case ROOM_VERYHOT_ON_AC_SWITCH_OFF:
+                this->state.state = ROOM_WARM_ON_AC_SWITCH_OFF;
+                this->ta = fin;
+                break;
+            }
+        }
+        if(this->in == "high"){
+            switch (this->state.state) {
+                case ROOM_COLD_OFF_AC_ON:
+                this->state.state = ROOM_HOT_OFF_AC_ON;
+                this->ta = fin;
+                break;
+                case ROOM_COLD_OFF_AC_OFF:
+                this->state.state = ROOM_HOT_OFF_AC_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_COLD_OFF_AC_SWITCH_ON:
+                this->state.state = ROOM_HOT_OFF_AC_SWITCH_ON;
+                this->ta = fin;
+                break;
+                case ROOM_COLD_OFF_AC_SWITCH_OFF:
+                this->state.state = ROOM_HOT_OFF_AC_SWITCH_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_COOL_OFF_AC_ON:
+                this->state.state = ROOM_HOT_OFF_AC_ON;
+                this->ta = fin;
+                break;
+                case ROOM_COOL_OFF_AC_OFF:
+                this->state.state = ROOM_HOT_OFF_AC_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_COOL_OFF_AC_SWITCH_ON:
+                this->state.state = ROOM_HOT_OFF_AC_SWITCH_ON;
+                this->ta = fin;
+                break;
+                case ROOM_COOL_OFF_AC_SWITCH_OFF:
+                this->state.state = ROOM_HOT_OFF_AC_SWITCH_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_WARM_OFF_AC_ON:
+                this->state.state = ROOM_HOT_OFF_AC_ON;
+                this->ta = fin;
+                break;
+                case ROOM_WARM_OFF_AC_OFF:
+                this->state.state = ROOM_HOT_OFF_AC_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_WARM_OFF_AC_SWITCH_ON:
+                this->state.state = ROOM_HOT_OFF_AC_SWITCH_ON;
+                this->ta = fin;
+                break;
+                case ROOM_WARM_OFF_AC_SWITCH_OFF:
+                this->state.state = ROOM_HOT_OFF_AC_SWITCH_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_VERYHOT_OFF_AC_ON:
+                this->state.state = ROOM_HOT_OFF_AC_ON;
+                this->ta = fin;
+                break;
+                case ROOM_VERYHOT_OFF_AC_OFF:
+                this->state.state = ROOM_HOT_OFF_AC_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_VERYHOT_OFF_AC_SWITCH_ON:
+                this->state.state = ROOM_HOT_OFF_AC_SWITCH_ON;
+                this->ta = fin;
+                break;
+                case ROOM_VERYHOT_OFF_AC_SWITCH_OFF:
+                this->state.state = ROOM_HOT_OFF_AC_SWITCH_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_COLD_ON_AC_ON:
+                this->state.state = ROOM_HOT_ON_AC_ON;
+                this->ta = fin;
+                break;
+                case ROOM_COLD_ON_AC_OFF:
+                this->state.state = ROOM_HOT_ON_AC_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_COLD_ON_AC_SWITCH_ON:
+                this->state.state = ROOM_HOT_ON_AC_SWITCH_ON;
+                this->ta = fin;
+                break;
+                case ROOM_COLD_ON_AC_SWITCH_OFF:
+                this->state.state = ROOM_HOT_ON_AC_SWITCH_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_COOL_ON_AC_ON:
+                this->state.state = ROOM_HOT_ON_AC_ON;
+                this->ta = fin;
+                break;
+                case ROOM_COOL_ON_AC_OFF:
+                this->state.state = ROOM_HOT_ON_AC_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_COOL_ON_AC_SWITCH_ON:
+                this->state.state = ROOM_HOT_ON_AC_SWITCH_ON;
+                this->ta = fin;
+                break;
+                case ROOM_COOL_ON_AC_SWITCH_OFF:
+                this->state.state = ROOM_HOT_ON_AC_SWITCH_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_WARM_ON_AC_ON:
+                this->state.state = ROOM_HOT_ON_AC_ON;
+                this->ta = fin;
+                break;
+                case ROOM_WARM_ON_AC_OFF:
+                this->state.state = ROOM_HOT_ON_AC_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_WARM_ON_AC_SWITCH_ON:
+                this->state.state = ROOM_HOT_ON_AC_SWITCH_ON;
+                this->ta = fin;
+                break;
+                case ROOM_WARM_ON_AC_SWITCH_OFF:
+                this->state.state = ROOM_HOT_ON_AC_SWITCH_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_VERYHOT_ON_AC_ON:
+                this->state.state = ROOM_HOT_ON_AC_ON;
+                this->ta = fin;
+                break;
+                case ROOM_VERYHOT_ON_AC_OFF:
+                this->state.state = ROOM_HOT_ON_AC_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_VERYHOT_ON_AC_SWITCH_ON:
+                this->state.state = ROOM_HOT_ON_AC_SWITCH_ON;
+                this->ta = fin;
+                break;
+                case ROOM_VERYHOT_ON_AC_SWITCH_OFF:
+                this->state.state = ROOM_HOT_ON_AC_SWITCH_OFF;
+                this->ta = fin;
+                break;
+            }
+        }
+        if(this->in == "vhigh"){
+            switch (this->state.state) {
+                case ROOM_COLD_OFF_AC_ON:
+                this->state.state = ROOM_VERYHOT_OFF_AC_ON;
+                this->ta = fin;
+                break;
+                case ROOM_COLD_OFF_AC_OFF:
+                this->state.state = ROOM_VERYHOT_OFF_AC_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_COLD_OFF_AC_SWITCH_ON:
+                this->state.state = ROOM_VERYHOT_OFF_AC_SWITCH_ON;
+                this->ta = fin;
+                break;
+                case ROOM_COLD_OFF_AC_SWITCH_OFF:
+                this->state.state = ROOM_VERYHOT_OFF_AC_SWITCH_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_COOL_OFF_AC_ON:
+                this->state.state = ROOM_VERYHOT_OFF_AC_ON;
+                this->ta = fin;
+                break;
+                case ROOM_COOL_OFF_AC_OFF:
+                this->state.state = ROOM_VERYHOT_OFF_AC_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_COOL_OFF_AC_SWITCH_ON:
+                this->state.state = ROOM_VERYHOT_OFF_AC_SWITCH_ON;
+                this->ta = fin;
+                break;
+                case ROOM_COOL_OFF_AC_SWITCH_OFF:
+                this->state.state = ROOM_VERYHOT_OFF_AC_SWITCH_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_WARM_OFF_AC_ON:
+                this->state.state = ROOM_VERYHOT_OFF_AC_ON;
+                this->ta = fin;
+                break;
+                case ROOM_WARM_OFF_AC_OFF:
+                this->state.state = ROOM_VERYHOT_OFF_AC_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_WARM_OFF_AC_SWITCH_ON:
+                this->state.state = ROOM_VERYHOT_OFF_AC_SWITCH_ON;
+                this->ta = fin;
+                break;
+                case ROOM_WARM_OFF_AC_SWITCH_OFF:
+                this->state.state = ROOM_VERYHOT_OFF_AC_SWITCH_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_HOT_OFF_AC_ON:
+                this->state.state = ROOM_VERYHOT_OFF_AC_ON;
+                this->ta = fin;
+                break;
+                case ROOM_HOT_OFF_AC_OFF:
+                this->state.state = ROOM_VERYHOT_OFF_AC_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_HOT_OFF_AC_SWITCH_ON:
+                this->state.state = ROOM_VERYHOT_OFF_AC_SWITCH_ON;
+                this->ta = fin;
+                break;
+                case ROOM_HOT_OFF_AC_SWITCH_OFF:
+                this->state.state = ROOM_VERYHOT_OFF_AC_SWITCH_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_COLD_ON_AC_ON:
+                this->state.state = ROOM_VERYHOT_ON_AC_ON;
+                this->ta = fin;
+                break;
+                case ROOM_COLD_ON_AC_OFF:
+                this->state.state = ROOM_VERYHOT_ON_AC_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_COLD_ON_AC_SWITCH_ON:
+                this->state.state = ROOM_VERYHOT_ON_AC_SWITCH_ON;
+                this->ta = fin;
+                break;
+                case ROOM_COLD_ON_AC_SWITCH_OFF:
+                this->state.state = ROOM_VERYHOT_ON_AC_SWITCH_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_COOL_ON_AC_ON:
+                this->state.state = ROOM_VERYHOT_ON_AC_ON;
+                this->ta = fin;
+                break;
+                case ROOM_COOL_ON_AC_OFF:
+                this->state.state = ROOM_VERYHOT_ON_AC_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_COOL_ON_AC_SWITCH_ON:
+                this->state.state = ROOM_VERYHOT_ON_AC_SWITCH_ON;
+                this->ta = fin;
+                break;
+                case ROOM_COOL_ON_AC_SWITCH_OFF:
+                this->state.state = ROOM_VERYHOT_ON_AC_SWITCH_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_WARM_ON_AC_ON:
+                this->state.state = ROOM_VERYHOT_ON_AC_ON;
+                this->ta = fin;
+                break;
+                case ROOM_WARM_ON_AC_OFF:
+                this->state.state = ROOM_VERYHOT_ON_AC_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_WARM_ON_AC_SWITCH_ON:
+                this->state.state = ROOM_VERYHOT_ON_AC_SWITCH_ON;
+                this->ta = fin;
+                break;
+                case ROOM_WARM_ON_AC_SWITCH_OFF:
+                this->state.state = ROOM_VERYHOT_ON_AC_SWITCH_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_HOT_ON_AC_ON:
+                this->state.state = ROOM_VERYHOT_ON_AC_ON;
+                this->ta = fin;
+                break;
+                case ROOM_HOT_ON_AC_OFF:
+                this->state.state = ROOM_VERYHOT_ON_AC_OFF;
+                this->ta = fin;
+                break;
+                case ROOM_HOT_ON_AC_SWITCH_ON:
+                this->state.state = ROOM_VERYHOT_ON_AC_SWITCH_ON;
+                this->ta = fin;
+                break;
+                case ROOM_HOT_ON_AC_SWITCH_OFF:
+                this->state.state = ROOM_VERYHOT_ON_AC_SWITCH_OFF;
                 this->ta = fin;
                 break;
             }
