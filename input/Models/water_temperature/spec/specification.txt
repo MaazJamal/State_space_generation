@@ -5,7 +5,3 @@ no_state,water.cold-off,boi.switch_on,?
 no_state,water.veryhot-off,?,?
 no_state,water.veryhot-on,boi.switch_off,?
 no_state,water.veryhot-on,boi.off,?
-no_state,water.cool-off,boi.on,?
-no_state,water.hot-on,boi-off,?
-no_state,water.warm-on,boi.off,?
-no_state,water.warm-off,boi.on,?
