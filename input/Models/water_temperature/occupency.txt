@@ -1,0 +1,6 @@
+[atomic]
+X = x
+Y = occ_out
+S = occupency_off,occupency_on
+Int = occ_out,oclow,occupency_on,occupency_off,fin
+Int = occ_out,ochigh,occupency_off,occupency_on,fin
