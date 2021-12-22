@@ -1,0 +1,10 @@
+[coupled]
+X = water_temperature.boiler_out,water_temperature.occ_in,coupled.water,boiler_actuator.boiler_in
+Y = boiler_actuator.boiler_out,coupled.boi,water_temperature.water_out,occupency.occ_out
+D = water,boi,occ
+M = water_temperature,boiler_actuator,occupency
+EIC = coupled.water,boi.boiler_in
+EOC = water.water_out,coupled.boi
+IC = boi.boiler_out,water.boiler_out
+IC = occ.occ_out,water.occ_in
+select = water,boi,occ
