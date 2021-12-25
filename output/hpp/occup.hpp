@@ -1,11 +1,9 @@
-#ifndef __LIGHT_ACTUATOR__HPP__
-#define __LIGHT_ACTUATOR__HPP__
+#ifndef __OCCUP__HPP__
+#define __OCCUP__HPP__
 //STATE DEFINITIONS
 
-#define ON 0
-#define OFF 1
-#define SWITCH_ON 2
-#define SWITCH_OFF 3
+#define OCCUPENCY_OFF 0
+#define OCCUPENCY_ON 1
  
 
 #include <cadmium/modeling/ports.hpp>
@@ -37,17 +35,17 @@ using namespace mbed;
 
  //PORTS 
 
-struct light_actuator_defs {
-    struct light_out : public out_port<string> { };
-    struct light_in : public in_port<string> { };
+struct occup_defs {
+    struct occ_out : public out_port<string> { };
+    struct x : public in_port<string> { };
 };
 
 
 
         template <typename TIME>
-class light_actuator
+class occup
 {
-  using defs = light_actuator_defs; // putting definitions in context
+  using defs = occup_defs; // putting definitions in context
 public:
   //Parameters to be overwriten when instantiating the atomic model
   bool fin;
@@ -60,7 +58,7 @@ public:
   bool increment;
 
   // default constructor
-  light_actuator() noexcept
+  occup() noexcept
   {
     fin = true;
     inf = false;
@@ -81,25 +79,25 @@ public:
   
   //port deifinitions
 
-    using input_ports = std::tuple<typename defs::light_in>;
-    using output_ports = std::tuple<typename defs::light_out>;
+    using input_ports = std::tuple<typename defs::x>;
+    using output_ports = std::tuple<typename defs::occ_out>;
 
 //INTERNAL TRANSITIONS
 
   void internal_transition()
   {
 switch (this->state.state) {
-    case SWITCH_ON:
-        this->state.state = ON;
-        this->out_port = "light_out";
-        this->out = "on";
-        this->ta = inf;
+    case OCCUPENCY_ON:
+        this->state.state = OCCUPENCY_OFF;
+        this->out_port = "occ_out";
+        this->out = "oclow";
+        this->ta = fin;
         break;
-    case SWITCH_OFF:
-        this->state.state = OFF;
-        this->out_port = "light_out";
-        this->out = "off";
-        this->ta = inf;
+    case OCCUPENCY_OFF:
+        this->state.state = OCCUPENCY_ON;
+        this->out_port = "occ_out";
+        this->out = "ochigh";
+        this->ta = fin;
         break;
 }}
 
@@ -109,29 +107,13 @@ switch (this->state.state) {
 
   void external_transition(TIME e, typename make_message_bags<input_ports>::type mbs)
   {
-    for (const auto &x : get_messages<typename defs::light_in>(mbs))
+    for (const auto &x : get_messages<typename defs::x>(mbs))
     {
 
-      this->in_port = "light_in";
+      this->in_port = "x";
       this->in = x;
     }
-    if(this->in_port == "light_in") {
-        if(this->in == "on"){
-            switch (this->state.state) {
-                case OFF:
-                this->state.state = SWITCH_ON;
-                this->ta = fin;
-                break;
-            }
-        }
-        if(this->in == "off"){
-            switch (this->state.state) {
-                case ON:
-                this->state.state = SWITCH_OFF;
-                this->ta = fin;
-                break;
-            }
-        }
+    if(this->in_port == "x") {
     }
 }
  // confluence transition
@@ -145,9 +127,9 @@ switch (this->state.state) {
   typename make_message_bags<output_ports>::type output() const
   {
     typename make_message_bags<output_ports>::type bags;
-    if (this->out_port == "light_out")
+    if (this->out_port == "occ_out")
     {
-      get_messages<typename defs::light_out>(bags).push_back(out);
+      get_messages<typename defs::occ_out>(bags).push_back(out);
     }
     return bags;
   }
@@ -165,7 +147,7 @@ switch (this->state.state) {
     }
   }
 
-  friend std::ostringstream &operator<<(std::ostringstream &os, const typename light_actuator<TIME>::state_type &i)
+  friend std::ostringstream &operator<<(std::ostringstream &os, const typename occup<TIME>::state_type &i)
   {
     os << "Output: " << i.state;
     return os;
