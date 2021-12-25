@@ -1,0 +1,7 @@
+path,water.cool-off,boi.off,?,water.hot-on,boi.on,?
+no_state,water.cold-on,?,?
+no_state,water.cold-off,boi.on,?
+no_state,water.cold-off,boi.switch_on,?
+no_state,water.veryhot-off,?,?
+no_state,water.veryhot-on,boi.switch_off,?
+no_state,water.veryhot-on,boi.off,?
