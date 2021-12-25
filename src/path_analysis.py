@@ -21,9 +21,12 @@ class path_analysis:
         visited[0][0] = True
         traversal.append(vertex[0])
         count = 0
+        out = []
         while traversal:
 
             vertice = traversal.pop()
+            if count == 0:  
+                out.append([0,vertice])
             edge_idx = self.graph[vertice]
             last_visited = vertice
             count += 1
@@ -35,6 +38,7 @@ class path_analysis:
                     
                     if visited[edge_state_id][0] == False:
                         traversal.append(edge_state)
+
                         visited[edge_state_id][0] = True 
                 except KeyError:
                     continue

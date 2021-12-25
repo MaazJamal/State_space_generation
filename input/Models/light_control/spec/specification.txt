@@ -1,5 +1,3 @@
 path,occ.noc_off,light.off,occ.oc_on,light.on
 no_state,occ.noc_off,light.on
 no_state,occ.oc_on,light.off
-no_state,occ.noc_off,light.switch_on
-no_state,occ.oc_on,light.switch_off

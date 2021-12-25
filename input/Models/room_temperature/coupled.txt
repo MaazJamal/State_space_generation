@@ -1,9 +1,0 @@
-[coupled]
-X = room_temperature.ac_out,coupled.room,ac_actuator.ac_in
-Y = ac_actuator.ac_out,coupled.ac,room_temperature.room_out
-D = room,ac
-M = room_temperature,ac_actuator
-EIC = coupled.room,ac.ac_in
-EOC = room.room_out,coupled.ac
-IC = ac.ac_out,room.ac_out
-select = room,ac

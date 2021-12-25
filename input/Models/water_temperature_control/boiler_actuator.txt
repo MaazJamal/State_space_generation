@@ -1,9 +1,0 @@
-[atomic]
-X = boiler_in
-Y = boiler_out
-S = on,off,switch_on,switch_off
-Ext = boiler_in,on,off,switch_on,fin
-Ext = boiler_in,off,on,switch_off,fin
-Int = boiler_out,on,switch_on,on,inf
-Int = boiler_out,off,switch_off,off,inf
-

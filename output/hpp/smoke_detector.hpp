@@ -61,7 +61,7 @@ switch (this->state.state) {
                 this->ta = fin;
                 break;
                 case SMOKE_OFF:
-                this->state.state = NO_SMOKE_ON;
+                this->state.state = SMOKE_ON;
                 this->ta = fin;
                 break;
             }
@@ -69,11 +69,11 @@ switch (this->state.state) {
         if(this->in == "off"){
             switch (this->state.state) {
                 case NO_SMOKE_ON:
-                this->state.state = SMOKE_OFF;
+                this->state.state = NO_SMOKE_OFF;
                 this->ta = fin;
                 break;
                 case SMOKE_ON:
-                this->state.state = NO_SMOKE_OFF;
+                this->state.state = SMOKE_OFF;
                 this->ta = fin;
                 break;
             }
