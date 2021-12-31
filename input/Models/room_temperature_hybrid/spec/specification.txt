@@ -1,0 +1,3 @@
+path,room.cool-off,room.hot-on
+no_state,room.cold-on
+no_trans,room.warm-on,room.warm-off

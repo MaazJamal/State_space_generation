@@ -1,0 +1,23 @@
+[atomic]
+X = ac_in
+Y = room_out
+S = cold-off,cool-off,warm-off,hot-off,veryhot-off,cold-on,cool-on,warm-on,hot-on,veryhot-on
+Ext = ac_in,off,cold-on,cold-off,fin
+Ext = ac_in,off,cool-on,cool-off,fin
+Ext = ac_in,off,warm-on,warm-off,fin
+Ext = ac_in,off,hot-on,hot-off,fin
+Ext = ac_in,off,veryhot-on,veryhot-off,fin
+Ext = ac_in,on,cold-off,cold-on,fin
+Ext = ac_in,on,cool-off,cool-on,fin
+Ext = ac_in,on,warm-off,warm-on,fin
+Ext = ac_in,on,hot-off,hot-on,fin
+Ext = ac_in,on,veryhot-off,veryhot-on,fin
+Int = room_out,vlow,cool-off,cold-off,fin
+Int = room_out,low,cold-off,cool-off,fin
+Int = room_out,med,cool-off,warm-off,fin
+Int = room_out,high,warm-off,hot-off,fin
+Int = room_out,vhigh,hot-off,veryhot-off,fin
+Int = room_out,vlow,cool-on,cold-on,fin
+Int = room_out,low,warm-on,cool-on,fin
+Int = room_out,med,hot-on,warm-on,fin
+Int = room_out,high,veryhot-on,hot-on,fin

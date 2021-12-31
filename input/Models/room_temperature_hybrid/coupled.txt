@@ -1,0 +1,8 @@
+[coupled]
+X = room_hybrid.ac_in,coupled.room
+Y = coupled.ac,room_hybrid.room_out
+D = room
+M = room_hybrid
+EIC = coupled.room,room.ac_in
+EOC = room.room_out,coupled.ac
+select = room

@@ -78,7 +78,6 @@ public:
   string out;
   string in;
   string in_port;
-  bool increment;
 
   // default constructor
   CO2() noexcept
@@ -91,14 +90,13 @@ public:
     in = "";
     in_port = "";
     this->state.state = 0;
-    increment = true;
   } 
   
     // state definition
   struct state_type
   {
     int state;
-  };
+  } state;
   
   //port deifinitions
 

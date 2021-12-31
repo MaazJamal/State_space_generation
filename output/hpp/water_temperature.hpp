@@ -91,13 +91,13 @@ using namespace mbed;
 
 struct water_temperature_defs {
     struct boiler_out : public out_port<string> { };
-    struct occ_in : public out_port<string> { };
     struct water : public out_port<string> { };
     struct boiler_in : public out_port<string> { };
     struct boiler_out : public in_port<string> { };
     struct boi : public in_port<string> { };
     struct water_out : public in_port<string> { };
     struct occ_out : public in_port<string> { };
+    struct occ_in : public in_port<string> { };
 };
 
 
@@ -115,7 +115,6 @@ public:
   string out;
   string in;
   string in_port;
-  bool increment;
 
   // default constructor
   water_temperature() noexcept
@@ -128,19 +127,18 @@ public:
     in = "";
     in_port = "";
     this->state.state = 0;
-    increment = true;
   } 
   
     // state definition
   struct state_type
   {
     int state;
-  };
+  } state;
   
   //port deifinitions
 
-    using input_ports = std::tuple<typename defs::boiler_out,typename defs::boi,typename defs::water_out,typename defs::occ_out>;
-    using output_ports = std::tuple<typename defs::boiler_out,typename defs::occ_in,typename defs::water,typename defs::boiler_in>;
+    using input_ports = std::tuple<typename defs::boiler_out,typename defs::boi,typename defs::water_out,typename defs::occ_out,typename defs::occ_in>;
+    using output_ports = std::tuple<typename defs::boiler_out,typename defs::water,typename defs::boiler_in>;
 
 //INTERNAL TRANSITIONS
 
@@ -315,6 +313,90 @@ switch (this->state.state) {
         this->out = "off";
         this->ta = fin;
         break;
+    case WATER_COLD_OFF_BOI_OFF_OCC_OCCUPENCY_OFF:
+        this->state.state = WATER_COLD_OFF_BOI_SWITCH_ON_OCC_OCCUPENCY_OFF;
+        this->out_port = "boiler_in";
+        this->out = "occ_on";
+        this->ta = fin;
+        break;
+    case WATER_COLD_OFF_BOI_OFF_OCC_OCCUPENCY_ON:
+        this->state.state = WATER_COLD_OFF_BOI_SWITCH_ON_OCC_OCCUPENCY_ON;
+        this->out_port = "boiler_in";
+        this->out = "occ_on";
+        this->ta = fin;
+        break;
+    case WATER_COOL_OFF_BOI_OFF_OCC_OCCUPENCY_OFF:
+        this->state.state = WATER_COOL_OFF_BOI_SWITCH_ON_OCC_OCCUPENCY_OFF;
+        this->out_port = "boiler_in";
+        this->out = "occ_on";
+        this->ta = fin;
+        break;
+    case WATER_COOL_OFF_BOI_OFF_OCC_OCCUPENCY_ON:
+        this->state.state = WATER_COOL_OFF_BOI_SWITCH_ON_OCC_OCCUPENCY_ON;
+        this->out_port = "boiler_in";
+        this->out = "occ_on";
+        this->ta = fin;
+        break;
+    case WATER_WARM_OFF_BOI_OFF_OCC_OCCUPENCY_OFF:
+        this->state.state = WATER_WARM_OFF_BOI_SWITCH_ON_OCC_OCCUPENCY_OFF;
+        this->out_port = "boiler_in";
+        this->out = "occ_on";
+        this->ta = fin;
+        break;
+    case WATER_WARM_OFF_BOI_OFF_OCC_OCCUPENCY_ON:
+        this->state.state = WATER_WARM_OFF_BOI_SWITCH_ON_OCC_OCCUPENCY_ON;
+        this->out_port = "boiler_in";
+        this->out = "occ_on";
+        this->ta = fin;
+        break;
+    case WATER_HOT_OFF_BOI_OFF_OCC_OCCUPENCY_OFF:
+        this->state.state = WATER_HOT_OFF_BOI_SWITCH_ON_OCC_OCCUPENCY_OFF;
+        this->out_port = "boiler_in";
+        this->out = "occ_on";
+        this->ta = fin;
+        break;
+    case WATER_HOT_OFF_BOI_OFF_OCC_OCCUPENCY_ON:
+        this->state.state = WATER_HOT_OFF_BOI_SWITCH_ON_OCC_OCCUPENCY_ON;
+        this->out_port = "boiler_in";
+        this->out = "occ_on";
+        this->ta = fin;
+        break;
+    case WATER_COOL_ON_BOI_OFF_OCC_OCCUPENCY_OFF:
+        this->state.state = WATER_COOL_ON_BOI_SWITCH_ON_OCC_OCCUPENCY_OFF;
+        this->out_port = "boiler_in";
+        this->out = "occ_on";
+        this->ta = fin;
+        break;
+    case WATER_COOL_ON_BOI_OFF_OCC_OCCUPENCY_ON:
+        this->state.state = WATER_COOL_ON_BOI_SWITCH_ON_OCC_OCCUPENCY_ON;
+        this->out_port = "boiler_in";
+        this->out = "occ_on";
+        this->ta = fin;
+        break;
+    case WATER_WARM_ON_BOI_OFF_OCC_OCCUPENCY_OFF:
+        this->state.state = WATER_WARM_ON_BOI_SWITCH_ON_OCC_OCCUPENCY_OFF;
+        this->out_port = "boiler_in";
+        this->out = "occ_on";
+        this->ta = fin;
+        break;
+    case WATER_WARM_ON_BOI_OFF_OCC_OCCUPENCY_ON:
+        this->state.state = WATER_WARM_ON_BOI_SWITCH_ON_OCC_OCCUPENCY_ON;
+        this->out_port = "boiler_in";
+        this->out = "occ_on";
+        this->ta = fin;
+        break;
+    case WATER_HOT_ON_BOI_OFF_OCC_OCCUPENCY_OFF:
+        this->state.state = WATER_HOT_ON_BOI_SWITCH_ON_OCC_OCCUPENCY_OFF;
+        this->out_port = "boiler_in";
+        this->out = "occ_on";
+        this->ta = fin;
+        break;
+    case WATER_HOT_ON_BOI_OFF_OCC_OCCUPENCY_ON:
+        this->state.state = WATER_HOT_ON_BOI_SWITCH_ON_OCC_OCCUPENCY_ON;
+        this->out_port = "boiler_in";
+        this->out = "occ_on";
+        this->ta = fin;
+        break;
     case WATER_COOL_ON_BOI_ON_OCC_OCCUPENCY_OFF:
         this->state.state = WATER_COOL_OFF_BOI_ON_OCC_OCCUPENCY_OFF;
         this->out_port = "boiler_out";
@@ -481,294 +563,6 @@ switch (this->state.state) {
         this->state.state = WATER_HOT_ON_BOI_OFF_OCC_OCCUPENCY_ON;
         this->out_port = "boiler_out";
         this->out = "on";
-        this->ta = fin;
-        break;
-    case WATER_HOT_OFF_BOI_ON_OCC_OCCUPENCY_OFF:
-        this->state.state = WATER_HOT_ON_BOI_ON_OCC_OCCUPENCY_OFF;
-        this->out_port = "occ_out";
-        this->out = "ochigh";
-        this->ta = fin;
-        break;
-    case WATER_HOT_OFF_BOI_ON_OCC_OCCUPENCY_ON:
-        this->state.state = WATER_HOT_ON_BOI_ON_OCC_OCCUPENCY_ON;
-        this->out_port = "occ_out";
-        this->out = "ochigh";
-        this->ta = fin;
-        break;
-    case WATER_HOT_OFF_BOI_OFF_OCC_OCCUPENCY_OFF:
-        this->state.state = WATER_HOT_ON_BOI_OFF_OCC_OCCUPENCY_OFF;
-        this->out_port = "occ_out";
-        this->out = "ochigh";
-        this->ta = fin;
-        break;
-    case WATER_HOT_OFF_BOI_OFF_OCC_OCCUPENCY_ON:
-        this->state.state = WATER_HOT_ON_BOI_OFF_OCC_OCCUPENCY_ON;
-        this->out_port = "occ_out";
-        this->out = "ochigh";
-        this->ta = fin;
-        break;
-    case WATER_HOT_OFF_BOI_SWITCH_ON_OCC_OCCUPENCY_OFF:
-        this->state.state = WATER_HOT_ON_BOI_SWITCH_ON_OCC_OCCUPENCY_OFF;
-        this->out_port = "occ_out";
-        this->out = "ochigh";
-        this->ta = fin;
-        break;
-    case WATER_HOT_OFF_BOI_SWITCH_ON_OCC_OCCUPENCY_ON:
-        this->state.state = WATER_HOT_ON_BOI_SWITCH_ON_OCC_OCCUPENCY_ON;
-        this->out_port = "occ_out";
-        this->out = "ochigh";
-        this->ta = fin;
-        break;
-    case WATER_HOT_OFF_BOI_SWITCH_OFF_OCC_OCCUPENCY_OFF:
-        this->state.state = WATER_HOT_ON_BOI_SWITCH_OFF_OCC_OCCUPENCY_OFF;
-        this->out_port = "occ_out";
-        this->out = "ochigh";
-        this->ta = fin;
-        break;
-    case WATER_HOT_OFF_BOI_SWITCH_OFF_OCC_OCCUPENCY_ON:
-        this->state.state = WATER_HOT_ON_BOI_SWITCH_OFF_OCC_OCCUPENCY_ON;
-        this->out_port = "occ_out";
-        this->out = "ochigh";
-        this->ta = fin;
-        break;
-    case WATER_WARM_OFF_BOI_ON_OCC_OCCUPENCY_OFF:
-        this->state.state = WATER_WARM_ON_BOI_ON_OCC_OCCUPENCY_OFF;
-        this->out_port = "occ_out";
-        this->out = "ochigh";
-        this->ta = fin;
-        break;
-    case WATER_WARM_OFF_BOI_ON_OCC_OCCUPENCY_ON:
-        this->state.state = WATER_WARM_ON_BOI_ON_OCC_OCCUPENCY_ON;
-        this->out_port = "occ_out";
-        this->out = "ochigh";
-        this->ta = fin;
-        break;
-    case WATER_WARM_OFF_BOI_OFF_OCC_OCCUPENCY_OFF:
-        this->state.state = WATER_WARM_ON_BOI_OFF_OCC_OCCUPENCY_OFF;
-        this->out_port = "occ_out";
-        this->out = "ochigh";
-        this->ta = fin;
-        break;
-    case WATER_WARM_OFF_BOI_OFF_OCC_OCCUPENCY_ON:
-        this->state.state = WATER_WARM_ON_BOI_OFF_OCC_OCCUPENCY_ON;
-        this->out_port = "occ_out";
-        this->out = "ochigh";
-        this->ta = fin;
-        break;
-    case WATER_WARM_OFF_BOI_SWITCH_ON_OCC_OCCUPENCY_OFF:
-        this->state.state = WATER_WARM_ON_BOI_SWITCH_ON_OCC_OCCUPENCY_OFF;
-        this->out_port = "occ_out";
-        this->out = "ochigh";
-        this->ta = fin;
-        break;
-    case WATER_WARM_OFF_BOI_SWITCH_ON_OCC_OCCUPENCY_ON:
-        this->state.state = WATER_WARM_ON_BOI_SWITCH_ON_OCC_OCCUPENCY_ON;
-        this->out_port = "occ_out";
-        this->out = "ochigh";
-        this->ta = fin;
-        break;
-    case WATER_WARM_OFF_BOI_SWITCH_OFF_OCC_OCCUPENCY_OFF:
-        this->state.state = WATER_WARM_ON_BOI_SWITCH_OFF_OCC_OCCUPENCY_OFF;
-        this->out_port = "occ_out";
-        this->out = "ochigh";
-        this->ta = fin;
-        break;
-    case WATER_WARM_OFF_BOI_SWITCH_OFF_OCC_OCCUPENCY_ON:
-        this->state.state = WATER_WARM_ON_BOI_SWITCH_OFF_OCC_OCCUPENCY_ON;
-        this->out_port = "occ_out";
-        this->out = "ochigh";
-        this->ta = fin;
-        break;
-    case WATER_COOL_OFF_BOI_ON_OCC_OCCUPENCY_OFF:
-        this->state.state = WATER_COOL_ON_BOI_ON_OCC_OCCUPENCY_OFF;
-        this->out_port = "occ_out";
-        this->out = "ochigh";
-        this->ta = fin;
-        break;
-    case WATER_COOL_OFF_BOI_ON_OCC_OCCUPENCY_ON:
-        this->state.state = WATER_COOL_ON_BOI_ON_OCC_OCCUPENCY_ON;
-        this->out_port = "occ_out";
-        this->out = "ochigh";
-        this->ta = fin;
-        break;
-    case WATER_COOL_OFF_BOI_OFF_OCC_OCCUPENCY_OFF:
-        this->state.state = WATER_COOL_ON_BOI_OFF_OCC_OCCUPENCY_OFF;
-        this->out_port = "occ_out";
-        this->out = "ochigh";
-        this->ta = fin;
-        break;
-    case WATER_COOL_OFF_BOI_OFF_OCC_OCCUPENCY_ON:
-        this->state.state = WATER_COOL_ON_BOI_OFF_OCC_OCCUPENCY_ON;
-        this->out_port = "occ_out";
-        this->out = "ochigh";
-        this->ta = fin;
-        break;
-    case WATER_COOL_OFF_BOI_SWITCH_ON_OCC_OCCUPENCY_OFF:
-        this->state.state = WATER_COOL_ON_BOI_SWITCH_ON_OCC_OCCUPENCY_OFF;
-        this->out_port = "occ_out";
-        this->out = "ochigh";
-        this->ta = fin;
-        break;
-    case WATER_COOL_OFF_BOI_SWITCH_ON_OCC_OCCUPENCY_ON:
-        this->state.state = WATER_COOL_ON_BOI_SWITCH_ON_OCC_OCCUPENCY_ON;
-        this->out_port = "occ_out";
-        this->out = "ochigh";
-        this->ta = fin;
-        break;
-    case WATER_COOL_OFF_BOI_SWITCH_OFF_OCC_OCCUPENCY_OFF:
-        this->state.state = WATER_COOL_ON_BOI_SWITCH_OFF_OCC_OCCUPENCY_OFF;
-        this->out_port = "occ_out";
-        this->out = "ochigh";
-        this->ta = fin;
-        break;
-    case WATER_COOL_OFF_BOI_SWITCH_OFF_OCC_OCCUPENCY_ON:
-        this->state.state = WATER_COOL_ON_BOI_SWITCH_OFF_OCC_OCCUPENCY_ON;
-        this->out_port = "occ_out";
-        this->out = "ochigh";
-        this->ta = fin;
-        break;
-    case WATER_HOT_ON_BOI_ON_OCC_OCCUPENCY_OFF:
-        this->state.state = WATER_HOT_OFF_BOI_ON_OCC_OCCUPENCY_OFF;
-        this->out_port = "occ_out";
-        this->out = "oclow";
-        this->ta = fin;
-        break;
-    case WATER_HOT_ON_BOI_ON_OCC_OCCUPENCY_ON:
-        this->state.state = WATER_HOT_OFF_BOI_ON_OCC_OCCUPENCY_ON;
-        this->out_port = "occ_out";
-        this->out = "oclow";
-        this->ta = fin;
-        break;
-    case WATER_HOT_ON_BOI_OFF_OCC_OCCUPENCY_OFF:
-        this->state.state = WATER_HOT_OFF_BOI_OFF_OCC_OCCUPENCY_OFF;
-        this->out_port = "occ_out";
-        this->out = "oclow";
-        this->ta = fin;
-        break;
-    case WATER_HOT_ON_BOI_OFF_OCC_OCCUPENCY_ON:
-        this->state.state = WATER_HOT_OFF_BOI_OFF_OCC_OCCUPENCY_ON;
-        this->out_port = "occ_out";
-        this->out = "oclow";
-        this->ta = fin;
-        break;
-    case WATER_HOT_ON_BOI_SWITCH_ON_OCC_OCCUPENCY_OFF:
-        this->state.state = WATER_HOT_OFF_BOI_SWITCH_ON_OCC_OCCUPENCY_OFF;
-        this->out_port = "occ_out";
-        this->out = "oclow";
-        this->ta = fin;
-        break;
-    case WATER_HOT_ON_BOI_SWITCH_ON_OCC_OCCUPENCY_ON:
-        this->state.state = WATER_HOT_OFF_BOI_SWITCH_ON_OCC_OCCUPENCY_ON;
-        this->out_port = "occ_out";
-        this->out = "oclow";
-        this->ta = fin;
-        break;
-    case WATER_HOT_ON_BOI_SWITCH_OFF_OCC_OCCUPENCY_OFF:
-        this->state.state = WATER_HOT_OFF_BOI_SWITCH_OFF_OCC_OCCUPENCY_OFF;
-        this->out_port = "occ_out";
-        this->out = "oclow";
-        this->ta = fin;
-        break;
-    case WATER_HOT_ON_BOI_SWITCH_OFF_OCC_OCCUPENCY_ON:
-        this->state.state = WATER_HOT_OFF_BOI_SWITCH_OFF_OCC_OCCUPENCY_ON;
-        this->out_port = "occ_out";
-        this->out = "oclow";
-        this->ta = fin;
-        break;
-    case WATER_WARM_ON_BOI_ON_OCC_OCCUPENCY_OFF:
-        this->state.state = WATER_WARM_OFF_BOI_ON_OCC_OCCUPENCY_OFF;
-        this->out_port = "occ_out";
-        this->out = "oclow";
-        this->ta = fin;
-        break;
-    case WATER_WARM_ON_BOI_ON_OCC_OCCUPENCY_ON:
-        this->state.state = WATER_WARM_OFF_BOI_ON_OCC_OCCUPENCY_ON;
-        this->out_port = "occ_out";
-        this->out = "oclow";
-        this->ta = fin;
-        break;
-    case WATER_WARM_ON_BOI_OFF_OCC_OCCUPENCY_OFF:
-        this->state.state = WATER_WARM_OFF_BOI_OFF_OCC_OCCUPENCY_OFF;
-        this->out_port = "occ_out";
-        this->out = "oclow";
-        this->ta = fin;
-        break;
-    case WATER_WARM_ON_BOI_OFF_OCC_OCCUPENCY_ON:
-        this->state.state = WATER_WARM_OFF_BOI_OFF_OCC_OCCUPENCY_ON;
-        this->out_port = "occ_out";
-        this->out = "oclow";
-        this->ta = fin;
-        break;
-    case WATER_WARM_ON_BOI_SWITCH_ON_OCC_OCCUPENCY_OFF:
-        this->state.state = WATER_WARM_OFF_BOI_SWITCH_ON_OCC_OCCUPENCY_OFF;
-        this->out_port = "occ_out";
-        this->out = "oclow";
-        this->ta = fin;
-        break;
-    case WATER_WARM_ON_BOI_SWITCH_ON_OCC_OCCUPENCY_ON:
-        this->state.state = WATER_WARM_OFF_BOI_SWITCH_ON_OCC_OCCUPENCY_ON;
-        this->out_port = "occ_out";
-        this->out = "oclow";
-        this->ta = fin;
-        break;
-    case WATER_WARM_ON_BOI_SWITCH_OFF_OCC_OCCUPENCY_OFF:
-        this->state.state = WATER_WARM_OFF_BOI_SWITCH_OFF_OCC_OCCUPENCY_OFF;
-        this->out_port = "occ_out";
-        this->out = "oclow";
-        this->ta = fin;
-        break;
-    case WATER_WARM_ON_BOI_SWITCH_OFF_OCC_OCCUPENCY_ON:
-        this->state.state = WATER_WARM_OFF_BOI_SWITCH_OFF_OCC_OCCUPENCY_ON;
-        this->out_port = "occ_out";
-        this->out = "oclow";
-        this->ta = fin;
-        break;
-    case WATER_COOL_ON_BOI_ON_OCC_OCCUPENCY_OFF:
-        this->state.state = WATER_COOL_OFF_BOI_ON_OCC_OCCUPENCY_OFF;
-        this->out_port = "occ_out";
-        this->out = "oclow";
-        this->ta = fin;
-        break;
-    case WATER_COOL_ON_BOI_ON_OCC_OCCUPENCY_ON:
-        this->state.state = WATER_COOL_OFF_BOI_ON_OCC_OCCUPENCY_ON;
-        this->out_port = "occ_out";
-        this->out = "oclow";
-        this->ta = fin;
-        break;
-    case WATER_COOL_ON_BOI_OFF_OCC_OCCUPENCY_OFF:
-        this->state.state = WATER_COOL_OFF_BOI_OFF_OCC_OCCUPENCY_OFF;
-        this->out_port = "occ_out";
-        this->out = "oclow";
-        this->ta = fin;
-        break;
-    case WATER_COOL_ON_BOI_OFF_OCC_OCCUPENCY_ON:
-        this->state.state = WATER_COOL_OFF_BOI_OFF_OCC_OCCUPENCY_ON;
-        this->out_port = "occ_out";
-        this->out = "oclow";
-        this->ta = fin;
-        break;
-    case WATER_COOL_ON_BOI_SWITCH_ON_OCC_OCCUPENCY_OFF:
-        this->state.state = WATER_COOL_OFF_BOI_SWITCH_ON_OCC_OCCUPENCY_OFF;
-        this->out_port = "occ_out";
-        this->out = "oclow";
-        this->ta = fin;
-        break;
-    case WATER_COOL_ON_BOI_SWITCH_ON_OCC_OCCUPENCY_ON:
-        this->state.state = WATER_COOL_OFF_BOI_SWITCH_ON_OCC_OCCUPENCY_ON;
-        this->out_port = "occ_out";
-        this->out = "oclow";
-        this->ta = fin;
-        break;
-    case WATER_COOL_ON_BOI_SWITCH_OFF_OCC_OCCUPENCY_OFF:
-        this->state.state = WATER_COOL_OFF_BOI_SWITCH_OFF_OCC_OCCUPENCY_OFF;
-        this->out_port = "occ_out";
-        this->out = "oclow";
-        this->ta = fin;
-        break;
-    case WATER_COOL_ON_BOI_SWITCH_OFF_OCC_OCCUPENCY_ON:
-        this->state.state = WATER_COOL_OFF_BOI_SWITCH_OFF_OCC_OCCUPENCY_ON;
-        this->out_port = "occ_out";
-        this->out = "oclow";
         this->ta = fin;
         break;
 }}
@@ -1356,6 +1150,8 @@ switch (this->state.state) {
                 break;
             }
         }
+    }
+    if(this->in_port == "occ_in") {
     }
 }
  // confluence transition

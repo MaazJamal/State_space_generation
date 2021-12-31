@@ -57,7 +57,6 @@ public:
   string out;
   string in;
   string in_port;
-  bool increment;
 
   // default constructor
   boiler_actuator() noexcept
@@ -70,14 +69,13 @@ public:
     in = "";
     in_port = "";
     this->state.state = 0;
-    increment = true;
   } 
   
     // state definition
   struct state_type
   {
     int state;
-  };
+  } state;
   
   //port deifinitions
 
@@ -128,6 +126,14 @@ switch (this->state.state) {
             switch (this->state.state) {
                 case ON:
                 this->state.state = SWITCH_OFF;
+                this->ta = fin;
+                break;
+            }
+        }
+        if(this->in == "occ_on"){
+            switch (this->state.state) {
+                case OFF:
+                this->state.state = SWITCH_ON;
                 this->ta = fin;
                 break;
             }

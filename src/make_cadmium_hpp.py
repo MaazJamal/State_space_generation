@@ -76,7 +76,6 @@ public:
   string out;
   string in;
   string in_port;
-  bool increment;
 
   // default constructor
   {0}() noexcept
@@ -89,7 +88,6 @@ public:
     in = "";
     in_port = "";
     this->state.state = 0;
-    increment = true;
   }} 
   
     // state definition

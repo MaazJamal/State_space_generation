@@ -1,5 +1,5 @@
-#ifndef __WATER__HPP__
-#define __WATER__HPP__
+#ifndef __ROOM_HYBRID__HPP__
+#define __ROOM_HYBRID__HPP__
 //STATE DEFINITIONS
 
 #define COLD_OFF 0
@@ -43,17 +43,17 @@ using namespace mbed;
 
  //PORTS 
 
-struct water_defs {
-    struct water_out : public out_port<string> { };
-    struct boiler_out : public in_port<string> { };
+struct room_hybrid_defs {
+    struct room_out : public out_port<string> { };
+    struct ac_in : public in_port<string> { };
 };
 
 
 
         template <typename TIME>
-class water
+class room_hybrid
 {
-  using defs = water_defs; // putting definitions in context
+  using defs = room_hybrid_defs; // putting definitions in context
 public:
   //Parameters to be overwriten when instantiating the atomic model
   bool fin;
@@ -65,7 +65,7 @@ public:
   string in_port;
 
   // default constructor
-  water() noexcept
+  room_hybrid() noexcept
   {
     fin = true;
     inf = false;
@@ -85,8 +85,8 @@ public:
   
   //port deifinitions
 
-    using input_ports = std::tuple<typename defs::boiler_out>;
-    using output_ports = std::tuple<typename defs::water_out>;
+    using input_ports = std::tuple<typename defs::ac_in>;
+    using output_ports = std::tuple<typename defs::room_out>;
 
 //INTERNAL TRANSITIONS
 
@@ -95,50 +95,56 @@ public:
 switch (this->state.state) {
     case COOL_OFF:
         this->state.state = COLD_OFF;
-        this->out_port = "water_out";
+        this->out_port = "room_out";
         this->out = "vlow";
         this->ta = fin;
         break;
-    case WARM_OFF:
+    case COLD_OFF:
         this->state.state = COOL_OFF;
-        this->out_port = "water_out";
+        this->out_port = "room_out";
         this->out = "low";
+        this->ta = fin;
+        break;
+    case COOL_OFF:
+        this->state.state = WARM_OFF;
+        this->out_port = "room_out";
+        this->out = "med";
+        this->ta = fin;
+        break;
+    case WARM_OFF:
+        this->state.state = HOT_OFF;
+        this->out_port = "room_out";
+        this->out = "high";
         this->ta = fin;
         break;
     case HOT_OFF:
-        this->state.state = WARM_OFF;
-        this->out_port = "water_out";
-        this->out = "med";
-        this->ta = fin;
-        break;
-    case VERYHOT_OFF:
-        this->state.state = HOT_OFF;
-        this->out_port = "water_out";
-        this->out = "high";
-        this->ta = fin;
-        break;
-    case COLD_ON:
-        this->state.state = COOL_ON;
-        this->out_port = "water_out";
-        this->out = "low";
+        this->state.state = VERYHOT_OFF;
+        this->out_port = "room_out";
+        this->out = "vhigh";
         this->ta = fin;
         break;
     case COOL_ON:
-        this->state.state = WARM_ON;
-        this->out_port = "water_out";
-        this->out = "med";
+        this->state.state = COLD_ON;
+        this->out_port = "room_out";
+        this->out = "vlow";
         this->ta = fin;
         break;
     case WARM_ON:
-        this->state.state = HOT_ON;
-        this->out_port = "water_out";
-        this->out = "high";
+        this->state.state = COOL_ON;
+        this->out_port = "room_out";
+        this->out = "low";
         this->ta = fin;
         break;
     case HOT_ON:
-        this->state.state = VERYHOT_ON;
-        this->out_port = "water_out";
-        this->out = "vhigh";
+        this->state.state = WARM_ON;
+        this->out_port = "room_out";
+        this->out = "med";
+        this->ta = fin;
+        break;
+    case VERYHOT_ON:
+        this->state.state = HOT_ON;
+        this->out_port = "room_out";
+        this->out = "high";
         this->ta = fin;
         break;
 }}
@@ -149,13 +155,13 @@ switch (this->state.state) {
 
   void external_transition(TIME e, typename make_message_bags<input_ports>::type mbs)
   {
-    for (const auto &x : get_messages<typename defs::boiler_out>(mbs))
+    for (const auto &x : get_messages<typename defs::ac_in>(mbs))
     {
 
-      this->in_port = "boiler_out";
+      this->in_port = "ac_in";
       this->in = x;
     }
-    if(this->in_port == "boiler_out") {
+    if(this->in_port == "ac_in") {
         if(this->in == "off"){
             switch (this->state.state) {
                 case COLD_ON:
@@ -217,9 +223,9 @@ switch (this->state.state) {
   typename make_message_bags<output_ports>::type output() const
   {
     typename make_message_bags<output_ports>::type bags;
-    if (this->out_port == "water_out")
+    if (this->out_port == "room_out")
     {
-      get_messages<typename defs::water_out>(bags).push_back(out);
+      get_messages<typename defs::room_out>(bags).push_back(out);
     }
     return bags;
   }
@@ -237,7 +243,7 @@ switch (this->state.state) {
     }
   }
 
-  friend std::ostringstream &operator<<(std::ostringstream &os, const typename water<TIME>::state_type &i)
+  friend std::ostringstream &operator<<(std::ostringstream &os, const typename room_hybrid<TIME>::state_type &i)
   {
     os << "Output: " << i.state;
     return os;

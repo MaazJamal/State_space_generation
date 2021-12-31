@@ -1,5 +1,5 @@
 [atomic]
-X = boiler_out,occ_in
+X = boiler_out
 Y = water_out
 S = cold-off,cool-off,warm-off,hot-off,veryhot-off,cold-on,cool-on,warm-on,hot-on,veryhot-on
 Ext = boiler_out,off,cold-on,cold-off,fin
@@ -12,12 +12,6 @@ Ext = boiler_out,on,cool-off,cool-on,fin
 Ext = boiler_out,on,warm-off,warm-on,fin
 Ext = boiler_out,on,hot-off,hot-on,fin
 Ext = boiler_out,on,veryhot-off,veryhot-on,fin
-Ext = occ_in,ochigh,hot-off,hot-on,fin
-Ext = occ_in,ochigh,warm-off,warm-on,fin
-Ext = occ_in,ochigh,cool-off,cool-on,fin
-Ext = occ_in,oclow,hot-on,hot-off,fin
-Ext = occ_in,oclow,warm-on,warm-off,fin
-Ext = occ_in,oclow,cool-on,cool-off,fin
 Int = water_out,vlow,cool-off,cold-off,fin
 Int = water_out,low,warm-off,cool-off,fin
 Int = water_out,med,hot-off,warm-off,fin
