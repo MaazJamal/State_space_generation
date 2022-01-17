@@ -1,0 +1,2 @@
+Vertices: 40
+Edges:240,240

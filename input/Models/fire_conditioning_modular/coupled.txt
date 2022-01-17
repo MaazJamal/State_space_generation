@@ -1,11 +1,11 @@
 [coupled]
-X = fire_alarm.smoke_out,light_actuator.occupency_out,occupency.occupency_in,vents.co2_out
+X = fire_alarm.smoke_out,light_actuator.occupency_out,occupency.occupency_in,vents.co2_out,coupled.ocp
 Y = CO2_detector.co2_out,fire_alarm.alarm_out,light_actuator.light_out,occupency.occupency_out,smoke_detector.smoke_out,vents.vent_out,coupled.fire,coupled.light,coupled.vent
 D = CO2,alarm,light,occup,smoke,vents
 M = CO2_detector,fire_alarm,light_actuator,occupency,smoke_detector,vents
 EIC = coupled.ocp,occup.occupency_in
-EOC = fire_alarm.alarm_out,coupled.fire
-EOC = light_actuator.light_out,coupled.light
+EOC = alarm.alarm_out,coupled.fire
+EOC = light.light_out,coupled.light
 EOC = vents.vent_out,coupled.vent
 IC = CO2.co2_out,vents.co2_out
 IC = occup.occupency_out,light.occupency_out

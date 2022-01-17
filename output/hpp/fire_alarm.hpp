@@ -39,7 +39,7 @@ using namespace mbed;
 
 struct fire_alarm_defs {
     struct alarm_out : public out_port<string> { };
-    struct alarm_in : public in_port<string> { };
+    struct smoke_out : public in_port<string> { };
 };
 
 
@@ -79,7 +79,7 @@ public:
   
   //port deifinitions
 
-    using input_ports = std::tuple<typename defs::alarm_in>;
+    using input_ports = std::tuple<typename defs::smoke_out>;
     using output_ports = std::tuple<typename defs::alarm_out>;
 
 //INTERNAL TRANSITIONS
@@ -107,14 +107,14 @@ switch (this->state.state) {
 
   void external_transition(TIME e, typename make_message_bags<input_ports>::type mbs)
   {
-    for (const auto &x : get_messages<typename defs::alarm_in>(mbs))
+    for (const auto &x : get_messages<typename defs::smoke_out>(mbs))
     {
 
-      this->in_port = "alarm_in";
+      this->in_port = "smoke_out";
       this->in = x;
     }
-    if(this->in_port == "alarm_in") {
-        if(this->in == "h"){
+    if(this->in_port == "smoke_out") {
+        if(this->in == "sch"){
             switch (this->state.state) {
                 case ALARM_OFF:
                 this->state.state = SWITCH_ON;
@@ -122,7 +122,7 @@ switch (this->state.state) {
                 break;
             }
         }
-        if(this->in == "l"){
+        if(this->in == "scl"){
             switch (this->state.state) {
                 case ALARM_ON:
                 this->state.state = SWITCH_OFF;

@@ -1,0 +1,2 @@
+Vertices: 16
+Edges:48,48

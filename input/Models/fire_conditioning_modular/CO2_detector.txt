@@ -1,5 +1,6 @@
 [atomic]
 Y = co2_out
+X = x
 S = low,medium,high
 Int = co2_out,co2h,low,medium,fin
 Int = co2_out,co2h,low,high,fin

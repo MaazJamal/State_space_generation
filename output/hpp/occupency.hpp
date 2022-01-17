@@ -2,10 +2,10 @@
 #define __OCCUPENCY__HPP__
 //STATE DEFINITIONS
 
-#define OC_ON 0
-#define OC_OFF 1
-#define NOC_ON 2
-#define NOC_OFF 3
+#define ENTRY 0
+#define EXIT 1
+#define NOT_OCCUPIED 2
+#define OCCUPIED 3
  
 
 #include <cadmium/modeling/ports.hpp>
@@ -38,8 +38,8 @@ using namespace mbed;
  //PORTS 
 
 struct occupency_defs {
-    struct occ_out : public out_port<string> { };
-    struct light_out : public in_port<string> { };
+    struct occupency_out : public out_port<string> { };
+    struct occupency_in : public in_port<string> { };
 };
 
 
@@ -79,37 +79,25 @@ public:
   
   //port deifinitions
 
-    using input_ports = std::tuple<typename defs::light_out>;
-    using output_ports = std::tuple<typename defs::occ_out>;
+    using input_ports = std::tuple<typename defs::occupency_in>;
+    using output_ports = std::tuple<typename defs::occupency_out>;
 
 //INTERNAL TRANSITIONS
 
   void internal_transition()
   {
 switch (this->state.state) {
-    case NOC_OFF:
-        this->state.state = OC_OFF;
-        this->out_port = "occ_out";
-        this->out = "och";
-        this->ta = fin;
-        break;
-    case NOC_ON:
-        this->state.state = OC_ON;
-        this->out_port = "occ_out";
-        this->out = "och";
-        this->ta = fin;
-        break;
-    case OC_ON:
-        this->state.state = NOC_ON;
-        this->out_port = "occ_out";
+    case ENTRY:
+        this->state.state = OCCUPIED;
+        this->out_port = "occupency_out";
         this->out = "ocl";
-        this->ta = fin;
+        this->ta = inf;
         break;
-    case OC_OFF:
-        this->state.state = NOC_OFF;
-        this->out_port = "occ_out";
-        this->out = "ocl";
-        this->ta = fin;
+    case EXIT:
+        this->state.state = NOT_OCCUPIED;
+        this->out_port = "occupency_out";
+        this->out = "och";
+        this->ta = inf;
         break;
 }}
 
@@ -119,33 +107,21 @@ switch (this->state.state) {
 
   void external_transition(TIME e, typename make_message_bags<input_ports>::type mbs)
   {
-    for (const auto &x : get_messages<typename defs::light_out>(mbs))
+    for (const auto &x : get_messages<typename defs::occupency_in>(mbs))
     {
 
-      this->in_port = "light_out";
+      this->in_port = "occupency_in";
       this->in = x;
     }
-    if(this->in_port == "light_out") {
-        if(this->in == "off"){
+    if(this->in_port == "occupency_in") {
+        if(this->in == "ocs"){
             switch (this->state.state) {
-                case OC_ON:
-                this->state.state = OC_OFF;
+                case OCCUPIED:
+                this->state.state = EXIT;
                 this->ta = fin;
                 break;
-                case NOC_ON:
-                this->state.state = NOC_OFF;
-                this->ta = fin;
-                break;
-            }
-        }
-        if(this->in == "on"){
-            switch (this->state.state) {
-                case OC_OFF:
-                this->state.state = OC_ON;
-                this->ta = fin;
-                break;
-                case NOC_OFF:
-                this->state.state = NOC_ON;
+                case NOT_OCCUPIED:
+                this->state.state = ENTRY;
                 this->ta = fin;
                 break;
             }
@@ -163,9 +139,9 @@ switch (this->state.state) {
   typename make_message_bags<output_ports>::type output() const
   {
     typename make_message_bags<output_ports>::type bags;
-    if (this->out_port == "occ_out")
+    if (this->out_port == "occupency_out")
     {
-      get_messages<typename defs::occ_out>(bags).push_back(out);
+      get_messages<typename defs::occupency_out>(bags).push_back(out);
     }
     return bags;
   }

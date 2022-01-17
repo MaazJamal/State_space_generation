@@ -39,7 +39,7 @@ using namespace mbed;
 
 struct light_actuator_defs {
     struct light_out : public out_port<string> { };
-    struct light_in : public in_port<string> { };
+    struct occupency_out : public in_port<string> { };
 };
 
 
@@ -79,7 +79,7 @@ public:
   
   //port deifinitions
 
-    using input_ports = std::tuple<typename defs::light_in>;
+    using input_ports = std::tuple<typename defs::occupency_out>;
     using output_ports = std::tuple<typename defs::light_out>;
 
 //INTERNAL TRANSITIONS
@@ -87,16 +87,16 @@ public:
   void internal_transition()
   {
 switch (this->state.state) {
-    case SWITCH_ON:
-        this->state.state = ON;
-        this->out_port = "light_out";
-        this->out = "on";
-        this->ta = inf;
-        break;
     case SWITCH_OFF:
         this->state.state = OFF;
         this->out_port = "light_out";
         this->out = "off";
+        this->ta = inf;
+        break;
+    case SWITCH_ON:
+        this->state.state = ON;
+        this->out_port = "light_out";
+        this->out = "on";
         this->ta = inf;
         break;
 }}
@@ -107,25 +107,25 @@ switch (this->state.state) {
 
   void external_transition(TIME e, typename make_message_bags<input_ports>::type mbs)
   {
-    for (const auto &x : get_messages<typename defs::light_in>(mbs))
+    for (const auto &x : get_messages<typename defs::occupency_out>(mbs))
     {
 
-      this->in_port = "light_in";
+      this->in_port = "occupency_out";
       this->in = x;
     }
-    if(this->in_port == "light_in") {
-        if(this->in == "on"){
+    if(this->in_port == "occupency_out") {
+        if(this->in == "ocl"){
             switch (this->state.state) {
-                case OFF:
-                this->state.state = SWITCH_ON;
+                case ON:
+                this->state.state = SWITCH_OFF;
                 this->ta = fin;
                 break;
             }
         }
-        if(this->in == "off"){
+        if(this->in == "och"){
             switch (this->state.state) {
-                case ON:
-                this->state.state = SWITCH_OFF;
+                case OFF:
+                this->state.state = SWITCH_ON;
                 this->ta = fin;
                 break;
             }

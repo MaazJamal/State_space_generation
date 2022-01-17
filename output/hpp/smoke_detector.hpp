@@ -2,10 +2,8 @@
 #define __SMOKE_DETECTOR__HPP__
 //STATE DEFINITIONS
 
-#define NO_SMOKE_OFF 0
-#define SMOKE_OFF 1
-#define NO_SMOKE_ON 2
-#define SMOKE_ON 3
+#define NO_SMOKE 0
+#define SMOKE 1
  
 
 #include <cadmium/modeling/ports.hpp>
@@ -39,7 +37,7 @@ using namespace mbed;
 
 struct smoke_detector_defs {
     struct smoke_out : public out_port<string> { };
-    struct alarm_out : public in_port<string> { };
+    struct x : public in_port<string> { };
 };
 
 
@@ -79,7 +77,7 @@ public:
   
   //port deifinitions
 
-    using input_ports = std::tuple<typename defs::alarm_out>;
+    using input_ports = std::tuple<typename defs::x>;
     using output_ports = std::tuple<typename defs::smoke_out>;
 
 //INTERNAL TRANSITIONS
@@ -87,26 +85,14 @@ public:
   void internal_transition()
   {
 switch (this->state.state) {
-    case NO_SMOKE_OFF:
-        this->state.state = SMOKE_OFF;
+    case NO_SMOKE:
+        this->state.state = SMOKE;
         this->out_port = "smoke_out";
         this->out = "sch";
         this->ta = fin;
         break;
-    case SMOKE_OFF:
-        this->state.state = NO_SMOKE_OFF;
-        this->out_port = "smoke_out";
-        this->out = "scl";
-        this->ta = fin;
-        break;
-    case NO_SMOKE_ON:
-        this->state.state = SMOKE_ON;
-        this->out_port = "smoke_out";
-        this->out = "sch";
-        this->ta = fin;
-        break;
-    case SMOKE_ON:
-        this->state.state = NO_SMOKE_ON;
+    case SMOKE:
+        this->state.state = NO_SMOKE;
         this->out_port = "smoke_out";
         this->out = "scl";
         this->ta = fin;
@@ -119,37 +105,13 @@ switch (this->state.state) {
 
   void external_transition(TIME e, typename make_message_bags<input_ports>::type mbs)
   {
-    for (const auto &x : get_messages<typename defs::alarm_out>(mbs))
+    for (const auto &x : get_messages<typename defs::x>(mbs))
     {
 
-      this->in_port = "alarm_out";
+      this->in_port = "x";
       this->in = x;
     }
-    if(this->in_port == "alarm_out") {
-        if(this->in == "on"){
-            switch (this->state.state) {
-                case NO_SMOKE_OFF:
-                this->state.state = NO_SMOKE_ON;
-                this->ta = fin;
-                break;
-                case SMOKE_OFF:
-                this->state.state = SMOKE_ON;
-                this->ta = fin;
-                break;
-            }
-        }
-        if(this->in == "off"){
-            switch (this->state.state) {
-                case NO_SMOKE_ON:
-                this->state.state = NO_SMOKE_OFF;
-                this->ta = fin;
-                break;
-                case SMOKE_ON:
-                this->state.state = SMOKE_OFF;
-                this->ta = fin;
-                break;
-            }
-        }
+    if(this->in_port == "x") {
     }
 }
  // confluence transition
