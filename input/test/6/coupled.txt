@@ -1,0 +1,13 @@
+[coupled]
+X = planta.pin,coupled.water,atypea.aain,stypeb.sbin
+Y = planta.pout,atypea.aaout,coupled.boi,stypea.saout,coupled.saout,stypeb.sbout,coupled.sbout
+D = pa1,aa1,sa1,sa2,sb1,sa3
+M = planta,atypea,stypea,stypea,stypeb,stypea
+EIC = coupled.water,aa1.aain
+EOC = pa1.pout,coupled.boi
+EOC = sa1.saout,coupled.saout
+EOC = sa2.saout,coupled.saout
+EOC = sa3.saout,coupled.saout
+EOC = sb1.sbout,coupled.sbout
+IC = aa1.aaout,pa1.pin
+select = pa1,aa1,sa1,sa2,sa3,sb1

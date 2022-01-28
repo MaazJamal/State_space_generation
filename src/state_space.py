@@ -337,7 +337,7 @@ def state_space(model):
     return state_graph
 
 
-def state_graph_to_file(state_graph,dir):
+def state_graph_to_file(state_graph,dir, mode=0):
         dir = dir+"/"
         if not os.path.isdir(dir):
             raise NotADirectoryError()
@@ -351,27 +351,29 @@ def state_graph_to_file(state_graph,dir):
 
             vertices = state_graph.graph_dict.keys()
             data_vertice = []
-            for V in vertices:
-                data = []
-                if type(V) == str:
-                    state = V
-                if type(V) == list:
-                    state = ",".join(V)
-                vert = "".join(["V,",state,"\n"])
-                data.append(vert)
-                data_vertice.append(vert)
-                for edge_idx in state_graph.graph_dict[state]:
-                    edge = state_graph.E[edge_idx]
-                    edge_str = ["E"]
-                    if type(edge[0][0]) == str:
-                        edge_str.append(",".join(edge[0]))
-                    elif type(edge[0][0]) == list:
-                        combine_edge = ["/".join(edge[0][0]) , "/".join(edge[0][1])]
-                        edge_str.append(",".join(combine_edge))
-                    edge_str.append(edge[1])
-                    edge_str.append(",".join(edge[2]))
-                    data.append("".join([",".join(edge_str),"\n"]))
-                    
+            data_vertice.append("Vertice: {}\nEdge: {}\n".format(len(state_graph.V),len(state_graph.E)))
+            if mode == 0:
+                for V in vertices:
+                    data = []
+                    if type(V) == str:
+                        state = V
+                    if type(V) == list:
+                        state = ",".join(V)
+                    vert = "".join(["V,",state,"\n"])
+                    data.append(vert)
+                    data_vertice.append(vert)
+                    for edge_idx in state_graph.graph_dict[state]:
+                        edge = state_graph.E[edge_idx]
+                        edge_str = ["E"]
+                        if type(edge[0][0]) == str:
+                            edge_str.append(",".join(edge[0]))
+                        elif type(edge[0][0]) == list:
+                            combine_edge = ["/".join(edge[0][0]) , "/".join(edge[0][1])]
+                            edge_str.append(",".join(combine_edge))
+                        edge_str.append(edge[1])
+                        edge_str.append(",".join(edge[2]))
+                        data.append("".join([",".join(edge_str),"\n"]))
+                        
                 f.writelines(data)
             fv.writelines(data_vertice)
         f.close()

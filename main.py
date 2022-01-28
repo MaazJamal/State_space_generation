@@ -32,7 +32,6 @@ def multiple_loop():
     sub_dir_name = next(os.walk("input/Models"))[1]
     dir = [os.path.abspath("input/Models/"+subdir) for subdir in sub_dir_name]
     dir = [f.replace(os.sep, posixpath.sep) for f in dir]
-
     for idx,model_dir in enumerate(dir):
         read_atomic_files(model_dir)
         reader_obj = read_model(model_dir)
@@ -59,13 +58,31 @@ def multiple_loop():
     read_inverse_files("output/Models/")
 
 
+def no_spec_loop():
+    # get all the child subdirectories
 
+    sub_dir_name = next(os.walk("input/Models"))[1]
+    dir = [os.path.abspath("input/Models/"+subdir) for subdir in sub_dir_name]
+    dir = [f.replace(os.sep, posixpath.sep) for f in dir]
+    for idx,model_dir in enumerate(dir):
+        out_path = "output/Models/"+sub_dir_name[idx]
+        ofile = out_path+"/coupled_graph_vertice.txt"
+        if os.path.isfile(ofile):
+            continue
+        read_atomic_files(model_dir)
+        reader_obj = read_model(model_dir)
+        _,coupleds = reader_obj.read_models()
+        if not os.path.isdir(out_path):
+            os.mkdir(out_path)
+
+        graphs = state_space(coupleds[0])
+        state_graph_to_file(graphs,out_path,1)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Single or multiple models')
     parser.add_argument('--mode',"-m", dest="mode" ,type=int,
-                    help='mode 0 for one model. 1 for multiple models')
+                    help='mode 0 for one model. 1 for multiple models, 2 for no spec (for testing)')
     
     args = parser.parse_args()
     if args.mode == 0:
@@ -73,3 +90,6 @@ if __name__ == "__main__":
     
     elif args.mode == 1:
         multiple_loop()
+    
+    elif args.mode == 2:
+        no_spec_loop()

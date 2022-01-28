@@ -1,0 +1,6 @@
+[atomic]
+X = x
+Y = saout
+S = occupency_off,occupency_on
+Int = saout,oclow,occupency_on,occupency_off,fin
+Int = saout,ochigh,occupency_off,occupency_on,fin

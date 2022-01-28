@@ -1,0 +1,15 @@
+[atomic]
+X = sbin
+Y = sbout
+S = vlow,low,lmedium,medium,hmedium,high,vhigh
+Int = sbout,ocvlow,low,vlow,fin
+Int = sbout,oclow,vlow,low,fin
+Int = sbout,oclow,lmedium,low,fin
+Int = sbout,oclmed,low,lmedium,fin
+Int = sbout,oclmed,medium,lmedium,fin
+Int = sbout,ocmed,lmedium,medium,fin
+Int = sbout,ocmed,hmedium,medium,fin
+Int = sbout,ochmed,medium,hmedium,fin
+Int = sbout,ochigh,hmedium,high,fin
+Int = sbout,ochigh,vhigh,high,fin
+Int = sbout,ocvhigh,high,vhigh,fin

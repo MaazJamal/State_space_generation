@@ -1,0 +1,14 @@
+[atomic]
+X = pin
+Y = pout
+S = cool-off,warm-off,hot-off,cool-on,warm-on,hot-on
+Ext = pin,off,cool-on,cool-off,fin
+Ext = pin,off,warm-on,warm-off,fin
+Ext = pin,off,hot-on,hot-off,fin
+Ext = pin,on,cool-off,cool-on,fin
+Ext = pin,on,warm-off,warm-on,fin
+Ext = pin,on,hot-off,hot-on,fin
+Int = pout,low,warm-off,cool-off,fin
+Int = pout,med,hot-off,warm-off,fin
+Int = pout,med,cool-on,warm-on,fin
+Int = pout,high,warm-on,hot-on,fin

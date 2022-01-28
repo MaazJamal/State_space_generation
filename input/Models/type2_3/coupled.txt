@@ -1,0 +1,18 @@
+[coupled]
+X = planta.pin,coupled.water,atypea.aain
+Y = planta.pout,atypea.aaout,coupled.boi,stypea.saout,coupled.saout
+D = pa1,aa1,sa1,pa2,aa2,sa2,pa3,aa3,sa3
+M = planta,atypea,stypea,planta,atypea,stypea,planta,atypea,stypea
+EIC = coupled.water,aa1.aain
+EOC = pa1.pout,coupled.boi
+EOC = sa1.saout,coupled.saout
+IC = aa1.aaout,pa1.pin
+EIC = coupled.water,aa2.aain
+EOC = pa2.pout,coupled.boi
+EOC = sa2.saout,coupled.saout
+IC = aa2.aaout,pa2.pin
+EIC = coupled.water,aa3.aain
+EOC = pa3.pout,coupled.boi
+EOC = sa3.saout,coupled.saout
+IC = aa3.aaout,pa3.pin
+select = pa1,aa1,sa1,pa2,aa2,sa2,pa3,aa3,sa3
