@@ -1,0 +1,8 @@
+[atomic]
+X = abin
+Y = x
+S = on,off,switch_on,switch_off
+Ext = abin,on,off,switch_on,fin
+Ext = abin,off,on,switch_off,fin
+Ext = abin,occ_on,off,switch_on,fin
+Ext = abin,occ_on,on,switch_off,fin

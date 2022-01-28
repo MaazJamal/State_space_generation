@@ -1,0 +1,10 @@
+[atomic]
+X = aain
+Y = aaout
+S = on,off,switch_on,switch_off
+Ext = aain,on,off,switch_on,fin
+Ext = aain,off,on,switch_off,fin
+Ext = aain,occ_on,off,switch_on,fin
+Int = aaout,on,switch_on,on,inf
+Int = aaout,off,switch_off,off,inf
+

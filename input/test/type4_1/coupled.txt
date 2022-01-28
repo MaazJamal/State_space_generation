@@ -1,0 +1,8 @@
+[coupled]
+X = coupled.water,atypeb.abin
+Y = stypea.saout,coupled.saout
+D = ab1,sa1
+M = atypeb,stypea
+EIC = coupled.water,ab1.abin
+EOC = sa1.saout,coupled.saout
+select = ab1,sa1
