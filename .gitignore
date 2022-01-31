@@ -2,3 +2,4 @@
 output/*.txt
 output/**/*.txt
 output/hpp/*.hpp
+output/Results/*

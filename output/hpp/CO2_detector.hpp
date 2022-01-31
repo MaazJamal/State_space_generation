@@ -2,9 +2,12 @@
 #define __CO2_DETECTOR__HPP__
 //STATE DEFINITIONS
 
-#define LOW 0
-#define MEDIUM 1
-#define HIGH 2
+#define LOW_OPEN 0
+#define MEDIUM_OPEN 1
+#define HIGH_OPEN 2
+#define LOW_CLOSED 3
+#define MEDIUM_CLOSED 4
+#define HIGH_CLOSED 5
  
 
 #include <cadmium/modeling/ports.hpp>
@@ -38,7 +41,7 @@ using namespace mbed;
 
 struct CO2_detector_defs {
     struct co2_out : public out_port<string> { };
-    struct x : public in_port<string> { };
+    struct vents_out : public in_port<string> { };
 };
 
 
@@ -78,7 +81,7 @@ public:
   
   //port deifinitions
 
-    using input_ports = std::tuple<typename defs::x>;
+    using input_ports = std::tuple<typename defs::vents_out>;
     using output_ports = std::tuple<typename defs::co2_out>;
 
 //INTERNAL TRANSITIONS
@@ -86,34 +89,52 @@ public:
   void internal_transition()
   {
 switch (this->state.state) {
-    case LOW:
-        this->state.state = MEDIUM;
+    case LOW_OPEN:
+        this->state.state = MEDIUM_OPEN;
+        this->out_port = "co2_out";
+        this->out = "co2m";
+        this->ta = fin;
+        break;
+    case MEDIUM_OPEN:
+        this->state.state = HIGH_OPEN;
         this->out_port = "co2_out";
         this->out = "co2h";
         this->ta = fin;
         break;
-    case LOW:
-        this->state.state = HIGH;
+    case HIGH_OPEN:
+        this->state.state = MEDIUM_OPEN;
+        this->out_port = "co2_out";
+        this->out = "co2m";
+        this->ta = fin;
+        break;
+    case MEDIUM_OPEN:
+        this->state.state = LOW_OPEN;
+        this->out_port = "co2_out";
+        this->out = "co2l";
+        this->ta = fin;
+        break;
+    case LOW_CLOSED:
+        this->state.state = MEDIUM_CLOSED;
+        this->out_port = "co2_out";
+        this->out = "co2m";
+        this->ta = fin;
+        break;
+    case MEDIUM_CLOSED:
+        this->state.state = HIGH_CLOSED;
         this->out_port = "co2_out";
         this->out = "co2h";
         this->ta = fin;
         break;
-    case MEDIUM:
-        this->state.state = HIGH;
+    case HIGH_CLOSED:
+        this->state.state = MEDIUM_CLOSED;
         this->out_port = "co2_out";
-        this->out = "co2h";
+        this->out = "co2m";
         this->ta = fin;
         break;
-    case HIGH:
-        this->state.state = MEDIUM;
+    case MEDIUM_CLOSED:
+        this->state.state = LOW_CLOSED;
         this->out_port = "co2_out";
-        this->out = "co2h";
-        this->ta = fin;
-        break;
-    case HIGH:
-        this->state.state = LOW;
-        this->out_port = "co2_out";
-        this->out = "co2h";
+        this->out = "co2l";
         this->ta = fin;
         break;
 }}
@@ -124,13 +145,45 @@ switch (this->state.state) {
 
   void external_transition(TIME e, typename make_message_bags<input_ports>::type mbs)
   {
-    for (const auto &x : get_messages<typename defs::x>(mbs))
+    for (const auto &x : get_messages<typename defs::vents_out>(mbs))
     {
 
-      this->in_port = "x";
+      this->in_port = "vents_out";
       this->in = x;
     }
-    if(this->in_port == "x") {
+    if(this->in_port == "vents_out") {
+        if(this->in == "ventl"){
+            switch (this->state.state) {
+                case LOW_OPEN:
+                this->state.state = LOW_CLOSED;
+                this->ta = fin;
+                break;
+                case MEDIUM_OPEN:
+                this->state.state = MEDIUM_CLOSED;
+                this->ta = fin;
+                break;
+                case HIGH_OPEN:
+                this->state.state = HIGH_CLOSED;
+                this->ta = fin;
+                break;
+            }
+        }
+        if(this->in == "venth"){
+            switch (this->state.state) {
+                case LOW_CLOSED:
+                this->state.state = LOW_OPEN;
+                this->ta = fin;
+                break;
+                case MEDIUM_CLOSED:
+                this->state.state = MEDIUM_OPEN;
+                this->ta = fin;
+                break;
+                case HIGH_CLOSED:
+                this->state.state = HIGH_OPEN;
+                this->ta = fin;
+                break;
+            }
+        }
     }
 }
  // confluence transition

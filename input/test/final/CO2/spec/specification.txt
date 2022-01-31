@@ -1,7 +1,0 @@
-path,CO2.low-open,vents.shut,CO2.high-closed,vents.full_open
-no_state,CO2.low-open,vents.full_open
-no_state,CO2.low-closed,vents.opening
-no_state,CO2.high-closed,vents.shut
-no_state,CO2.high-open,vents.closing
-no_transition,CO2.medium-closed,?,CO2.medium-open,?
-no_transition,CO2.medium-open,?,CO2.medium-closed,?

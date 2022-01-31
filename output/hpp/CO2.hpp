@@ -2,26 +2,27 @@
 #define __CO2__HPP__
 //STATE DEFINITIONS
 
-#define CO2_LOW_OPEN_VENTS_SHUT 0
-#define CO2_MEDIUM_OPEN_VENTS_SHUT 1
-#define CO2_LOW_OPEN_VENTS_CLOSING 2
-#define CO2_MEDIUM_OPEN_VENTS_CLOSING 3
-#define CO2_LOW_OPEN_VENTS_OPENING 4
-#define CO2_MEDIUM_OPEN_VENTS_OPENING 5
+#define CO2_MEDIUM_OPEN_VENTS_SHUT 0
+#define CO2_LOW_OPEN_VENTS_CLOSING 1
+#define CO2_MEDIUM_OPEN_VENTS_CLOSING 2
+#define CO2_LOW_OPEN_VENTS_OPENING 3
+#define CO2_MEDIUM_OPEN_VENTS_OPENING 4
+#define CO2_LOW_OPEN_VENTS_FULL_OPEN 5
 #define CO2_MEDIUM_OPEN_VENTS_FULL_OPEN 6
 #define CO2_HIGH_OPEN_VENTS_SHUT 7
-#define CO2_HIGH_OPEN_VENTS_OPENING 8
-#define CO2_HIGH_OPEN_VENTS_FULL_OPEN 9
-#define CO2_LOW_CLOSED_VENTS_SHUT 10
-#define CO2_MEDIUM_CLOSED_VENTS_SHUT 11
-#define CO2_LOW_CLOSED_VENTS_CLOSING 12
-#define CO2_MEDIUM_CLOSED_VENTS_CLOSING 13
-#define CO2_MEDIUM_CLOSED_VENTS_OPENING 14
-#define CO2_LOW_CLOSED_VENTS_FULL_OPEN 15
-#define CO2_MEDIUM_CLOSED_VENTS_FULL_OPEN 16
-#define CO2_HIGH_CLOSED_VENTS_CLOSING 17
-#define CO2_HIGH_CLOSED_VENTS_OPENING 18
-#define CO2_HIGH_CLOSED_VENTS_FULL_OPEN 19
+#define CO2_HIGH_OPEN_VENTS_CLOSING 8
+#define CO2_HIGH_OPEN_VENTS_OPENING 9
+#define CO2_HIGH_OPEN_VENTS_FULL_OPEN 10
+#define CO2_LOW_CLOSED_VENTS_SHUT 11
+#define CO2_MEDIUM_CLOSED_VENTS_SHUT 12
+#define CO2_LOW_CLOSED_VENTS_CLOSING 13
+#define CO2_MEDIUM_CLOSED_VENTS_CLOSING 14
+#define CO2_MEDIUM_CLOSED_VENTS_OPENING 15
+#define CO2_LOW_CLOSED_VENTS_FULL_OPEN 16
+#define CO2_MEDIUM_CLOSED_VENTS_FULL_OPEN 17
+#define CO2_HIGH_CLOSED_VENTS_CLOSING 18
+#define CO2_HIGH_CLOSED_VENTS_OPENING 19
+#define CO2_HIGH_CLOSED_VENTS_FULL_OPEN 20
  
 
 #include <cadmium/modeling/ports.hpp>
@@ -108,12 +109,6 @@ public:
   void internal_transition()
   {
 switch (this->state.state) {
-    case CO2_LOW_OPEN_VENTS_SHUT:
-        this->state.state = CO2_LOW_OPEN_VENTS_OPENING;
-        this->out_port = "vents_in";
-        this->out = "on";
-        this->ta = fin;
-        break;
     case CO2_MEDIUM_OPEN_VENTS_SHUT:
         this->state.state = CO2_MEDIUM_OPEN_VENTS_OPENING;
         this->out_port = "vents_in";
@@ -136,6 +131,12 @@ switch (this->state.state) {
         this->state.state = CO2_MEDIUM_CLOSED_VENTS_OPENING;
         this->out_port = "vents_in";
         this->out = "on";
+        this->ta = fin;
+        break;
+    case CO2_LOW_OPEN_VENTS_FULL_OPEN:
+        this->state.state = CO2_LOW_OPEN_VENTS_CLOSING;
+        this->out_port = "vents_in";
+        this->out = "off";
         this->ta = fin;
         break;
     case CO2_MEDIUM_OPEN_VENTS_FULL_OPEN:
@@ -168,8 +169,8 @@ switch (this->state.state) {
         this->out = "off";
         this->ta = fin;
         break;
-    case CO2_LOW_OPEN_VENTS_SHUT:
-        this->state.state = CO2_LOW_CLOSED_VENTS_SHUT;
+    case CO2_LOW_OPEN_VENTS_FULL_OPEN:
+        this->state.state = CO2_LOW_CLOSED_VENTS_FULL_OPEN;
         this->out_port = "vents_out";
         this->out = "ventl";
         this->ta = fin;
@@ -273,6 +274,10 @@ switch (this->state.state) {
                 this->state.state = CO2_MEDIUM_OPEN_VENTS_SHUT;
                 this->ta = inf;
                 break;
+                case CO2_HIGH_OPEN_VENTS_CLOSING:
+                this->state.state = CO2_HIGH_OPEN_VENTS_SHUT;
+                this->ta = inf;
+                break;
                 case CO2_LOW_CLOSED_VENTS_CLOSING:
                 this->state.state = CO2_LOW_CLOSED_VENTS_SHUT;
                 this->ta = inf;
@@ -293,6 +298,10 @@ switch (this->state.state) {
                 this->state.state = CO2_MEDIUM_OPEN_VENTS_SHUT;
                 this->ta = inf;
                 break;
+                case CO2_HIGH_OPEN_VENTS_CLOSING:
+                this->state.state = CO2_HIGH_OPEN_VENTS_SHUT;
+                this->ta = inf;
+                break;
                 case CO2_LOW_CLOSED_VENTS_CLOSING:
                 this->state.state = CO2_LOW_CLOSED_VENTS_SHUT;
                 this->ta = inf;
@@ -311,10 +320,6 @@ switch (this->state.state) {
     if(this->in_port == "co2_out") {
         if(this->in == "co2m"){
             switch (this->state.state) {
-                case CO2_LOW_OPEN_VENTS_SHUT:
-                this->state.state = CO2_MEDIUM_OPEN_VENTS_SHUT;
-                this->ta = fin;
-                break;
                 case CO2_LOW_OPEN_VENTS_CLOSING:
                 this->state.state = CO2_MEDIUM_OPEN_VENTS_CLOSING;
                 this->ta = fin;
@@ -323,8 +328,16 @@ switch (this->state.state) {
                 this->state.state = CO2_MEDIUM_OPEN_VENTS_OPENING;
                 this->ta = fin;
                 break;
+                case CO2_LOW_OPEN_VENTS_FULL_OPEN:
+                this->state.state = CO2_MEDIUM_OPEN_VENTS_FULL_OPEN;
+                this->ta = fin;
+                break;
                 case CO2_HIGH_OPEN_VENTS_SHUT:
                 this->state.state = CO2_MEDIUM_OPEN_VENTS_SHUT;
+                this->ta = fin;
+                break;
+                case CO2_HIGH_OPEN_VENTS_CLOSING:
+                this->state.state = CO2_MEDIUM_OPEN_VENTS_CLOSING;
                 this->ta = fin;
                 break;
                 case CO2_HIGH_OPEN_VENTS_OPENING:

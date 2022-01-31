@@ -38,8 +38,8 @@ using namespace mbed;
  //PORTS 
 
 struct vents_defs {
-    struct vent_out : public out_port<string> { };
-    struct co2_out : public in_port<string> { };
+    struct vents_out : public out_port<string> { };
+    struct vents_in : public in_port<string> { };
 };
 
 
@@ -79,8 +79,8 @@ public:
   
   //port deifinitions
 
-    using input_ports = std::tuple<typename defs::co2_out>;
-    using output_ports = std::tuple<typename defs::vent_out>;
+    using input_ports = std::tuple<typename defs::vents_in>;
+    using output_ports = std::tuple<typename defs::vents_out>;
 
 //INTERNAL TRANSITIONS
 
@@ -89,14 +89,14 @@ public:
 switch (this->state.state) {
     case OPENING:
         this->state.state = FULL_OPEN;
-        this->out_port = "vent_out";
-        this->out = "open";
+        this->out_port = "vents_out";
+        this->out = "venth";
         this->ta = inf;
         break;
     case CLOSING:
         this->state.state = SHUT;
-        this->out_port = "vent_out";
-        this->out = "close";
+        this->out_port = "vents_out";
+        this->out = "ventl";
         this->ta = inf;
         break;
 }}
@@ -107,14 +107,14 @@ switch (this->state.state) {
 
   void external_transition(TIME e, typename make_message_bags<input_ports>::type mbs)
   {
-    for (const auto &x : get_messages<typename defs::co2_out>(mbs))
+    for (const auto &x : get_messages<typename defs::vents_in>(mbs))
     {
 
-      this->in_port = "co2_out";
+      this->in_port = "vents_in";
       this->in = x;
     }
-    if(this->in_port == "co2_out") {
-        if(this->in == "high"){
+    if(this->in_port == "vents_in") {
+        if(this->in == "on"){
             switch (this->state.state) {
                 case SHUT:
                 this->state.state = OPENING;
@@ -122,7 +122,7 @@ switch (this->state.state) {
                 break;
             }
         }
-        if(this->in == "low"){
+        if(this->in == "off"){
             switch (this->state.state) {
                 case FULL_OPEN:
                 this->state.state = CLOSING;
@@ -143,9 +143,9 @@ switch (this->state.state) {
   typename make_message_bags<output_ports>::type output() const
   {
     typename make_message_bags<output_ports>::type bags;
-    if (this->out_port == "vent_out")
+    if (this->out_port == "vents_out")
     {
-      get_messages<typename defs::vent_out>(bags).push_back(out);
+      get_messages<typename defs::vents_out>(bags).push_back(out);
     }
     return bags;
   }
